@@ -1,11 +1,19 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleTodoStatus } from '../slices/todoSlicer';
+import { selectActiveTodos } from "../selectors/todoSelectors";
+
 
 export default function TodoList() {
-    const todoSelector = useSelector((state) => state.todos.todos);
+    const activeTodoSelector = useSelector( selectActiveTodos );
+    const dispatch = useDispatch();
+
+    function handleCheckboxChange(id) {
+        dispatch(toggleTodoStatus({id}));
+    };
 
     return (
         <div>
-            {todoSelector.map(i => <div key={i.id}><input type="checkbox" />{i.text}</div>) }
+            {activeTodoSelector.map(i => <div key={i.id}><input type="checkbox" checked={i.status === "active" ? false : true} onChange={() => handleCheckboxChange(i.id)} />{i.text}</div>) }
         </div>
     )
 };

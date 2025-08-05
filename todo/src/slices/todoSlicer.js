@@ -1,7 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const loadSavedTodos = () => {
+    try {
+        const raw = localStorage.getItem('savedTodos');
+        return raw ? JSON.parse(raw) : [];
+    } catch {
+        return [];
+    }
+};
+
 const initialState = {
-    todos: []
+    todos: loadSavedTodos()
 };
 
 
@@ -15,10 +24,18 @@ const todoSlice = createSlice({
             },
         clearAllTodos:  (state) => {
             state.todos = [];
+            },
+        toggleTodoStatus: (state, action) => {
+            const todo = state.todos.find(t => t.id === action.payload.id);
+            if (todo.status === 'active') {
+                todo.status = 'completed';
+            } else {
+                todo.status = 'active';
             }
+        }
         }
     });
 
 
-export const { addTodo, clearAllTodos } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus } = todoSlice.actions;
 export default todoSlice.reducer;
