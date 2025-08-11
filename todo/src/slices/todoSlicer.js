@@ -31,11 +31,17 @@ const todoSlice = createSlice({
                 todo.status = 'completed';
             } else {
                 todo.status = 'active';
+            }},
+        updateTodoText: (state, action) => {
+            const todo = state.todos.find((t) => t.id === action.payload.id);
+            if (todo) {
+                todo.text = action.payload.text;
+                }
             }
         }
-        }
-    });
+    }
+);
 
 
-export const { addTodo, clearAllTodos, toggleTodoStatus } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText } = todoSlice.actions;
 export default todoSlice.reducer;

@@ -14,7 +14,7 @@ function App() {
       <section className='controls'>
         <AddTodoInputbox />
       </section>
-      <section className='completed'>
+      <section className='done'>
         <CompletedTodoList />
       </section>
     </div>

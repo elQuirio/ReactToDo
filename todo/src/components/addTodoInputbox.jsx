@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addTodo, clearAllTodos } from "../slices/todoSlicer";
 import { v4 as uuid } from 'uuid';
 
@@ -7,11 +7,12 @@ import { v4 as uuid } from 'uuid';
 export default function AddTodoInputbox() {
     const [text, setText] = useState('');
     const dispatch = useDispatch();
-    const todoSelector = useSelector((state => state.todos.todos));
 
     function handleAddTodoClick () {
-        dispatch(addTodo({id: uuid(), text: text, status: 'active'}));
-        setText('');
+        if (text.trim()) {
+            dispatch(addTodo({id: uuid(), text: text, status: 'active'}));
+            setText(''); 
+        }
     };
 
     function handleClearAllTodos() {
@@ -23,9 +24,18 @@ export default function AddTodoInputbox() {
         setText(e.target.value);
     };
 
-    return (<div>
-                <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox}/>
-                <button onClick={handleAddTodoClick}>Add todo</button>
-                <button onClick={handleClearAllTodos}>Clear todos</button>
+    function handleKeyDown(e) {
+        if (e.key === "Enter") {
+            handleAddTodoClick();
+        } else if (e.key === "Escape") {
+            setText('');
+            e.target.blur();
+        }
+    }
+
+    return (<div className="control-bar">
+                <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown}/>
+                <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
+                <button className="todo-controls-button" onClick={handleClearAllTodos}>Clear todos</button>
             </div>)
 }

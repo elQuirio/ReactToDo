@@ -1,15 +1,9 @@
 import { useSelector } from 'react-redux';
 import { selectCompletedTodos } from '../selectors/todoSelectors';
-import { useDispatch } from 'react-redux';
-import { toggleTodoStatus } from '../slices/todoSlicer';
+import { TodoItem } from "./todoItem";
 
 export default function CompletedTodoList() {
     const completedTodoList = useSelector(selectCompletedTodos);
-    const dispatch = useDispatch();
 
-    function handleCheckboxChange(id) {
-        dispatch(toggleTodoStatus({id}));
-    }
-
-    return <div> {completedTodoList.map((t) => <div key={t.id}> <input type="checkbox" checked={t.status === 'completed' ? true : false} onChange={() => handleCheckboxChange(t.id)} />{t.text} </div>)} </div>
-}
+    return <div> {completedTodoList.map((td) => <TodoItem key={td.id} id={td.id} status={td.status} text={td.text}/>)} </div>
+};
