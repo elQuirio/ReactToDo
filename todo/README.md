@@ -1,12 +1,39 @@
-# React + Vite
+# React ToDo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple **ToDo List** application built with **React** and **Redux Toolkit**, designed to practice state management, modular components, and custom styling.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Add new ToDos** via an input bar and `Add` button.
+- **Mark ToDos as completed** using a checkbox.
+- **Double-click to edit** a ToDo’s text inline.
+- **Clear all ToDos** with a single click (`Clear todos`).
+- **Local state persistence** via Local Storage (no backend yet).
+- **Minimal dark UI** with glassmorphism effects and smooth transitions.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React** – Main library for the UI.
+- **Redux Toolkit** – State management (`todoSlicer.js`).
+- **Custom CSS** – Dark, minimal, and responsive styling.
+- **UUID** – Generate unique IDs for ToDos.
+
+
+## Getting Started
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Start the development server
+npm run dev
+
+# 3. Open the app in your browser
+http://localhost:5173
+```
+
+## 📌 Next Steps
+
+- Add **user authentication** (Passport.js + Express backend).
+- Save ToDos in a **database** instead of Local Storage.
+- Improve UI with animations for adding/removing items.
