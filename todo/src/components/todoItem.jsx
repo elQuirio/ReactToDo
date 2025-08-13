@@ -8,8 +8,10 @@ export function TodoItem({id, status, text }) {
     const [tempText, setTempText] = useState(text);
     const dispatch = useDispatch();
 
-    function handleDoubleClick() {
-        setIsEditing(true);
+    function handleDoubleClick(status) {
+        if (status !== 'completed') {
+            setIsEditing(true);
+        }
     };
 
     function handleOnBlur() {
@@ -33,7 +35,7 @@ export function TodoItem({id, status, text }) {
         }
     };
 
-    return  <div className={`todo-item ${status === "active" ? "active" : "done"}`} onDoubleClick={handleDoubleClick} >
+    return  <div className={`todo-item ${status === "active" ? "active" : "done"}`} onDoubleClick={() => handleDoubleClick(status)} >
             <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} /> 
             {isEditing ? (<input className = "todo-edit-input" autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />) 
             :
