@@ -37,11 +37,13 @@ const todoSlice = createSlice({
             if (todo) {
                 todo.text = action.payload.text;
                 }
+            },
+        clearCompleted: (state, action) => {
+            state.todos = state.todos.filter((t) => t.status !== 'completed');
+                }
             }
-        }
-    }
-);
+    });
 
 
-export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted } = todoSlice.actions;
 export default todoSlice.reducer;

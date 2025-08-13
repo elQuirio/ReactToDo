@@ -32,7 +32,7 @@ npm run dev
 http://localhost:5173
 ```
 
-## 📌 Next Steps
+## Next Steps
 
 - Add **user authentication** (Passport.js + Express backend).
 - Save ToDos in a **database** instead of Local Storage.
