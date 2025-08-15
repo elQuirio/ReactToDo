@@ -12,15 +12,17 @@ export function DropDownButton({handleOnClick}) {
     }
 
     function handleClearCompleted() {
+        console.log('test');
         dispatch(clearCompleted());
 
     }
 
-    function handleOnBlur() {
+    function handleOnBlur(e) {
+        if (e.currentTarget.contains(e.relatedTarget)) return;
         setIsToggled(false);
     }
     
-    return  <div className="dropdown-button" onBlur={handleOnBlur}>
+    return  <div className="dropdown-button" tabIndex={0} onBlur={handleOnBlur}>
                 <button className="todo-controls-button" onClick={handleOnClick}>
                     <span>Clear todos</span>
                     <span className="caret" onClick={handleDropDownClick}> ▼ </span>
