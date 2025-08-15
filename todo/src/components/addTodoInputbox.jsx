@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addTodo, clearAllTodos } from "../slices/todoSlicer";
 import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
+import { StatusBar } from './statusBar';
 
 
 export default function AddTodoInputbox() {
@@ -39,5 +40,6 @@ export default function AddTodoInputbox() {
                 <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown}/>
                 <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
                 < DropDownButton handleOnClick={handleClearAllTodos} />
+                <StatusBar />
             </div>)
 }
