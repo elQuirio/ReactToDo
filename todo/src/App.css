@@ -6,31 +6,25 @@
   text-align: center;
 }
 
-.card { padding: 2em; }
-.read-the-docs { color: #888; }
-
 /* input nella control bar */
 .addTodo {
   min-width: 300px;
-  min-height: 30px;
+  min-height: 40px;
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 16px;
-  color: inherit;
+  font-size: 18px;
   outline: none;
 }
 
 /* --- TODO ITEM --- */
 .todo-item {
   cursor: pointer;
-  width: 100%;
   padding: 12px 16px;
   margin: 12px 0;
   display: flex;
   align-items: center;
   gap: 12px;
-
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
@@ -51,7 +45,6 @@
 
 .todo-item input[type="checkbox"] {
   transform: scale(1.8);
-  margin-right: 10px;
   cursor: pointer;
   accent-color: #4caf50;
 }
@@ -75,7 +68,6 @@
   border: none;
   outline: none;
   padding: 0;
-  transition: color 0.2s ease-in-out;
 }
 
 /* evidenzia il banner mentre stai editando */
@@ -88,11 +80,12 @@
 .control-bar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
   width: 100%;
   position: relative;
   z-index: 50;
-  padding: 12px 16px;
+  padding: 12px 16px 4px 16px;
   margin: 16px 0;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -126,14 +119,12 @@
 /* il contenitore decide la larghezza */
 .dropdown-button {
   position: relative;
-  display: block;
-  z
 }
 
 /* pannello sotto: stessa larghezza del contenitore */
 .dropdown-panel {
   position: absolute;
-  top: calc(100%);
+  top: 100%;
   left: 0;
   width: 100%;
   margin-top: 5px;
@@ -141,9 +132,19 @@
 
 /* bottone interno al pannello: match 100% */
 .dropdown-item {
-  width: 100%;
   display: block;
   text-align: center;
   box-sizing: border-box;
 }
+
+
+.status-bar-mini {
+  flex: 0 0 100%;
+  text-align: center;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  font-size: 14px;
+  color: #ccc;
+}
+
 
