@@ -41,10 +41,13 @@ const todoSlice = createSlice({
         clearCompleted: (state, action) => {
             state.todos = state.todos.filter((t) => t.status !== 'completed');
             console.log(state.todos);
-                }
+                },
+        resetTodos: (state, action) => {
+            state.todos = action.payload;
+        }
             }
     });
 
 
-export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted, resetTodos } = todoSlice.actions;
 export default todoSlice.reducer;
