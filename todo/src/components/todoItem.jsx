@@ -2,6 +2,7 @@ import { useState } from "react";
 import { updateTodoText } from '../slices/todoSlicer';
 import { useDispatch } from "react-redux";
 import { toggleTodoStatus } from '../slices/todoSlicer';
+import { saveTodo } from "../thunks/todoThunks";
 
 export function TodoItem({id, status, text }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -16,13 +17,16 @@ export function TodoItem({id, status, text }) {
 
     function handleOnBlur() {
         if (tempText !== '') {
-            dispatch(updateTodoText({id: id, text: tempText}));
+            dispatch(saveTodo({id: id, text: tempText, status: status}))
+            //dispatch(updateTodoText({id: id, text: tempText}));
         }
         setIsEditing(false);
     };
 
     function handleCheckboxChange(id) {
-        dispatch(toggleTodoStatus({id}));
+        console.log({id: id, text: text, status: status === 'active' ? 'completed' : 'active'});
+        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active'}))
+        //dispatch(toggleTodoStatus({id}));
     };
 
     function handleKeyDown(e) {

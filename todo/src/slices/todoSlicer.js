@@ -20,7 +20,7 @@ const todoSlice = createSlice({
     reducers: {
         addTodo: (state, action) => {
             state.todos.push(action.payload);
-            console.log(state.todos);
+            //console.log(state.todos);
             },
         clearAllTodos:  (state) => {
             state.todos = [];
@@ -32,22 +32,20 @@ const todoSlice = createSlice({
             } else {
                 todo.status = 'active';
             }},
-        updateTodoText: (state, action) => {
+        updateTodo: (state, action) => {
             const todo = state.todos.find((t) => t.id === action.payload.id);
             if (todo) {
+                todo.status = action.payload.status;
                 todo.text = action.payload.text;
                 }
             },
         clearCompleted: (state, action) => {
             state.todos = state.todos.filter((t) => t.status !== 'completed');
             console.log(state.todos);
-                },
-        resetTodos: (state, action) => {
-            state.todos = action.payload;
-        }
+                }
             }
     });
 
 
-export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted, resetTodos } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted, resetTodos, updateTodo } = todoSlice.actions;
 export default todoSlice.reducer;
