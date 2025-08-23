@@ -1,10 +1,8 @@
 import fs from 'fs';
 import path from "path";
 
-export const db = path.resolve("src/assets/todos.json");
-
 //simulating db with json file
-//export const db = "../src/assets/todos.json"
+export const db = path.resolve("../src/assets/todos.json");
 
 export const readTodos = () => {
     try {
@@ -18,9 +16,20 @@ export const readTodos = () => {
 
 export const writeTodos = (todo) => {
     const dbTodos = readTodos();
-    dbTodos.push(todo);
-    fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
-    return dbTodos;
+    const index = dbTodos.findIndex((t) => t.id == todo.id);
+    console.log(index);
+    if (index !== -1) {
+        //update if exists
+        dbTodos[index] = todo;
+        fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
+        return dbTodos;
+    } else {
+        //else append
+        dbTodos.push(todo);
+        fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
+        console.log(todo);
+        return todo;
+    }
 };
 
 

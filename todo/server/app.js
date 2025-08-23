@@ -16,6 +16,18 @@ app.get("/api/todos", (req, res) => {
   res.send(todos);
 });
 
+
+app.patch("/api/todos", (req, res) => {
+  const todo = req.body;
+  try {
+    writeTodos(todo);
+    res.status(201).json(todo);
+  } catch (err) {
+    res.status(500).json({ error: "Error saving todo" })
+  }
+});
+
+
 app.post("/api/todos", (req, res) => {
   const todo = req.body;
   try {
