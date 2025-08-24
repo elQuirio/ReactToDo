@@ -42,7 +42,10 @@ const todoSlice = createSlice({
         clearCompleted: (state, action) => {
             state.todos = state.todos.filter((t) => t.status !== 'completed');
             console.log(state.todos);
-                }
+                },
+        resetTodos: (state, action) => {
+            state.todos = action.payload;
+        }
             }
     });
 
