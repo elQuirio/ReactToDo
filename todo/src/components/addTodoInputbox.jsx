@@ -4,9 +4,7 @@ import { addTodo, clearAllTodos } from "../slices/todoSlicer";
 import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
 import { StatusBar } from './statusBar';
-import { fetchTodos } from '../thunks/todoThunks';
-import { saveTodo } from "../thunks/todoThunks";
-import { insertTodo } from '../thunks/todoThunks';
+import { fetchTodos, insertTodo, clearTodos } from '../thunks/todoThunks';
 
 
 export default function AddTodoInputbox() {
@@ -25,7 +23,7 @@ export default function AddTodoInputbox() {
     };
 
     function handleClearAllTodos() {
-        dispatch(clearAllTodos());
+        dispatch(clearTodos());
         setText('');
     };
 

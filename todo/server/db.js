@@ -17,7 +17,6 @@ export const readTodos = () => {
 export const writeTodos = (todo) => {
     const dbTodos = readTodos();
     const index = dbTodos.findIndex((t) => t.id == todo.id);
-    console.log(index);
     if (index !== -1) {
         //update if exists
         dbTodos[index] = todo;
@@ -27,9 +26,19 @@ export const writeTodos = (todo) => {
         //else append
         dbTodos.push(todo);
         fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
-        console.log(todo);
         return todo;
     }
 };
 
 
+export const clearTodos = (status="all") => {
+    if (status==="completed") {
+        const dbTodos = readTodos();
+        const newDbTodos = dbTodos.filter((t) => t.status !== "completed");
+        fs.writeFileSync(db, JSON.stringify(newDbTodos, null, 2));
+        return newDbTodos;
+    } else if (status === "all") {
+        fs.writeFileSync(db, JSON.stringify([], null, 2));
+        return [];
+    }
+}

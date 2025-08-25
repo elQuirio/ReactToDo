@@ -24,7 +24,7 @@ export function TodoItem({id, status, text }) {
     };
 
     function handleCheckboxChange(id) {
-        console.log({id: id, text: text, status: status === 'active' ? 'completed' : 'active'});
+        //console.log({id: id, text: text, status: status === 'active' ? 'completed' : 'active'});
         dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active'}))
         //dispatch(toggleTodoStatus({id}));
     };

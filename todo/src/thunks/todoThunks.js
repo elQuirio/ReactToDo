@@ -34,7 +34,32 @@ export const insertTodo = createAsyncThunk(
                 body: JSON.stringify(todo)
             });
         const data = await res.json();
-        console.log(data);
         dispatch(addTodo(data));
+    }
+);
+
+// capire se si puo accorpare completed e all e gestione errori
+export const clearTodos = createAsyncThunk(
+    "todos/clearTodos",
+    async ( _ , { dispatch }) => {
+        const res = await fetch('http://localhost:3000/api/todos',
+            {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" }
+            });
+        const data = await res.json();
+        dispatch(resetTodos(data));
+    }
+);
+
+export const clearCompletedTodos = createAsyncThunk(
+    "todos/clearCompletedTodos",
+    async ( _ , { dispatch }) => {
+        const res = await fetch('http://localhost:3000/api/todos?status=completed', {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
+        const data = await res.json();
+        dispatch(resetTodos(data));
     }
 );

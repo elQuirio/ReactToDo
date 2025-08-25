@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { db, readTodos, writeTodos } from './db.js';
+import { db, readTodos, writeTodos, clearTodos } from './db.js';
 
 
 const app = express();
@@ -11,12 +11,13 @@ app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'D
 }));
 
 
+// GET
 app.get("/api/todos", (req, res) => {
   const todos = readTodos();
   res.send(todos);
 });
 
-
+// PATCH
 app.patch("/api/todos", (req, res) => {
   const todo = req.body;
   try {
@@ -28,6 +29,7 @@ app.patch("/api/todos", (req, res) => {
 });
 
 
+// POST
 app.post("/api/todos", (req, res) => {
   const todo = req.body;
   try {
@@ -36,6 +38,15 @@ app.post("/api/todos", (req, res) => {
   } catch (err) {
     res.status(500).json({ error: "Error saving todo" })
   }
+});
+
+
+// DELETE
+app.delete("/api/todos", (req, res) => {
+  //if no status is provided deletes all todos
+  const status = req.query.status;
+  const todos = clearTodos(status);
+  res.status(200).json(todos);
 });
 
 app.listen(3000, () => {

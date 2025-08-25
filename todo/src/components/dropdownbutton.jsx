@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { clearCompleted } from "../slices/todoSlicer";
+import { clearCompletedTodos } from '../thunks/todoThunks';
 
 export function DropDownButton({handleOnClick}) {
     const [ isToggled, setIsToggled ] = useState(false);
@@ -12,9 +13,7 @@ export function DropDownButton({handleOnClick}) {
     }
 
     function handleClearCompleted() {
-        console.log('test');
-        dispatch(clearCompleted());
-
+        dispatch(clearCompletedTodos());
     }
 
     function handleOnBlur(e) {
