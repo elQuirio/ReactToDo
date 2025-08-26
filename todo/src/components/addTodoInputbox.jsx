@@ -16,8 +16,8 @@ export default function AddTodoInputbox() {
 
     function handleAddTodoClick () {
         if (text.trim()) {
-            dispatch(insertTodo({id: uuid(), text: text, status: 'active'}))
-            //dispatch(addTodo({id: uuid(), text: text, status: 'active'}));
+            const now = Date.now();
+            dispatch(insertTodo({id: uuid(), text: text, status: 'active', createdAt: now, updatedAt: now, toBeCompletedAt: null }))
             setText('');
         }
     };
