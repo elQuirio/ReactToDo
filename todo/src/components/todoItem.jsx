@@ -7,7 +7,9 @@ import { saveTodo } from "../thunks/todoThunks";
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
+    const [isExpanded, setIsExpanded] = useState(false);
     const dispatch = useDispatch();
+    let todoContent = '';
 
     function handleDoubleClick(status) {
         if (status !== 'completed') {
@@ -17,16 +19,13 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     function handleOnBlur() {
         if (tempText !== '') {
-            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: updatedAt, toBeCompletedAt: toBeCompletedAt }))
-            //dispatch(updateTodoText({id: id, text: tempText}));
+            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
         }
         setIsEditing(false);
     };
 
     function handleCheckboxChange(id) {
-        //console.log({id: id, text: text, status: status === 'active' ? 'completed' : 'active'});
-        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: updatedAt, toBeCompletedAt: toBeCompletedAt }))
-        //dispatch(toggleTodoStatus({id}));
+        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
     };
 
     function handleKeyDown(e) {
@@ -39,10 +38,18 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     };
 
+    if (isEditing && !isExpanded) {
+        todoContent = (<input className = "todo-edit-input" autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
+    } 
+    else if (!isEditing && isExpanded) {
+        // template filler for expanding body development
+        todoContent = (<div></div>)
+    } else if (!isEditing && !isExpanded) {
+        todoContent = (<span className="todo-text" > {text}</span>);
+    }
+
     return  <div className={`todo-item ${status === "active" ? "active" : "done"}`} onDoubleClick={() => handleDoubleClick(status)} >
             <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} /> 
-            {isEditing ? (<input className = "todo-edit-input" autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />) 
-            :
-            (<span className="todo-text" > {text}</span>)}
+            {todoContent}
             </div>
 };
