@@ -11,6 +11,10 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     const dispatch = useDispatch();
     let todoContent = '';
 
+    function handleOnClick() {
+        setIsExpanded(!isExpanded);
+    };
+
     function handleDoubleClick(status) {
         if (status !== 'completed') {
             setIsEditing(true);
@@ -26,6 +30,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     function handleCheckboxChange(id) {
         dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
+
     };
 
     function handleKeyDown(e) {
@@ -38,18 +43,23 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     };
 
-    if (isEditing && !isExpanded) {
+    if (isEditing) {
         todoContent = (<input className = "todo-edit-input" autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
-    } 
-    else if (!isEditing && isExpanded) {
-        // template filler for expanding body development
-        todoContent = (<div></div>)
-    } else if (!isEditing && !isExpanded) {
+    } else if (!isEditing) {
         todoContent = (<span className="todo-text" > {text}</span>);
     }
 
     return  <div className={`todo-item ${status === "active" ? "active" : "done"}`} onDoubleClick={() => handleDoubleClick(status)} >
-            <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} /> 
-            {todoContent}
+                <div className="todo-header">
+                    <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
+                    {todoContent}
+                    <button className="expand-todo-btn" onClick={() => handleOnClick()}>{isExpanded ? "-" : "+" }</button>
+                </div>
+
+                {isExpanded && (<div className="todo-details">
+                    <div className="detail-row"><span className="label">Created:</span> {createdAt ? new Date(createdAt).toLocaleString() : "—"}</div>
+                    <div className="detail-row"><span className="label">Updated:</span> {updatedAt ? new Date(updatedAt).toLocaleString() : "—"}</div>
+                    <div className="detail-row"><span className="label">Due:</span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</div>
+                </div>)}
             </div>
 };
