@@ -49,7 +49,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         todoContent = (<span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text}</span>);
     }
 
-    return  <div className={`todo-item ${status === "active" ? "active" : "done"}`} onDoubleClick={() => handleDoubleClick(status)} >
+    return  <div className={`todo-item`} onDoubleClick={() => handleDoubleClick(status)} >
                 <div className="todo-header">
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
