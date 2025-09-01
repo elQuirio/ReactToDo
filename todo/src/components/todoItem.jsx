@@ -15,7 +15,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         setIsExpanded(!isExpanded);
     };
 
-    function handleDoubleClick(status) {
+    function handleDoubleClick() {
         if (status !== 'completed') {
             setIsEditing(true);
         }
@@ -28,10 +28,19 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         setIsEditing(false);
     };
 
-    function handleCheckboxChange(id) {
+    function handleCheckboxChange() {
         dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
-
     };
+
+    function handlePlus1d() {
+        let dueDate;
+        if (!toBeCompletedAt) {
+            dueDate = Date.now() + (24 * 60 * 60 * 1000); //add one day
+        } else {
+            dueDate = toBeCompletedAt + (24 * 60 * 60 * 1000);
+        }
+        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
+    }
 
     function handleKeyDown(e) {
         if (e.key === 'Enter') 
@@ -60,6 +69,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                     <div className="detail-row"><span className="label">Created:</span> {createdAt ? new Date(createdAt).toLocaleString() : "—"}</div>
                     <div className="detail-row"><span className="label">Updated:</span> {updatedAt ? new Date(updatedAt).toLocaleString() : "—"}</div>
                     <div className="detail-row"><span className="label">Due:</span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</div>
+                    <button className="detail-row due-date-button" onClick={handlePlus1d}>+1d</button>
                 </div>)}
             </div>
 };
