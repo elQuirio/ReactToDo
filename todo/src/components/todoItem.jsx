@@ -66,10 +66,25 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                 </div>
 
                 {isExpanded && (<div className="todo-details">
-                    <div className="detail-row"><span className="label">Created:</span> {createdAt ? new Date(createdAt).toLocaleString() : "—"}</div>
-                    <div className="detail-row"><span className="label">Updated:</span> {updatedAt ? new Date(updatedAt).toLocaleString() : "—"}</div>
-                    <div className="detail-row"><span className="label">Due:</span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</div>
-                    <button className="detail-row due-date-button" onClick={handlePlus1d}>+1d</button>
+                    <div className="detail-row">
+                        <span className="label">Created:</span>
+                        <span> {createdAt ? new Date(createdAt).toLocaleString() : "—"}</span>
+                    </div>
+                    <div className="detail-row">
+                        <span className="label">Updated:</span> 
+                        <span> {updatedAt ? new Date(updatedAt).toLocaleString() : "—"}</span>
+                    </div>
+                    <div className="detail-row due-date-box">
+                        <div className="due-date-box-label">
+                            <span className="label">Due:</span> 
+                            <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
+                        </div>
+                        <div className="due-date-box-commands">
+                            <button className="detail-row due-date-button" onClick={handlePlus1d}>+1d</button>
+                            <button className="detail-row due-date-button" >Reset</button>
+                            <button className="detail-row due-date-button" >Set</button>
+                        </div>
+                    </div>
                 </div>)}
             </div>
 };
