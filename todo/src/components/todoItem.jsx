@@ -3,12 +3,14 @@ import { updateTodoText } from '../slices/todoSlicer';
 import { useDispatch } from "react-redux";
 import { toggleTodoStatus } from '../slices/todoSlicer';
 import { saveTodo } from "../thunks/todoThunks";
+import { useRef } from "react";
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
     const [isExpanded, setIsExpanded] = useState(false);
     const dispatch = useDispatch();
+    const refDatePicker = useRef(null);
     let todoContent = '';
 
     function handleOnClick() {
@@ -39,6 +41,21 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         } else {
             dueDate = toBeCompletedAt + (24 * 60 * 60 * 1000);
         }
+        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
+    }
+
+    function handleResetDue() {
+        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null }))
+    }
+
+    function handleSetDue() {
+        refDatePicker.current.showPicker();
+    }
+
+    function handleOnChangeDatePicker(e) {
+        const selectedDate = new Date(e.target.value);
+        selectedDate.setHours(9, 0, 0, 0);
+        const dueDate = selectedDate.getTime();
         dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
     }
 
@@ -80,9 +97,10 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
                         <div className="due-date-box-commands">
-                            <button className="detail-row due-date-button" onClick={handlePlus1d}>+1d</button>
-                            <button className="detail-row due-date-button" >Reset</button>
-                            <button className="detail-row due-date-button" >Set</button>
+                            <button className="detail-row due-date-button" onClick={handlePlus1d} >+1d</button>
+                            <button className="detail-row due-date-button" onClick={handleResetDue} >Reset</button>
+                            <button className="detail-row due-date-button" onClick={handleSetDue} >Set</button>
+                            <input type="date" ref={refDatePicker} className="hidden-date-picker" onChange={(e) => handleOnChangeDatePicker(e)}></input>
                         </div>
                     </div>
                 </div>)}
