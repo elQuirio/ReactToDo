@@ -4,15 +4,15 @@
     "text": "test todo",
     "status": "active",
     "createdAt": 1756675074316,
-    "updatedAt": 1756847831771,
-    "toBeCompletedAt": 1759388400000
+    "updatedAt": 1756932904052,
+    "toBeCompletedAt": null
   },
   {
     "id": "b21fc430-7e59-436e-a24f-0c593acd2b0c",
     "text": "test new todo",
     "status": "completed",
     "createdAt": 1756759022936,
-    "updatedAt": 1756759377992,
+    "updatedAt": 1756932236656,
     "toBeCompletedAt": null
   }
 ]

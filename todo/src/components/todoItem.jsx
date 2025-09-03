@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { updateTodoText } from '../slices/todoSlicer';
 import { useDispatch } from "react-redux";
-import { toggleTodoStatus } from '../slices/todoSlicer';
 import { saveTodo } from "../thunks/todoThunks";
 import { useRef } from "react";
 
@@ -11,7 +9,9 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     const [isExpanded, setIsExpanded] = useState(false);
     const dispatch = useDispatch();
     const refDatePicker = useRef(null);
+    const oneDay = 24 * 60 * 60 * 1000;
     let todoContent = '';
+    let dueDateCommands = '';
 
     function handleOnClick() {
         setIsExpanded(!isExpanded);
@@ -35,21 +35,27 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     };
 
     function handlePlus1d() {
-        let dueDate;
-        if (!toBeCompletedAt) {
-            dueDate = Date.now() + (24 * 60 * 60 * 1000); //add one day
-        } else {
-            dueDate = toBeCompletedAt + (24 * 60 * 60 * 1000);
+        if (status !== 'completed') {
+            let dueDate;
+            if (!toBeCompletedAt) {
+                dueDate = Date.now() + oneDay; //add one day
+            } else {
+                dueDate = toBeCompletedAt + oneDay;
+            }
+            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
         }
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
     }
 
     function handleResetDue() {
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null }))
+        if (status !== 'completed') {
+            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null }))
+        }
     }
 
     function handleSetDue() {
-        refDatePicker.current.showPicker();
+        if (status !== 'completed') {
+            refDatePicker.current.showPicker();
+        }
     }
 
     function handleOnChangeDatePicker(e) {
@@ -75,11 +81,22 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         todoContent = (<span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text}</span>);
     }
 
+    if (status !== 'completed') {
+        dueDateCommands = (<div className="due-date-box-commands">
+                            <button className="detail-row due-date-button" onClick={handlePlus1d} >+1d</button>
+                            <button className="detail-row due-date-button" onClick={handleResetDue} >Reset</button>
+                            <button className="detail-row due-date-button" onClick={handleSetDue} >Set</button>
+                            <input type="date" ref={refDatePicker} className="hidden-date-picker" onChange={(e) => handleOnChangeDatePicker(e)}></input>
+                        </div>);
+    } else {
+        dueDateCommands = <div className="due-date-box-commands"></div>;
+    }
+
     return  <div className={`todo-item`} onDoubleClick={() => handleDoubleClick(status)} >
                 <div className="todo-header">
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
-                    <button className="expand-todo-btn" onClick={() => handleOnClick()}>{isExpanded ? "-" : "+" }</button>
+                    <button className="expand-todo-btn" onClick={handleOnClick}>{isExpanded ? "-" : "+" }</button>
                 </div>
 
                 {isExpanded && (<div className="todo-details">
@@ -96,12 +113,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                             <span className="label">Due:</span> 
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
-                        <div className="due-date-box-commands">
-                            <button className="detail-row due-date-button" onClick={handlePlus1d} >+1d</button>
-                            <button className="detail-row due-date-button" onClick={handleResetDue} >Reset</button>
-                            <button className="detail-row due-date-button" onClick={handleSetDue} >Set</button>
-                            <input type="date" ref={refDatePicker} className="hidden-date-picker" onChange={(e) => handleOnChangeDatePicker(e)}></input>
-                        </div>
+                        {dueDateCommands}
                     </div>
                 </div>)}
             </div>
