@@ -1,16 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const loadSavedTodos = () => {
-    try {
-        const raw = localStorage.getItem('savedTodos');
-        return raw ? JSON.parse(raw) : [];
-    } catch {
-        return [];
-    }
-};
 
 const initialState = {
-    todos: loadSavedTodos()
+    todos: []
 };
 
 

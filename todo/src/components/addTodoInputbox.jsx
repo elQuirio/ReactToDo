@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addTodo, clearAllTodos } from "../slices/todoSlicer";
 import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
 import { StatusBar } from './statusBar';
@@ -9,7 +8,6 @@ import { fetchTodos, insertTodo, clearTodos } from '../thunks/todoThunks';
 
 export default function AddTodoInputbox() {
     const [text, setText] = useState('');
-    const [isDroppedDown, setIsDroppedDown] = useState(false);
     const dispatch = useDispatch();
 
     useEffect(() => { dispatch(fetchTodos()) }, [dispatch]);
