@@ -2,11 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveTodo } from "../thunks/todoThunks";
 import { useRef } from "react";
+import { toggleId } from "../slices/uiTodoSlicer";
 
-export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt }) {
+export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
-    const [isExpanded, setIsExpanded] = useState(false);
+    //const [isExpanded, setIsExpanded] = useState(false);
     const dispatch = useDispatch();
     const refDatePicker = useRef(null);
     const oneDay = 24 * 60 * 60 * 1000;
@@ -14,7 +15,8 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     let dueDateCommands = '';
 
     function handleOnClick() {
-        setIsExpanded(!isExpanded);
+        dispatch(toggleId({ id: id }));
+        //setIsExpanded(!isExpanded);
     };
 
     function handleDoubleClick() {
