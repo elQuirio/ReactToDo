@@ -1,9 +1,9 @@
 /* layout base Vite */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0;
   text-align: center;
+  height: 100%;
+  width:100%;
 }
 
 /* input nella control bar */
@@ -223,3 +223,72 @@
   width: 0;
   height: 0;
 }
+
+.main-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+}
+
+.sidebar {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  flex: 0 0 64px;
+}
+
+/*******/
+.sidebar {
+  width: 30px;                  /* chiusa: solo icone */
+  flex: 0 0 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 8px;
+
+  background: rgba(255, 255, 255, 0.05);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.sidebar.open {
+  width: 220px;
+}
+
+.sidebar-action-button {
+  background: #5555555c;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  padding: 1px 4px 4px 4px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 24px;
+  text-align: center;
+
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.sidebar button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/*******/
+
+.todo-content {
+  flex: 1;
+  overflow: auto;
+  width: 100%;
+}
+
+.todo-content-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+

@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { db, readTodos, writeTodos, clearTodos } from './db.js';
+import { readTodos, writeTodos, clearTodos } from './db.js';
 
 
 const app = express();
