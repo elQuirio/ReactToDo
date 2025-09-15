@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { saveTodo } from "../thunks/todoThunks";
 import { useRef } from "react";
 import { toggleId } from "../slices/uiTodoSlicer";
+import { AlertCircle } from "lucide-react";
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -16,7 +17,6 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     function handleOnClick() {
         dispatch(toggleId({ id: id }));
-        //setIsExpanded(!isExpanded);
     };
 
     function handleDoubleClick() {
@@ -80,7 +80,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
     } else if (!isEditing) {
-        todoContent = (<span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text}</span>);
+        todoContent = (<span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text} { (toBeCompletedAt && toBeCompletedAt < Date.now() && status !== 'completed' ) && <AlertCircle /> }</span>);
     }
 
     if (status !== 'completed') {
@@ -98,6 +98,9 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                 <div className="todo-header">
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
+                    {
+                    //fermaposto per qualcosa di carino in futuro ( spostare isOverdue da qualche altra parte)
+                    }
                     <button className="expand-todo-btn" onClick={handleOnClick}>{isExpanded ? "-" : "+" }</button>
                 </div>
 
