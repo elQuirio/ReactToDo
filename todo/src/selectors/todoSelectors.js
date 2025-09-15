@@ -7,3 +7,5 @@ export function selectTodos(state) {
 export const selectActiveTodos = createSelector( [selectTodos], (todos) => todos.filter( (t) => t.status === 'active'));
 
 export const selectCompletedTodos = createSelector( [selectTodos], (todos) => todos.filter((t) => t.status === 'completed'));
+
+export const selectOverdueTodos = createSelector( [selectTodos], (todos) => todos.filter((t) => t.toBeCompletedAt && t.toBeCompletedAt < Date.now() ));

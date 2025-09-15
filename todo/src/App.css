@@ -240,7 +240,7 @@
 
 /*******/
 .sidebar {
-  width: 30px;                  /* chiusa: solo icone */
+  width: 35px;                  /* chiusa: solo icone */
   flex: 0 0 64px;
   display: flex;
   flex-direction: column;
