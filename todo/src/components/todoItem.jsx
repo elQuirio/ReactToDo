@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveTodo } from "../thunks/todoThunks";
 import { useRef } from "react";
-import { toggleId } from "../slices/uiTodoSlicer";
+import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle } from "lucide-react";
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded }) {
@@ -36,7 +36,8 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     };
 
     function handleCheckboxChange() {
-        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
+        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }));
+        dispatch(collapseId({id: id}));
     };
 
     function handlePlus1d() {

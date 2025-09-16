@@ -21,12 +21,16 @@ const uiTodoSlice = createSlice({
             const id = action.payload.id;
             if (state.expandedTodo[id]) {
                 delete state.expandedTodo[id];
-            } else
-            state.expandedTodo[id] = true;
+            } else {
+                state.expandedTodo[id] = true;
+            }
+        },
+        collapseId: (state, action) => {
+            delete state.expandedTodo[action.payload.id];
         }
     }
 });
 
 
-export const { collapseAll, expandAll, toggleId } = uiTodoSlice.actions;
+export const { collapseAll, expandAll, toggleId, collapseId } = uiTodoSlice.actions;
 export default uiTodoSlice.reducer;
