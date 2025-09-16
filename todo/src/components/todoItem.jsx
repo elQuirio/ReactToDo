@@ -16,7 +16,10 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     let dueDateCommands = '';
 
     function handleOnClick() {
-        dispatch(toggleId({ id: id }));
+        if (status === 'active')
+        {
+            dispatch(toggleId({ id: id }));
+        }
     };
 
     function handleDoubleClick() {
