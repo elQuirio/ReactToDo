@@ -63,3 +63,16 @@ export const clearCompletedTodos = createAsyncThunk(
         dispatch(resetTodos(data));
     }
 );
+
+// capire se possibile accorpare
+export const markAllAsCompletedTodos = createAsyncThunk(
+    'todos/markAllAsCompleted',
+    async ( _ , { dispatch }) => {
+        const res = await fetch('http://localhost:3000/api/todos/mark-all-as-completed', {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" }
+        })
+        const data = await res.json();
+        dispatch(resetTodos(data));
+    }
+);

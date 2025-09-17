@@ -35,10 +35,13 @@ const todoSlice = createSlice({
                 },
         resetTodos: (state, action) => {
             state.todos = action.payload;
+        },
+        markAllAsCompleted: (state, action) => {
+            state.todos.map((t) => t.status = 'completed');
         }
-            }
-    });
+    }
+});
 
 
-export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted, resetTodos, updateTodo } = todoSlice.actions;
+export const { addTodo, clearAllTodos, toggleTodoStatus, updateTodoText, clearCompleted, resetTodos, updateTodo, markAllAsCompleted } = todoSlice.actions;
 export default todoSlice.reducer;

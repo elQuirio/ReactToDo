@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { clearCompleted } from "../slices/todoSlicer";
+import { markAllAsCompletedTodos } from "../thunks/todoThunks";
 import { collapseAll } from "../slices/uiTodoSlicer";
 import { clearCompletedTodos } from '../thunks/todoThunks';
 
@@ -18,6 +18,10 @@ export function DropDownButton({handleOnClick}) {
         dispatch(clearCompletedTodos());
     }
 
+    function handleMarkAllAsDone() {
+        dispatch(markAllAsCompletedTodos());
+    }
+
     function handleCollapseAll() {
         dispatch(collapseAll());
     }
@@ -30,7 +34,7 @@ export function DropDownButton({handleOnClick}) {
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
-                            <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Mark all as done</button>
+                            <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
                             <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Mark all as active</button>
                             <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Sort todos</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleCollapseAll} >Collapse todos</button>
