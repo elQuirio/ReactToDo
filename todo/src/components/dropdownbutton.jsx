@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { markAllAsCompletedTodos } from "../thunks/todoThunks";
 import { collapseAll } from "../slices/uiTodoSlicer";
-import { clearCompletedTodos } from '../thunks/todoThunks';
+import { clearCompletedTodos, markAllAsActiveTodos } from '../thunks/todoThunks';
 
 export function DropDownButton({handleOnClick}) {
     const [ isToggled, setIsToggled ] = useState(false);
@@ -16,6 +16,10 @@ export function DropDownButton({handleOnClick}) {
 
     function handleClearCompleted() {
         dispatch(clearCompletedTodos());
+    }
+
+    function handleMarkAllAsActive() {
+        dispatch(markAllAsActiveTodos());
     }
 
     function handleMarkAllAsDone() {
@@ -35,7 +39,7 @@ export function DropDownButton({handleOnClick}) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
-                            <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Mark all as active</button>
+                            <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsActive}>Mark all as active</button>
                             <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Sort todos</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleCollapseAll} >Collapse todos</button>
                         </div>)

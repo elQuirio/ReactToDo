@@ -76,3 +76,15 @@ export const markAllAsCompletedTodos = createAsyncThunk(
         dispatch(resetTodos(data));
     }
 );
+
+export const markAllAsActiveTodos = createAsyncThunk(
+    'todos/markAllAsActive',
+    async (_ , { dispatch} ) => {
+        const res = await fetch('http://localhost:3000/api/todos/mark-all-as-active', {
+            method: 'PATCH',
+            headers: { "Content-Type": "application/json" }
+        })
+        const data = await res.json();
+        dispatch(resetTodos(data));
+    }
+);
