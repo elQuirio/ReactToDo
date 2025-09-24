@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodos, clearTodos } from './db.js';
+import { readTodos, writeTodos, clearTodos, getNewPosition } from './db.js';
 
 
 const app = express();
@@ -28,10 +28,47 @@ app.patch("/api/todos", (req, res) => {
   }
 });
 
+//capire se possibile accorpare e semplificare
+app.patch("/api/todos/mark-all-as-completed", (req, res) => {
+  const todos = readTodos();
+  const updatedTodos = todos.map((t) => {
+    if (t.status !== 'completed') {
+      return { ...t, status: 'completed', updatedAt: Date.now() };
+    } else {
+      return t;
+    }
+  });
+
+  try {
+    updatedTodos.forEach((t) => writeTodos(t));
+    res.status(200).json(readTodos());
+  } catch (err) {
+    res.status(500).json({ error: "Error saving todo" })
+  }
+});
+
+app.patch("/api/todos/mark-all-as-active", (req, res) => {
+  const todos = readTodos();
+  const updatedTodos = todos.map(t => {
+    if (t.status !== "active") {
+      return {...t, status: 'active', updatedAt: Date.now()}
+    } else {
+      return t;
+    }
+  });
+  try {
+    updatedTodos.forEach((t) => writeTodos(t));
+    res.status(200).json(readTodos());
+  } catch {
+    res.status(500).json({error: "Error saving todo"});
+  }
+});
+
 
 // POST
 app.post("/api/todos", (req, res) => {
   const todo = req.body;
+  todo.position = getNewPosition();
   try {
     writeTodos(todo);
     res.status(201).json(todo);

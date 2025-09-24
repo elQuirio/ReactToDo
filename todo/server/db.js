@@ -42,3 +42,9 @@ export const clearTodos = (status="all") => {
         return [];
     }
 }
+
+export const getNewPosition = () => {
+    const dbTodos = readTodos();
+    const maxPosition = dbTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
+    return maxPosition +1;
+}
