@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodos, clearTodos, getNewPosition } from './db.js';
+import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos } from './db.js';
 
 
 const app = express();
@@ -14,19 +14,36 @@ app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'D
 // GET
 app.get("/api/todos", (req, res) => {
   const todos = readTodos();
-  res.send(todos);
+  res.status(200).send(todos);
 });
 
 // PATCH
 app.patch("/api/todos", (req, res) => {
-  const todo = req.body;
-  try {
-    writeTodos(todo);
-    res.status(201).json(todo);
-  } catch (err) {
-    res.status(500).json({ error: "Error saving todo" })
+  const direction = req.query.sortDirection;
+  if (direction) {
+    if (direction != 'asc' && direction != 'desc') {
+      return res.status(400).json({error: "Sort direction must be 'asc' or 'desc'"});
+    }
+    try {
+      const todos = sortTodos(direction);
+      return res.status(200).send(todos);
+    } catch (err) {
+      return res.status(500).json({error: "Error sorting json"})
+    }
+  } 
+  else { 
+    const todo = req.body;
+    try {
+      writeTodos(todo);
+      return res.status(200).json(todo);
+    } 
+    catch (err) {
+      return res.status(500).json({ error: "Error saving todo" })
+    }
   }
 });
+
+
 
 //capire se possibile accorpare e semplificare
 app.patch("/api/todos/mark-all-as-completed", (req, res) => {

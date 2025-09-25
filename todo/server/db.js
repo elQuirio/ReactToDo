@@ -48,3 +48,16 @@ export const getNewPosition = () => {
     const maxPosition = dbTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
     return maxPosition +1;
 }
+
+export function sortTodos(direction) {
+    const todos = readTodos();
+    if (direction == 'desc') {
+        todos.sort((a, b) => b.position - a.position);
+        writeTodos(todos);
+        return todos;
+    } else if (direction == 'asc') {
+        todos.sort((a,b) => a.position - b.position);
+        writeTodos(todos);
+        return todos;
+    }
+}

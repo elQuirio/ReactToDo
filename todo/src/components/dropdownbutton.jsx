@@ -40,7 +40,7 @@ export function DropDownButton({handleOnClick}) {
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsActive}>Mark all as active</button>
-                            <button className="todo-controls-button dropdown-item" style={{ display: "none"}}>Sort todos</button>
+                            <button className="todo-controls-button dropdown-item" >Sort todos</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleCollapseAll} >Collapse todos</button>
                         </div>)
     }
