@@ -88,3 +88,12 @@ export const markAllAsActiveTodos = createAsyncThunk(
         dispatch(resetTodos(data));
     }
 );
+
+export const sortByDirectionTodos = createAsyncThunk(
+    'todos/sortByDirection', 
+    async ( sortDirection , { dispatch } ) => {
+        const res = await fetch(`http://localhost:3000/api/todos?direction=${sortDirection}`, { method: 'PATCH' } )
+        const sortedTodos = await res.json();
+        dispatch(resetTodos(sortedTodos));
+    }
+);

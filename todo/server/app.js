@@ -19,7 +19,8 @@ app.get("/api/todos", (req, res) => {
 
 // PATCH
 app.patch("/api/todos", (req, res) => {
-  const direction = req.query.sortDirection;
+  console.log(req.query.direction);
+  const direction = req.query.direction;
   if (direction) {
     if (direction != 'asc' && direction != 'desc') {
       return res.status(400).json({error: "Sort direction must be 'asc' or 'desc'"});
