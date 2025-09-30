@@ -10,6 +10,7 @@ app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'D
   credentials: false,
 }));
 
+///////////////////////////////////////// TODOS ///////////////////////////////////////////
 
 // GET
 app.get("/api/todos", (req, res) => {
@@ -103,6 +104,12 @@ app.delete("/api/todos", (req, res) => {
   const todos = clearTodos(status);
   res.status(200).json(todos);
 });
+
+
+
+///////////////////////////////////////// PREFERENCES ///////////////////////////////////////////
+
+
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

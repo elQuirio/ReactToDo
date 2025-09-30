@@ -3,6 +3,7 @@ import path from "path";
 
 //simulating db with json file
 export const db = path.resolve("../src/assets/todos.json");
+export const preferences = path.resolve("..src/assets/preferences.json");
 
 export const readTodos = () => {
     try {
@@ -11,7 +12,6 @@ export const readTodos = () => {
     } catch (err) {
         return [];
     }
-    
 };
 
 export const writeTodos = (todo) => {
@@ -41,13 +41,13 @@ export const clearTodos = (status="all") => {
         fs.writeFileSync(db, JSON.stringify([], null, 2));
         return [];
     }
-}
+};
 
 export const getNewPosition = () => {
     const dbTodos = readTodos();
     const maxPosition = dbTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
     return maxPosition +1;
-}
+};
 
 export function sortTodos(direction) {
     const todos = readTodos();
@@ -61,4 +61,41 @@ export function sortTodos(direction) {
         writeTodos(todos);
         return todos;
     }
-}
+};
+
+export function readPreferences() {
+    try {
+        const pref = fs.readFileSync(preferences, "utf-8");
+        return JSON.parse(pref);
+    } catch (err) { 
+        return [];
+    }
+};
+
+export function getPreferencesByUserID(userId) {
+    try {
+        const pref = readPreferences().find((p) => p.id == userId);
+        return pref;
+    } catch (err) {
+        return {}
+    }
+};
+
+// capire dove va inizializzato il json con le preferenze
+//ha senso creare una funzione per creare il template delle preferencze?
+
+export function patchPreferencesByUserId(userId, prefObj) {
+    try {
+        const allPref = readPreferences();
+        const prefIndex = allPref.findIndex((i) => i.userId == userId);
+        const pref = getPreferencesByUserID(userId);
+        if (pref) {
+            const newPref = {...pref, ...prefObj};
+            allPref[prefIndex] = newPref;
+            fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
+            return newPref;
+        } 
+    } catch (err) {
+        return {}
+    }
+};
