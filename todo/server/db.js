@@ -74,27 +74,41 @@ export function readPreferences() {
 
 export function getPreferencesByUserID(userId) {
     try {
-        const pref = readPreferences().find((p) => p.id == userId);
-        return pref;
+        const pref = readPreferences().find((p) => p.userId == userId);
+        if (pref) {
+            return pref;
+        } else {
+            return {userId: userId, sortDirection: 'asc'}; //defualt preferences object
+        }
     } catch (err) {
-        return {}
+        return {userId: userId, sortDirection: 'asc'}
     }
 };
 
 // capire dove va inizializzato il json con le preferenze
 //ha senso creare una funzione per creare il template delle preferencze?
+export function getMaxUserId() {
+    const preferences = readPreferences();
+    const maxUserIdDb = preferences.reduce((acc, p) => Math.max(acc, p.userId ?? 0), 0);
+    return maxUserIdDb + 1;
+};
 
 export function patchPreferencesByUserId(userId, prefObj) {
     try {
         const allPref = readPreferences();
         const prefIndex = allPref.findIndex((i) => i.userId == userId);
         const pref = getPreferencesByUserID(userId);
-        if (pref) {
+        if (prefIndex!== -1) {
             const newPref = {...pref, ...prefObj};
             allPref[prefIndex] = newPref;
             fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
             return newPref;
-        } 
+        } else {
+            const defaultPreferences = {userId: userId, sortDirection: 'asc', ...prefObj};
+            allPref.push(defaultPreferences);
+            fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
+            return defaultPreferences;
+        }
     } catch (err) {
         return {}
     }
