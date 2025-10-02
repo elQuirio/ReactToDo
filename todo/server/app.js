@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos } from './db.js';
+import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos, getMaxUserId } from './db.js';
 
 
 const app = express();
@@ -109,7 +109,40 @@ app.delete("/api/todos", (req, res) => {
 
 ///////////////////////////////////////// PREFERENCES ///////////////////////////////////////////
 
+// middleware per gestire id nei cookie
+const cookieParser = require("cookie-parser");
 
+// passare a id uuid
+app.use(cookieParser());
+app.use(express.json());
+
+app.use((req, res, next) => {
+  let userId = req.cookies.userId;
+  if(!userId) {
+    userId = string(getMaxUserId());
+    res.cookie(
+      "userId", userId, 
+      {
+        httpOnly: true,
+        sameSite: "Lax",
+        secure: false,
+        maxAge: 365*24*60*60*1000
+      });
+  }
+  req.userId = userId;
+  next()
+});
+
+// aggiungere try/catch
+app.patch('/api/preferences', (req, res) => {
+  const preferences = patchPreferencesByUserId(req.userId, req.body);
+  res.json(preferences);
+});
+
+app.get('/api/preferences', (req, res) => {
+  const preferences = getPreferencesByUserID(req.userId);
+  res.json(preferences);
+});
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
