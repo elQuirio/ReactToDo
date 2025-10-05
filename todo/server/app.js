@@ -110,7 +110,8 @@ app.delete("/api/todos", (req, res) => {
 ///////////////////////////////////////// PREFERENCES ///////////////////////////////////////////
 
 // middleware per gestire id nei cookie
-const cookieParser = require("cookie-parser");
+//const cookieParser = require("cookie-parser");
+import cookieParser from "cookie-parser";
 
 // passare a id uuid
 app.use(cookieParser());
