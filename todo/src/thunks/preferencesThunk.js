@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPreferences } from '../slices/preferencesSlicer';
 
-export const getUserPreferences = createAsyncThunk(
+export const fetchPreferences = createAsyncThunk(
     'preferences/getUserPreferences', 
     async ( _ , { dispatch } ) => {
         const resp = await fetch('http://localhost:3000/api/preferences', {
