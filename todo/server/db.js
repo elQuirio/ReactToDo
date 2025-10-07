@@ -3,7 +3,7 @@ import path from "path";
 
 //simulating db with json file
 export const db = path.resolve("../src/assets/todos.json");
-export const preferences = path.resolve("..src/assets/preferences.json");
+export const preferences = path.resolve("../src/assets/preferences.json");
 
 export const readTodos = () => {
     try {

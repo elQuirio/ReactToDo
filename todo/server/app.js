@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos, getMaxUserId } from './db.js';
+import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId } from './db.js';
 
 
 const app = express();
 app.use(express.json());
 app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: false,
+  credentials: true,
 }));
 
 ///////////////////////////////////////// TODOS ///////////////////////////////////////////
@@ -120,7 +120,7 @@ app.use(express.json());
 app.use((req, res, next) => {
   let userId = req.cookies.userId;
   if(!userId) {
-    userId = string(getMaxUserId());
+    userId = String(getMaxUserId());
     res.cookie(
       "userId", userId, 
       {

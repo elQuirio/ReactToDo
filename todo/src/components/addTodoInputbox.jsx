@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
 import { StatusBar } from './statusBar';
 import { fetchTodos, insertTodo, clearTodos } from '../thunks/todoThunks';
+import { fetchPreferences } from "../thunks/preferencesThunk";
 
 
 export default function AddTodoInputbox() {
@@ -11,6 +12,7 @@ export default function AddTodoInputbox() {
     const dispatch = useDispatch();
 
     useEffect(() => { dispatch(fetchTodos()) }, [dispatch]);
+    useEffect(() => { dispatch(fetchPreferences())}, [dispatch]);
 
     function handleAddTodoClick () {
         if (text.trim()) {
