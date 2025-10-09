@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { markAllAsCompletedTodos } from "../thunks/todoThunks";
 import { collapseAll } from "../slices/uiTodoSlicer";
 import { clearCompletedTodos, markAllAsActiveTodos, sortByDirectionTodos } from '../thunks/todoThunks';
+import { selectSortDirection } from '../selectors/preferencesSelector';
+import { updatePreferences } from '../thunks/preferencesThunk';
 
 export function DropDownButton({handleOnClick}) {
     const [ isToggled, setIsToggled ] = useState(false);
     const dispatch = useDispatch();
     let dropDownPanel = '';
+
+    const currentDirection = useSelector(selectSortDirection);
+
+    console.log('CurrentDirection:');
+    console.log(currentDirection);
 
     function handleDropDownClick(e) {
         e.stopPropagation();
@@ -35,10 +42,20 @@ export function DropDownButton({handleOnClick}) {
         setIsToggled(false);
     }
     function handleSortTodos() {
-        dispatch(sortByDirectionTodos('desc'));
+        //pulire e aggiungere cambio name dinamico nel button
+        console.log('current direction inner:');
+        console.log(currentDirection);
+        if (currentDirection=="asc") {
+            dispatch(sortByDirectionTodos('desc'));
+            dispatch(updatePreferences({sortDirection: "desc"}));
+        } else if (currentDirection== "desc") {
+            dispatch(sortByDirectionTodos('asc'));
+            dispatch(updatePreferences({sortDirection: "asc"}));
+        } 
     }
 
     //implementare tutti gli altri pulsanti
+    //aggiungere toggle al pulsante con direzione attuale
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>

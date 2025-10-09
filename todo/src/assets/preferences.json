@@ -2,5 +2,9 @@
   {
     "userId": 1,
     "sortDirection": "asc"
+  },
+  {
+    "userId": "2",
+    "sortDirection": "asc"
   }
 ]

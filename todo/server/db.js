@@ -51,7 +51,6 @@ export const getNewPosition = () => {
 
 export function sortTodos(direction) {
     const todos = readTodos();
-    console.log('aaa');
     if (direction == 'desc') {
         todos.sort((a, b) => b.position - a.position);
         writeTodos(todos);

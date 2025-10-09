@@ -9,5 +9,20 @@ export const fetchPreferences = createAsyncThunk(
             credentials: "include"
         });
         const pref = await resp.json();
+        console.log('dispatching:');
+        console.log(pref);
         dispatch(resetPreferences(pref));
+    });
+
+export const updatePreferences = createAsyncThunk(
+    'preferences/updatePreferences', 
+    async ( pref, {dispatch}) => {
+        const resp = await fetch('http://localhost:3000/api/preferences', {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(pref)
+        });
+        const respPref = await resp.json();
+        dispatch(resetPreferences(respPref));
     });

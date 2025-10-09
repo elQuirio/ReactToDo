@@ -89,6 +89,7 @@ export const markAllAsActiveTodos = createAsyncThunk(
     }
 );
 
+
 export const sortByDirectionTodos = createAsyncThunk(
     'todos/sortByDirection', 
     async ( sortDirection , { dispatch } ) => {

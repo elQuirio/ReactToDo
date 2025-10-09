@@ -3,10 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const preferencesSlice = createSlice({
     name: 'preferences',
-    initialState: {},
+    initialState: {preferences:{"sortDirection": "asc"}},
     reducers: {
         resetPreferences: (state, action) => {
             state.preferences = action.payload;
+            //console.log(state.preferences);
         }
     }
 });
