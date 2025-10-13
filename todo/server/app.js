@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodos, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId } from './db.js';
 
 
 const app = express();
@@ -36,7 +36,7 @@ app.patch("/api/todos", (req, res) => {
   else { 
     const todo = req.body;
     try {
-      writeTodos(todo);
+      writeTodo(todo);
       return res.status(200).json(todo);
     } 
     catch (err) {
@@ -59,7 +59,7 @@ app.patch("/api/todos/mark-all-as-completed", (req, res) => {
   });
 
   try {
-    updatedTodos.forEach((t) => writeTodos(t));
+    updatedTodos.forEach((t) => writeTodo(t));
     res.status(200).json(readTodos());
   } catch (err) {
     res.status(500).json({ error: "Error saving todo" })
@@ -76,7 +76,7 @@ app.patch("/api/todos/mark-all-as-active", (req, res) => {
     }
   });
   try {
-    updatedTodos.forEach((t) => writeTodos(t));
+    updatedTodos.forEach((t) => writeTodo(t));
     res.status(200).json(readTodos());
   } catch {
     res.status(500).json({error: "Error saving todo"});
@@ -89,7 +89,7 @@ app.post("/api/todos", (req, res) => {
   const todo = req.body;
   todo.position = getNewPosition();
   try {
-    writeTodos(todo);
+    writeTodo(todo);
     res.status(201).json(todo);
   } catch (err) {
     res.status(500).json({ error: "Error saving todo" })

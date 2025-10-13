@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { markAllAsCompletedTodos } from "../thunks/todoThunks";
 import { collapseAll } from "../slices/uiTodoSlicer";
 import { clearCompletedTodos, markAllAsActiveTodos, sortByDirectionTodos } from '../thunks/todoThunks';
 import { selectSortDirection } from '../selectors/preferencesSelector';
-import { updatePreferences } from '../thunks/preferencesThunk';
+import { fetchPreferences, updatePreferences } from '../thunks/preferencesThunk';
 
 export function DropDownButton({handleOnClick}) {
     const [ isToggled, setIsToggled ] = useState(false);
     const dispatch = useDispatch();
     let dropDownPanel = '';
 
+    //allo startup controllare che il sort sempre coerente con preferences
+    useEffect(() => {dispatch(fetchPreferences())}, [dispatch]);
+    //aggiungere handling con resort per todo aggiunti successivamente
     const currentDirection = useSelector(selectSortDirection);
 
     console.log('CurrentDirection:');

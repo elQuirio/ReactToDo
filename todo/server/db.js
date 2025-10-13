@@ -14,7 +14,7 @@ export const readTodos = () => {
     }
 };
 
-export const writeTodos = (todo) => {
+export const writeTodo = (todo) => {
     const dbTodos = readTodos();
     const index = dbTodos.findIndex((t) => t.id == todo.id);
     if (index !== -1) {
@@ -29,6 +29,11 @@ export const writeTodos = (todo) => {
         return todo;
     }
 };
+
+export const writeAllTodos = (todos) => {
+    fs.writeFileSync(db, JSON.stringify(todos, null, 2));
+    return todos;
+}
 
 
 export const clearTodos = (status="all") => {
@@ -53,11 +58,13 @@ export function sortTodos(direction) {
     const todos = readTodos();
     if (direction == 'desc') {
         todos.sort((a, b) => b.position - a.position);
-        writeTodos(todos);
+        clearTodos();
+        writeAllTodos(todos);
         return todos;
     } else if (direction == 'asc') {
         todos.sort((a,b) => a.position - b.position);
-        writeTodos(todos);
+        clearTodos();
+        writeAllTodos(todos);
         return todos;
     }
 };

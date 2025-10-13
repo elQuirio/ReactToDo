@@ -8,7 +8,6 @@ import { AlertCircle } from "lucide-react";
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
-    //const [isExpanded, setIsExpanded] = useState(false);
     const dispatch = useDispatch();
     const refDatePicker = useRef(null);
     const oneDay = 24 * 60 * 60 * 1000;
