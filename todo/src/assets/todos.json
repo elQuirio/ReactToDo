@@ -1,12 +1,12 @@
 [
   {
-    "id": "330594a9-c84c-49e0-b7c7-3bc094de039f",
-    "text": "todo 1",
+    "id": "c92aed76-f362-4bae-bb3b-7ad49e877a74",
+    "text": "todo 3",
     "status": "active",
-    "createdAt": 1760391790687,
-    "updatedAt": 1760391790687,
+    "createdAt": 1760391796338,
+    "updatedAt": 1760391796338,
     "toBeCompletedAt": null,
-    "position": 1
+    "position": 3
   },
   {
     "id": "5232bf73-1cf2-48bb-8fe6-1893efa7fd00",
@@ -18,12 +18,12 @@
     "position": 2
   },
   {
-    "id": "c92aed76-f362-4bae-bb3b-7ad49e877a74",
-    "text": "todo 3",
+    "id": "330594a9-c84c-49e0-b7c7-3bc094de039f",
+    "text": "todo 1",
     "status": "active",
-    "createdAt": 1760391796338,
-    "updatedAt": 1760391796338,
+    "createdAt": 1760391790687,
+    "updatedAt": 1760391790687,
     "toBeCompletedAt": null,
-    "position": 3
+    "position": 1
   }
 ]

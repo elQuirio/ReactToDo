@@ -16,9 +16,6 @@ export function DropDownButton({handleOnClick}) {
     //aggiungere handling con resort per todo aggiunti successivamente
     const currentDirection = useSelector(selectSortDirection);
 
-    console.log('CurrentDirection:');
-    console.log(currentDirection);
-
     function handleDropDownClick(e) {
         e.stopPropagation();
         setIsToggled(!isToggled);
@@ -45,9 +42,6 @@ export function DropDownButton({handleOnClick}) {
         setIsToggled(false);
     }
     function handleSortTodos() {
-        //pulire e aggiungere cambio name dinamico nel button
-        console.log('current direction inner:');
-        console.log(currentDirection);
         if (currentDirection=="asc") {
             dispatch(sortByDirectionTodos('desc'));
             dispatch(updatePreferences({sortDirection: "desc"}));
@@ -58,13 +52,12 @@ export function DropDownButton({handleOnClick}) {
     }
 
     //implementare tutti gli altri pulsanti
-    //aggiungere toggle al pulsante con direzione attuale
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsActive}>Mark all as active</button>
-                            <button className="todo-controls-button dropdown-item" onClick={handleSortTodos}>Sort todos</button>
+                            <button className="todo-controls-button dropdown-item" onClick={handleSortTodos}>Sort {currentDirection==="asc" ? "desc" : "asc"}</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleCollapseAll} >Collapse todos</button>
                         </div>)
     }
