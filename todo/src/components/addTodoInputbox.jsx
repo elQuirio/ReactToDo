@@ -7,6 +7,7 @@ import { fetchTodos, insertTodo, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from "../thunks/preferencesThunk";
 
 
+
 export default function AddTodoInputbox() {
     const [text, setText] = useState('');
     const dispatch = useDispatch();

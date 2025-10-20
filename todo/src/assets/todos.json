@@ -4,9 +4,8 @@
     "text": "todo 3",
     "status": "active",
     "createdAt": 1760391796338,
-    "updatedAt": 1760391796338,
-    "toBeCompletedAt": null,
-    "position": 3
+    "updatedAt": 1760648673684,
+    "toBeCompletedAt": 1760821472145
   },
   {
     "id": "5232bf73-1cf2-48bb-8fe6-1893efa7fd00",
