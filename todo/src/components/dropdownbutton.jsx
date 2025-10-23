@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { markAllAsCompletedTodos } from "../thunks/todoThunks";
-import { collapseAll } from "../slices/uiTodoSlicer";
-import { clearCompletedTodos, markAllAsActiveTodos, sortByDirectionTodos } from '../thunks/todoThunks';
-import { selectSortDirection } from '../selectors/preferencesSelector';
-import { fetchPreferences, updatePreferences } from '../thunks/preferencesThunk';
+import { useDispatch } from "react-redux";
+import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos } from '../thunks/todoThunks';
+import { fetchPreferences } from '../thunks/preferencesThunk';
 
 export function DropDownButton({handleOnClick}) {
     const [ isToggled, setIsToggled ] = useState(false);
@@ -14,7 +11,6 @@ export function DropDownButton({handleOnClick}) {
     //allo startup controllare che il sort sempre coerente con preferences
     useEffect(() => {dispatch(fetchPreferences())}, [dispatch]);
     //aggiungere handling con resort per todo aggiunti successivamente
-    const currentDirection = useSelector(selectSortDirection);
 
     function handleDropDownClick(e) {
         e.stopPropagation();
@@ -33,32 +29,17 @@ export function DropDownButton({handleOnClick}) {
         dispatch(markAllAsCompletedTodos());
     }
 
-    function handleCollapseAll() {
-        dispatch(collapseAll());
-    }
-
     function handleOnBlur(e) {
         if (e.currentTarget.contains(e.relatedTarget)) return;
         setIsToggled(false);
     }
-    function handleSortTodos() {
-        if (currentDirection=="asc") {
-            dispatch(sortByDirectionTodos('desc'));
-            dispatch(updatePreferences({sortDirection: "desc"}));
-        } else if (currentDirection== "desc") {
-            dispatch(sortByDirectionTodos('asc'));
-            dispatch(updatePreferences({sortDirection: "asc"}));
-        } 
-    }
 
-    //implementare tutti gli altri pulsanti
+    
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
                             <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsActive}>Mark all as active</button>
-                            <button className="todo-controls-button dropdown-item" onClick={handleSortTodos}>Sort {currentDirection==="asc" ? "desc" : "asc"}</button>
-                            <button className="todo-controls-button dropdown-item" onClick={handleCollapseAll} >Collapse todos</button>
                         </div>)
     }
 

@@ -4,25 +4,23 @@
     "text": "todo 1",
     "status": "active",
     "createdAt": 1761082495596,
-    "updatedAt": 1761082502678,
-    "toBeCompletedAt": 1761168902678
+    "updatedAt": 1761255128568,
+    "toBeCompletedAt": null
   },
   {
     "id": "97ccaefa-edaf-4e14-9fd0-4c0f1f6d297d",
     "text": "todo 2",
     "status": "active",
     "createdAt": 1761082497188,
-    "updatedAt": 1761082497188,
-    "toBeCompletedAt": null,
-    "position": 2
+    "updatedAt": 1761255164051,
+    "toBeCompletedAt": 1760770800000
   },
   {
     "id": "ea6d92fd-c820-4471-94cb-eb01ea321a4b",
     "text": "todo 3",
     "status": "active",
     "createdAt": 1761082499477,
-    "updatedAt": 1761082499477,
-    "toBeCompletedAt": null,
-    "position": 3
+    "updatedAt": 1761255179344,
+    "toBeCompletedAt": 1761341579344
   }
 ]
