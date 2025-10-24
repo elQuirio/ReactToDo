@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle } from "lucide-react";
 
-export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded }) {
+export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
     const dispatch = useDispatch();
@@ -29,13 +29,13 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     function handleOnBlur() {
         if (tempText !== '') {
-            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }))
+            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }))
         }
         setIsEditing(false);
     };
 
     function handleCheckboxChange() {
-        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt }));
+        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
         dispatch(collapseId({id: id}));
     };
 
@@ -47,13 +47,13 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
             } else {
                 dueDate = toBeCompletedAt + oneDay;
             }
-            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
+            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }))
         }
     }
 
     function handleResetDue() {
         if (status !== 'completed') {
-            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null }))
+            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null, position: position }))
         }
     }
 
@@ -67,7 +67,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         const selectedDate = new Date(e.target.value);
         selectedDate.setHours(9, 0, 0, 0);
         const dueDate = selectedDate.getTime();
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate }))
+        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }))
     }
 
     function handleKeyDown(e) {
