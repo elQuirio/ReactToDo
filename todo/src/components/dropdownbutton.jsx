@@ -10,7 +10,8 @@ export function DropDownButton({handleOnClick}) {
 
     //allo startup controllare che il sort sempre coerente con preferences
     useEffect(() => {dispatch(fetchPreferences())}, [dispatch]);
-    //aggiungere handling con resort per todo aggiunti successivamente
+    //aggiungere handling con resort per todo aggiunti successivamente al primo sorting
+    //aggiungere logica di sorting per nome e data invece che per position
 
     function handleDropDownClick(e) {
         e.stopPropagation();
@@ -34,7 +35,7 @@ export function DropDownButton({handleOnClick}) {
         setIsToggled(false);
     }
 
-    
+
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel">
                             <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>

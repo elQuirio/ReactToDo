@@ -40,7 +40,7 @@ export default function AddTodoInputbox() {
             e.target.blur();
         }
     }
-
+    // valutare se togliere il tasto add todo e usare solo enter
     return (<div className="control-bar">
                 <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown}/>
                 <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
