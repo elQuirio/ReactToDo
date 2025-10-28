@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 let initialState = {
     //id: true/false
     expandedTodo: {},
-    searchBtnActive: false
+    searchBtnActive: false,
+    searchString: ""
 };
 
 const uiTodoSlice = createSlice({
@@ -31,10 +32,13 @@ const uiTodoSlice = createSlice({
         },
         searchBtnToggle: (state) => {
             state.searchBtnActive = !state.searchBtnActive;
+        },
+        updateSearchString: (state, action) => {
+            action.payload = state.searchString;
         }
     }
 });
 
 
-export const { collapseAll, expandAll, toggleId, collapseId , searchBtnToggle} = uiTodoSlice.actions;
+export const { collapseAll, expandAll, toggleId, collapseId , searchBtnToggle, updateSearchString} = uiTodoSlice.actions;
 export default uiTodoSlice.reducer;

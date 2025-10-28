@@ -4,8 +4,8 @@
     "text": "todo 1nkn",
     "status": "active",
     "createdAt": 1761329414746,
-    "updatedAt": 1761329436773,
-    "toBeCompletedAt": 1759993200000,
+    "updatedAt": 1761603654035,
+    "toBeCompletedAt": null,
     "position": 1
   },
   {
@@ -22,8 +22,7 @@
     "text": "todo 3",
     "status": "active",
     "createdAt": 1761329418069,
-    "updatedAt": 1761329418069,
-    "toBeCompletedAt": null,
-    "position": 3
+    "updatedAt": 1761604457400,
+    "toBeCompletedAt": null
   }
 ]
