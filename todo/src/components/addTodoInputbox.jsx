@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
 import { StatusBar } from './statusBar';
 import { fetchTodos, insertTodo, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from "../thunks/preferencesThunk";
-
+import { updateSearchString } from "../slices/uiTodoSlicer";
+import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
 
 export default function AddTodoInputbox() {
     const [text, setText] = useState('');
     const dispatch = useDispatch();
+    const searchButtonActive = useSelector(selectSearchBtnToggled);
 
     useEffect(() => { dispatch(fetchTodos()) }, [dispatch]);
     useEffect(() => { dispatch(fetchPreferences())}, [dispatch]);
@@ -29,7 +31,12 @@ export default function AddTodoInputbox() {
     };
 
     function handleOnChangeInputbox(e) {
+        const value = e.target.value;
         setText(e.target.value);
+        //console.log(text);
+        if (searchButtonActive) {
+            dispatch(updateSearchString({text: value}));
+        }
     };
 
     function handleKeyDown(e) {
@@ -45,6 +52,6 @@ export default function AddTodoInputbox() {
                 <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown}/>
                 <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
                 < DropDownButton handleOnClick={handleClearAllTodos} />
-                <StatusBar />
+                <StatusBar searchString={text}/>
             </div>)
 }

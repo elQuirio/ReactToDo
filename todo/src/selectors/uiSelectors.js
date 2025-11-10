@@ -9,8 +9,9 @@ export function selectSearchBtnToggled(state) {
 }
 
 export function selectSearchString(state) {
+    console.log('search string from store');
+    console.log(state.uiTodo.searchString);
     return state.uiTodo.searchString;
 }
-
 
 export const expandedSelector = createSelector([selectUiTodos], (uiTodo) => uiTodo );

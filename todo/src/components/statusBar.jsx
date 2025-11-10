@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { collapseAll, searchBtnToggle } from "../slices/uiTodoSlicer";
+import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
 import { sortByDirectionTodos } from '../thunks/todoThunks';
 import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectSortDirection } from '../selectors/preferencesSelector';
@@ -7,13 +7,13 @@ import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { Search, ArrowUpAZ, ArrowDownZA, Minimize2, Maximize2 } from "lucide-react";
 
-export function StatusBar() {
+export function StatusBar({ searchString }) {
     const activeTodos = useSelector(selectActiveTodos);
     const completedTodos = useSelector(selectCompletedTodos);
     const overdueTodos = useSelector(selectOverdueTodos);
     const currentDirection = useSelector(selectSortDirection);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
-    console.log(searchButtonActive);
+    //console.log(searchButtonActive);
     let sortComponent = '';
 
     const dispatch = useDispatch();
@@ -33,6 +33,8 @@ export function StatusBar() {
     }
 
     function handleToggleSearch() {
+        //condizione che resetta il search string
+        dispatch(updateSearchString({text: searchString}));
         dispatch(searchBtnToggle());
     }
 
@@ -43,7 +45,6 @@ export function StatusBar() {
     }
 
     
-
 
     // aggiungere cambio button con ordinamento e collapse expand
     return <div className="status-bar-mini">
