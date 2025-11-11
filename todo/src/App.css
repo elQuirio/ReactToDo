@@ -1,298 +1,34 @@
-#root {
+/* ----- Main elements ----- */
+html, body, #root {
   margin: 0;
-  text-align: center;
-  height: 100%;
-  width:100%;
-}
-
-/* input nella control bar */
-.addTodo {
-  min-width: 300px;
-  min-height: 40px;
-  flex: 1;
-  border: none;
-  background: transparent;
-  font-size: 20px;
-  outline: none;
-}
-
-/* --- TODO ITEM --- */
-.todo-item {
-  cursor: pointer;
-  padding: 10px 16px;
-  margin: 12px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
-  transition: border-color 0.2s ease-in-out, background 0.2s ease-in-out;
-}
-
-.todo-item:hover {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.todo-done {
-  opacity: 0.6;
-  text-decoration: line-through;
-}
-
-.todo-item input[type="checkbox"] {
-  transform: scale(1.8);
-  cursor: pointer;
-  accent-color: #4caf50;
-}
-
-/* testo e input di editing: stesse dimensioni e comportamento */
-.todo-text,
-.todo-edit-input {
-  font-size: 20px;
-  font-weight: 500;
-  flex: 1;
-  min-width: 0;
-  color: inherit;
-}
-
-.todo-text {
-  word-break: break-word;
-}
-
-.todo-edit-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 0 5%;
-}
-
-/* evidenzia il banner mentre stai editando */
-.todo-item:focus-within {
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* --- CONTROL BAR --- */
-.control-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  position: relative;
-  z-index: 50;
-  padding: 12px 16px 4px 16px;
-  margin: 16px 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  min-width: 300px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(4px);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.3s ease-in-out, background 0.3s ease-in-out;
-}
-
-/* pulsanti: versione leggermente evidenziata ma coerente */
-.todo-controls-button {
-  background: #3a3a3a;
-  /*background: #555;*/
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-}
-
-.todo-controls-button:hover {
-  /*background: #3a3a3a;*/
-  background: #555;
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-/* il contenitore decide la larghezza */
-.dropdown-button {
-  position: relative;
-}
-
-/* pannello sotto: stessa larghezza del contenitore */
-.dropdown-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  margin-top: 5px;
-}
-
-/* bottone interno al pannello: match 100% */
-.dropdown-item {
-  display: block;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.quick-actions-container {
-  position: absolute;
-  left: 20px;
-}
-
-
-.status-bar-mini {
-  flex: 0 0 100%;
-  text-align: center;
-  padding-top: 2px;
-  border-top: 1px solid rgba(255,255,255,0.2);
-  font-size: 14px;
-  color: #ccc;
-}
-
-
-.quick-actions-button {
-  padding: 0 5px;
-  margin: 0 8px;
-  border-radius: 20px;
-  background: #1b1b1b;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  /*max-width: 35px;*/
-  color: #fff;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-}
-
-
-.quick-actions-button:hover {
-  background: #555;
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.quick-actions-button.active {
-  background: #555;
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.search-button {
-
-}
-
-.sort-button {
-}
-
-
-.expand-todo-btn {
-  background: none;
-  border: none;
   padding: 0;
-  color: #fff;
-  font-size: 28px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  width: 20px;
-  line-height: 1;
+  height: 100%;
 }
 
-.expand-todo-btn:hover {
-  transform: scale(1.2);
-}
-
-.todo-header {
+#root {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.todo-details {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: start;
-  font-size: 14px;
-}
-
-.due-date-button {
-  background: #3a3a3a;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  /*max-width: 35px;*/
-  color: #fff;
-  padding: 4px ;
-  margin: 1% 4% 0 4% ;
-  border-radius: 15px;
-  font-size: 14px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
-}
-
-
-.due-date-button:hover {
-  background: #555;
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-
-.due-date-box {
-  display: flex;
-  flex-direction: column;
-}
-
-.due-date-box-commands {
-  display: flex;
-}
-
-.hidden-date-picker {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
+  text-align: center;
 }
 
 .main-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
-  align-items: center;
 }
 
+/* ----- Sidebar ----- */
+
 .sidebar {
-  display: flex;
-  height: 100vh;
-  width: 100%;
   flex: 0 0 64px;
-}
-
-
-
-/*******/
-.sidebar {
-  width: 35px;                  /* chiusa: solo icone */
-  flex: 0 0 64px;
+  width: 40px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
-  padding: 0px 8px 0 8px;
+  padding: 0 8px;
 
-  background: rgba(255, 255, 255, 0.05);
+  background: #ffffff0d;
   border-right: 1px solid rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(6px);
 
@@ -304,16 +40,16 @@
 }
 
 .sidebar-action-button {
-  background: #5555555c;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: #fff;
+  width: 40px;
   padding: 1px 4px 4px 4px;
-  width: 100%;
   border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #5555555c;
+  color: #fff;
   cursor: pointer;
   font-size: 24px;
   text-align: center;
-
+  margin-top: 3px;
   transition: background 0.25s ease, border-color 0.25s ease;
 }
 
@@ -322,12 +58,10 @@
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-/*******/
-
+/* ----- App ----- */
 .todo-content {
   flex: 1;
   width: 100%;
-  height: 100%;
   align-content: end;
 }
 
@@ -337,3 +71,253 @@
   padding: 75px 16px;
 }
 
+/* ----- addTodoInputbox ----- */
+
+.control-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  position: relative;
+  z-index: 50;
+
+  margin: 16px 0;
+  padding: 12px 16px 4px 16px;
+  min-width: 300px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+
+  transition: border-color 0.3s ease-in-out, background 0.3s ease-in-out;
+}
+
+.addTodo {
+  flex: 1;
+  min-width: 300px;
+  min-height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  outline: none;
+}
+
+.todo-controls-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #3a3a3a;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.todo-controls-button:hover {
+  background: #555;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+
+/* ----- dropdownbutton ----- */
+
+.dropdown-button {
+  position: relative;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  display: block;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* ----- statusBar ----- */
+
+.quick-actions-container {
+  position: absolute;
+  left: 20px;
+}
+
+.quick-actions-button {
+  margin: 0 8px;
+  padding: 0 5px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #1b1b1b;
+  color: #fff;
+  cursor: pointer;
+
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.quick-actions-button:hover,
+.quick-actions-button.active {
+  background: #555;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.status-bar-mini {
+  flex: 0 0 100%;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* ----- todoItem ----- */
+
+.todo-item {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  margin: 12px 0;
+  padding: 10px 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+
+  transition: border-color 0.2s ease-in-out, background 0.2s ease-in-out;
+}
+
+.todo-item:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.todo-item:focus-within {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.todo-item input[type="checkbox"] {
+  transform: scale(1.8);
+  cursor: pointer;
+  accent-color: #4caf50;
+}
+
+.todo-done {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.todo-text,
+.todo-edit-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: inherit;
+}
+
+.todo-text {
+  word-break: break-word;
+}
+
+.todo-edit-input {
+  padding: 0 5%;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+.todo-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.todo-details {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  width: 100%;
+  font-size: 14px;
+}
+
+
+.expand-todo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+
+  transition: transform 0.2s ease;
+}
+
+.expand-todo-btn:hover {
+  transform: scale(1.2);
+}
+
+.due-date-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.due-date-box-commands {
+  display: flex;
+}
+
+.due-date-button {
+  margin: 1% 4% 0 4%;
+  padding: 4px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #3a3a3a;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.due-date-button:hover {
+  background: #555;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.hidden-date-picker {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
