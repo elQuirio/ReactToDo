@@ -7,7 +7,6 @@ const preferencesSlice = createSlice({
     reducers: {
         resetPreferences: (state, action) => {
             state.preferences = action.payload;
-            //console.log(state.preferences);
         }
     }
 });

@@ -20,20 +20,20 @@ app.get("/api/todos", (req, res) => {
 
 // PATCH
 app.patch("/api/todos", (req, res) => {
-  console.log(req.query.direction);
-  const direction = req.query.direction;
-  if (direction) {
-    if (direction != 'asc' && direction != 'desc') {
+  const sortDirection = req.body.sortDirection;
+  const sortBy = req.body.sortBy;
+  if (sortDirection || sortBy) {
+    if (sortDirection != 'asc' && sortDirection != 'desc') {
       return res.status(400).json({error: "Sort direction must be 'asc' or 'desc'"});
     }
     try {
-      const todos = sortTodos(direction);
+      const todos = sortTodos(sortDirection, sortBy);
       return res.status(200).send(todos);
     } catch (err) {
       return res.status(500).json({error: "Error sorting json"})
     }
   } 
-  else { 
+  else {
     const todo = req.body;
     try {
       writeTodo(todo);

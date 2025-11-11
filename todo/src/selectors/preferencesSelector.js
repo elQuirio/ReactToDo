@@ -7,3 +7,5 @@ export function selectPreferences(state) {
 };
 
 export const selectSortDirection = createSelector([selectPreferences], (p) => p.sortDirection);
+
+export const selectSortBy = createSelector([selectPreferences], (p) => p.sortBy);

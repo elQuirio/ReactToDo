@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
-import { sortByDirectionTodos } from '../thunks/todoThunks';
+import { sortByTodos } from '../thunks/todoThunks';
 import { updatePreferences } from '../thunks/preferencesThunk';
-import { selectSortDirection } from '../selectors/preferencesSelector';
+import { selectSortDirection, selectSortBy } from '../selectors/preferencesSelector';
 import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { Search, ArrowUpAZ, ArrowDownZA, Minimize2, Maximize2 } from "lucide-react";
@@ -12,8 +12,8 @@ export function StatusBar({ searchString }) {
     const completedTodos = useSelector(selectCompletedTodos);
     const overdueTodos = useSelector(selectOverdueTodos);
     const currentDirection = useSelector(selectSortDirection);
+    const currentSortBy = useSelector(selectSortBy);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
-    //console.log(searchButtonActive);
     let sortComponent = '';
 
     const dispatch = useDispatch();
@@ -24,10 +24,10 @@ export function StatusBar({ searchString }) {
 
     function handleSortTodos() {
         if (currentDirection=="asc") {
-            dispatch(sortByDirectionTodos('desc'));
+            dispatch(sortByTodos({sortDirection: 'desc', sortBy: currentSortBy}));
             dispatch(updatePreferences({sortDirection: "desc"}));
         } else if (currentDirection== "desc") {
-            dispatch(sortByDirectionTodos('asc'));
+            dispatch(sortByTodos({sortDirection: 'asc', sortBy:currentSortBy}));
             dispatch(updatePreferences({sortDirection: "asc"}));
         } 
     }

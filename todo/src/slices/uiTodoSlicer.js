@@ -34,8 +34,6 @@ const uiTodoSlice = createSlice({
             state.searchBtnActive = !state.searchBtnActive;
         },
         updateSearchString: (state, action) => {
-            console.log('updating store:');
-            console.log(action.payload.text);
             state.searchString = action.payload.text;
         }
     }
