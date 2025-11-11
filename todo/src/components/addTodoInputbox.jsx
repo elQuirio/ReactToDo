@@ -33,7 +33,6 @@ export default function AddTodoInputbox() {
     function handleOnChangeInputbox(e) {
         const value = e.target.value;
         setText(e.target.value);
-        //console.log(text);
         if (searchButtonActive) {
             dispatch(updateSearchString({text: value}));
         }

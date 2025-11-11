@@ -54,18 +54,31 @@ export const getNewPosition = () => {
     return maxPosition +1;
 };
 
-export function sortTodos(direction) {
+export function sortTodos(sortDirection, sortBy) {
     const todos = readTodos();
-    if (direction == 'desc') {
-        todos.sort((a, b) => b.position - a.position);
+    const SORTBY_MAP = { 
+        "manual": "position",
+        "createdAt": "createdAt",
+        "updatedAt": "updatedAt",
+        "alpha": "text"
+    }
+    const sortMethod = SORTBY_MAP[sortBy];
+    if (!sortMethod) throw new Error("SortBy method not found!");
+    try {
+        todos.sort((a, b) => {
+            const valA = a[sortMethod];
+            const valB = b[sortMethod];
+            if (typeof valA === "string") {
+                return sortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
+            } else {
+                return sortDirection === 'asc' ? valA - valB : valB - valA;
+            }
+        });
         clearTodos();
         writeAllTodos(todos);
         return todos;
-    } else if (direction == 'asc') {
-        todos.sort((a,b) => a.position - b.position);
-        clearTodos();
-        writeAllTodos(todos);
-        return todos;
+    } catch (e) {
+        throw new Error(e);
     }
 };
 
@@ -84,10 +97,10 @@ export function getPreferencesByUserID(userId) {
         if (pref) {
             return pref;
         } else {
-            return {userId: userId, sortDirection: 'asc'}; //defualt preferences object
+            return {userId: userId, sortDirection: 'manual'}; //defualt preferences object
         }
     } catch (err) {
-        return {userId: userId, sortDirection: 'asc'}
+        return {userId: userId, sortDirection: 'manual'}
     }
 };
 

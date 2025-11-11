@@ -90,10 +90,14 @@ export const markAllAsActiveTodos = createAsyncThunk(
 );
 
 
-export const sortByDirectionTodos = createAsyncThunk(
+export const sortByTodos = createAsyncThunk(
     'todos/sortByDirection', 
-    async ( sortDirection , { dispatch } ) => {
-        const res = await fetch(`http://localhost:3000/api/todos?direction=${sortDirection}`, { method: 'PATCH' } )
+    async ( {sortDirection, sortBy},  { dispatch } ) => {
+        const res = await fetch(`http://localhost:3000/api/todos`, { 
+            method: 'PATCH', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ "sortDirection": sortDirection , "sortBy": sortBy }) 
+        })
         const sortedTodos = await res.json();
         dispatch(resetTodos(sortedTodos));
     }

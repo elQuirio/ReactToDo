@@ -15,8 +15,6 @@ export const selectSearchedTodo = createSelector( [selectTodos, selectSearchStri
     if (searchString === "") {
         return todos;
     } else {
-        console.log('test string');
-        console.log(searchString);
         const query = searchString.trim().toLowerCase();
         return todos.filter((t) => t.text.toLowerCase().includes(query));
     }

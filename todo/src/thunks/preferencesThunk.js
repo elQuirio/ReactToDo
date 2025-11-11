@@ -9,8 +9,6 @@ export const fetchPreferences = createAsyncThunk(
             credentials: "include"
         });
         const pref = await resp.json();
-        console.log('dispatching:');
-        console.log(pref);
         dispatch(resetPreferences(pref));
     });
 
