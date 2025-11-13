@@ -102,3 +102,14 @@ export const sortByTodos = createAsyncThunk(
         dispatch(resetTodos(sortedTodos));
     }
 );
+
+export const dragAndDropReorderTodos = createAsyncThunk("todos/dragAndDropReorder", async ({fromId, toId}, {dispatch}) => {
+    const res = await fetch('http://localhost:3000/api/todos/reorder', {
+        method: 'PATCH', 
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({fromId, toId})
+    })
+    // aggiungere il reset dei todo con la response
+    const sortedTodos = await res.json();
+    dispatch(resetTodos(sortedTodos));
+});

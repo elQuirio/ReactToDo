@@ -18,6 +18,9 @@ export default function AddTodoInputbox() {
     useEffect(() => { dispatch(fetchPreferences())}, [dispatch]);
 
     function handleAddTodoClick () {
+        if (searchButtonActive) {
+            return;
+        }
         if (text.trim()) {
             const now = Date.now();
             dispatch(insertTodo({id: uuid(), text: text, status: 'active', createdAt: now, updatedAt: now, toBeCompletedAt: null }))
@@ -43,12 +46,21 @@ export default function AddTodoInputbox() {
             handleAddTodoClick();
         } else if (e.key === "Escape") {
             setText('');
+            dispatch(updateSearchString({text: ''}));
             e.target.blur();
         }
     }
-    // valutare se togliere il tasto add todo e usare solo enter
+
+    function handlePlaceholder() {
+        if(searchButtonActive) {
+            return 'Type to search...';
+        } else {
+            return 'Write here...';
+        }
+    }
+
     return (<div className="control-bar">
-                <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown}/>
+                <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown} placeholder={handlePlaceholder()}/>
                 <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
                 < DropDownButton handleOnClick={handleClearAllTodos} />
                 <StatusBar searchString={text}/>

@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos } from './db.js';
 
 
 const app = express();
@@ -45,6 +45,16 @@ app.patch("/api/todos", (req, res) => {
   }
 });
 
+
+app.patch("/api/todos/reorder", (req, res) => {
+  try{
+    const { fromId, toId } = req.body;
+    const sortedTodos = manualResortTodos(fromId, toId);
+    return res.status(200).json(sortedTodos);
+  } catch (e) {
+    res.status(500).json({error: "Error sorting todos"});
+  }
+});
 
 
 //capire se possibile accorpare e semplificare

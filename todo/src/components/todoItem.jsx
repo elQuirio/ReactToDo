@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { saveTodo } from "../thunks/todoThunks";
+import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
+import { updatePreferences } from "../thunks/preferencesThunk";
 import { useRef } from "react";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle } from "lucide-react";
@@ -8,6 +9,7 @@ import { AlertCircle } from "lucide-react";
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
+
     const dispatch = useDispatch();
     const refDatePicker = useRef(null);
     const oneDay = 24 * 60 * 60 * 1000;
@@ -73,12 +75,46 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     function handleKeyDown(e) {
         if (e.key === 'Enter') 
         {
-            handleOnBlur()
+            handleOnBlur();
         } else if (e.key === 'Escape') {
             setTempText(text);
             setIsEditing(false);
         }
-    };
+    }
+
+    function handleOnDragStart(e, id) {
+        if (status !== 'completed') {
+            e.dataTransfer.setData('text/plain', id);
+            e.dataTransfer.effectAllowed = 'move';
+        }
+    }
+
+    function handleOnDragOver(e, id) {
+        if (status !== 'completed') {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData('text/plain');
+            
+            if (draggedId === String(id)) {
+                e.dataTransfer.dropEffect = 'none';
+                return;
+            } else {
+                e.dataTransfer.dropEffect = 'move';
+            }
+        }
+    }
+    
+    function handleOnDrop(e, id) {
+        if (status !== 'completed') {
+            e.preventDefault();
+            const fromId = e.dataTransfer.getData('text/plain');
+            const toId = id;
+            if (!fromId || fromId === toId) return; // ignora drop su se stesso
+            
+            dispatch(dragAndDropReorderTodos({fromId, toId}));
+            dispatch(updatePreferences({sortBy: "manual"}));
+        }
+    }
+
 
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
@@ -97,13 +133,11 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         dueDateCommands = <div className="due-date-box-commands"></div>;
     }
 
-    return  <div className={`todo-item`} onDoubleClick={() => handleDoubleClick(status)} >
+    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDragEnd={() => handleOnDragEnd()} onDoubleClick={() => handleDoubleClick(status)} >
                 <div className="todo-header">
+                    <div className="drag-handle">⋮⋮</div>
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
-                    {
-                    //fermaposto per qualcosa di carino in futuro ( spostare isOverdue da qualche altra parte)
-                    }
                     <button className="expand-todo-btn" onClick={handleOnClick}>{isExpanded ? "-" : "+" }</button>
                 </div>
 

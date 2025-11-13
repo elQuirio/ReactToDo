@@ -54,9 +54,42 @@ export const getNewPosition = () => {
     return maxPosition +1;
 };
 
+export function manualResortTodos(fromId, toId) {
+    if (fromId === toId) return todos;
+    try {
+        const todos = readTodos();
+        const activeTodos = todos.filter((t) => t.status === 'active');
+        const completedTodos = todos.filter((t) => t.status === 'completed');
+
+        const fromIdIndex = activeTodos.findIndex((t) => t.id === fromId);
+        let toIdIndex = activeTodos.findIndex((t) => t.id === toId);
+
+        if (fromIdIndex === -1 || toIdIndex === -1) throw new Error("Todo not found");
+
+        const [moved] = activeTodos.splice(fromIdIndex, 1);
+        activeTodos.splice(toIdIndex, 0, moved);
+
+        const now = Date.now();
+        activeTodos[toIdIndex].updatedAt = now;
+
+        for (let i=0; i<activeTodos.length; i++) {
+            activeTodos[i].position = i+1;
+        }
+        const todosAll = [...activeTodos, ...completedTodos];
+        clearTodos();
+        writeAllTodos(todosAll);
+        return todosAll;
+    } catch (e) {
+        throw new Error(e);
+    }
+};
+
 export function sortTodos(sortDirection, sortBy) {
     const todos = readTodos();
-    const SORTBY_MAP = { 
+    const activeTodos = todos.filter((t) => t.status === "active");
+    const completedTodos = todos.filter((t) => t.status === "completed");
+
+    const SORTBY_MAP = {
         "manual": "position",
         "createdAt": "createdAt",
         "updatedAt": "updatedAt",
@@ -64,8 +97,9 @@ export function sortTodos(sortDirection, sortBy) {
     }
     const sortMethod = SORTBY_MAP[sortBy];
     if (!sortMethod) throw new Error("SortBy method not found!");
+
     try {
-        todos.sort((a, b) => {
+        activeTodos.sort((a, b) => {
             const valA = a[sortMethod];
             const valB = b[sortMethod];
             if (typeof valA === "string") {
@@ -75,8 +109,9 @@ export function sortTodos(sortDirection, sortBy) {
             }
         });
         clearTodos();
-        writeAllTodos(todos);
-        return todos;
+        const todosAll = [...activeTodos, ...completedTodos];
+        writeAllTodos(todosAll);
+        return todosAll;
     } catch (e) {
         throw new Error(e);
     }

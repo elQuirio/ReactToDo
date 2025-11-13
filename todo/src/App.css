@@ -321,3 +321,13 @@ html, body, #root {
   width: 0;
   height: 0;
 }
+
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+  padding-right: 20px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
