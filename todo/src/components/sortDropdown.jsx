@@ -22,7 +22,7 @@ export default function SortDropdown() {
 
     return <div className={"sort-dropdown"}>
             <span className='sort-dropdown-label'>Sort by:</span>
-            <select value={currentSortBy} onClick={handleOnClick}>
+            <select value={currentSortBy} onChange={handleOnClick}>
                 { SORT_OPTIONS.map((o) => { return <option key={o.value} value={o.value}>{o.label}</option> }) }
             </select>
             </div>

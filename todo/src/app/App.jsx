@@ -4,8 +4,21 @@ import AddTodoInputbox from '../components/addTodoInputbox';
 import TodoList from '../components/todoList';
 import CompletedTodoList from '../components/completedTodoList';
 import Sidebar from '../components/sidebar';
+import { useEffect } from "react";
 
 function App() {
+  //drag and drop prevented by default
+  useEffect(() => {
+  const prevent = (e) => e.preventDefault();
+
+  window.addEventListener("dragover", prevent);
+  window.addEventListener("drop", prevent);
+
+  return () => {
+    window.removeEventListener("dragover", prevent);
+    window.removeEventListener("drop", prevent);
+  };
+}, []);
 
   return (
     <div className="main-container">
