@@ -8,10 +8,7 @@ export function DropDownButton({handleOnClick}) {
     const dispatch = useDispatch();
     let dropDownPanel = '';
 
-    //allo startup controllare che il sort sempre coerente con preferences
     useEffect(() => {dispatch(fetchPreferences())}, [dispatch]);
-    //aggiungere handling con resort per todo aggiunti successivamente al primo sorting
-    //aggiungere logica di sorting per nome e data invece che per position
 
     function handleDropDownClick(e) {
         e.stopPropagation();
