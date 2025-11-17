@@ -58,6 +58,15 @@ html, body, #root {
   border-color: rgba(255, 255, 255, 0.35);
 }
 
+.input-password {
+  border: 1px solid #ccc;
+}
+
+.password-error {
+  border: 1px solid #ff4d4d;
+  background: rgba(255, 0, 0, 0.1);
+}
+
 /* ----- App ----- */
 .todo-content {
   flex: 1;
