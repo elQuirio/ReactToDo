@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser } from './db.js';
 
 
 const app = express();
@@ -156,4 +156,51 @@ app.get('/api/preferences', (req, res) => {
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
+});
+
+
+
+
+///////////////////////////////////////// LOGIN / REGISTRATION ///////////////////////////////////////////
+
+app.post('/api/auth/register', (req, res) => {
+  const {email, password} = req.body;
+  if (email && password) {
+    const userInfo = getUserByEmail(email);
+    // if user exists
+    if (userInfo) {
+        console.log("User exists");
+        return res.status(409).json({"error": "Email already exists!"});
+      } else {
+        const saveInfo = saveNewUser({email, password});
+        console.log(saveInfo);
+        if (saveInfo) {
+          return res.status(201).json(saveInfo);
+        } else {
+          return res.status(500).json({"error": "Internal error saving user!"});
+        }
+      }
+  }
+  else {
+    return res.status(400).json({"error": "User or password missing!"});
+  }
+});
+
+app.post('/api/auth/login', (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({"error": "User or password missing!"});
+    }
+
+    const existingUser = getUserByEmail(email);
+    if (existingUser) {
+      return existingUser.password === password ? res.status(200).json({email}) : res.status(401).json({"error": "Password is wrong"});
+    } else {
+      return res.status(404).json({"error":"User does not exists!"});
+    }
+  } catch(e) {
+    return res.status(500).json({"error": "Internal server error!"});
+  }
 });

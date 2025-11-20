@@ -1,9 +1,10 @@
-import fs from 'fs';
+import fs, { readFileSync } from 'fs';
 import path from "path";
 
 //simulating db with json file
 export const db = path.resolve("../src/assets/todos.json");
 export const preferences = path.resolve("../src/assets/preferences.json");
+export const users = path.resolve("../src/assets/users.json")
 
 export const readTodos = () => {
     try {
@@ -167,3 +168,38 @@ export function patchPreferencesByUserId(userId, prefObj) {
         return {}
     }
 };
+
+
+/////////////////////////////////// AUTH / REGISTRATION //////////////////////////
+
+export function readUsers() {
+    try {
+        const data = fs.readFileSync(users, "utf-8");
+        return data.trim() ? JSON.parse(data) : [];
+    }
+    catch(e) {
+        return [];
+    }
+}
+
+
+export function getUserByEmail(email) {
+    const userData = readUsers();
+    const userInfo = userData.find((u) => u.email === email);
+    if (userInfo) {
+        return userInfo;
+    } else {
+        return null;
+    }
+}
+
+export function saveNewUser(userInfo) {
+    try{
+        const usersDb = readUsers();
+        usersDb.push(userInfo);
+        fs.writeFileSync(users, JSON.stringify(usersDb, null, 2));
+        return userInfo.email;
+    } catch(e) {
+        return null;
+    }
+}
