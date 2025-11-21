@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../thunks/authThunks";
 import validator from "validator";
 
 export default function LoginForm() {
@@ -7,6 +9,7 @@ export default function LoginForm() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
     const [email, setEmail] = useState("");
+    const dispatch = useDispatch();
 
     let loginContent;
 
@@ -17,6 +20,7 @@ export default function LoginForm() {
             console.log(errors);
         } else {
             console.log('Registration') // dispatch registration
+            dispatch(registerUser({email, password}));
         }
     }
 
@@ -63,11 +67,11 @@ export default function LoginForm() {
             //addError('password', !password.length>3, 'Password is too short!');
             addError('confirmPassword', !(password===confirmPassword), 'Conform password is different!');
         } 
-        if (eventName === 'login') {
+        //if (eventName === 'login') {
             addError('email', !email, 'Email is missing!');
             addError('email', !validator.isEmail(email), 'Email is not a valid format!');
             addError('password', !password, 'Password is null!');
-        }
+        //}
 
         return errors;
     }
@@ -78,7 +82,8 @@ export default function LoginForm() {
                             <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)}></input>
                             <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password"></input>
                             <input type="password" placeholder="Confirm password..." className={passwordError ? 'password-error' : 'input-password'} onChange={(e) => handlePasswordOnChange(e, 'confirmPassword')}></input>
-                            <button onClick={handleRegisterOnClick}>Register</button>
+                            <button onClick={handleRegisterOnClick}>Confirm</button>
+                            <button onClick={() => setRegistrationMode(false)}>Login</button>
                         </div>
     } else {
         loginContent =  <div className="login-form-container">

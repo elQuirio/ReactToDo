@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import bcrypt from "bcrypt";
+
 import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser } from './db.js';
 
 
@@ -15,7 +17,7 @@ app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'D
 // GET
 app.get("/api/todos", (req, res) => {
   const todos = readTodos();
-  res.status(200).send(todos);
+  return res.status(200).send(todos);
 });
 
 // PATCH
@@ -52,7 +54,7 @@ app.patch("/api/todos/reorder", (req, res) => {
     const sortedTodos = manualResortTodos(fromId, toId);
     return res.status(200).json(sortedTodos);
   } catch (e) {
-    res.status(500).json({error: "Error sorting todos"});
+    return res.status(500).json({error: "Error sorting todos"});
   }
 });
 
@@ -70,9 +72,9 @@ app.patch("/api/todos/mark-all-as-completed", (req, res) => {
 
   try {
     updatedTodos.forEach((t) => writeTodo(t));
-    res.status(200).json(readTodos());
+    return res.status(200).json(readTodos());
   } catch (err) {
-    res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({ error: "Error saving todo" })
   }
 });
 
@@ -87,9 +89,9 @@ app.patch("/api/todos/mark-all-as-active", (req, res) => {
   });
   try {
     updatedTodos.forEach((t) => writeTodo(t));
-    res.status(200).json(readTodos());
+    return res.status(200).json(readTodos());
   } catch {
-    res.status(500).json({error: "Error saving todo"});
+    return res.status(500).json({error: "Error saving todo"});
   }
 });
 
@@ -100,9 +102,9 @@ app.post("/api/todos", (req, res) => {
   todo.position = getNewPosition();
   try {
     writeTodo(todo);
-    res.status(201).json(todo);
+    return res.status(201).json(todo);
   } catch (err) {
-    res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({ error: "Error saving todo" })
   }
 });
 
@@ -112,7 +114,7 @@ app.delete("/api/todos", (req, res) => {
   //if no status is provided deletes all todos
   const status = req.query.status;
   const todos = clearTodos(status);
-  res.status(200).json(todos);
+  return res.status(200).json(todos);
 });
 
 
@@ -146,12 +148,12 @@ app.use((req, res, next) => {
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
   const preferences = patchPreferencesByUserId(req.userId, req.body);
-  res.json(preferences);
+  return res.json(preferences);
 });
 
 app.get('/api/preferences', (req, res) => {
   const preferences = getPreferencesByUserID(req.userId);
-  res.json(preferences);
+  return res.json(preferences);
 });
 
 app.listen(3000, () => {
@@ -163,44 +165,46 @@ app.listen(3000, () => {
 
 ///////////////////////////////////////// LOGIN / REGISTRATION ///////////////////////////////////////////
 
-app.post('/api/auth/register', (req, res) => {
+app.post('/api/auth/register', async (req, res) => {
   const {email, password} = req.body;
-  if (email && password) {
-    const userInfo = getUserByEmail(email);
-    // if user exists
-    if (userInfo) {
-        console.log("User exists");
-        return res.status(409).json({"error": "Email already exists!"});
-      } else {
-        const saveInfo = saveNewUser({email, password});
-        console.log(saveInfo);
-        if (saveInfo) {
-          return res.status(201).json(saveInfo);
-        } else {
-          return res.status(500).json({"error": "Internal error saving user!"});
-        }
-      }
+  
+  if (!email || !password) {
+    return res.status(400).json({error: "Missing user or password!"});
   }
-  else {
-    return res.status(400).json({"error": "User or password missing!"});
+  
+  const userExists = getUserByEmail(email);
+  const hashedPwd = await bcrypt.hash(password, 10);
+  
+  if (userExists) {
+    console.log("User exists");
+    return res.status(409).json({error: "Email already registered!"});
   }
+  const saveInfo = saveNewUser({email, password: hashedPwd});
+  console.log(saveInfo);
+  if (saveInfo) {
+    return res.status(201).json(saveInfo);
+  } else {
+    return res.status(500).json({error: "Internal error saving user!"});
+  }  
 });
 
-app.post('/api/auth/login', (req, res) => {
+
+app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({"error": "User or password missing!"});
+      return res.status(400).json({error: "User or password missing!"});
     }
 
     const existingUser = getUserByEmail(email);
     if (existingUser) {
-      return existingUser.password === password ? res.status(200).json({email}) : res.status(401).json({"error": "Password is wrong"});
+      const isMatch = await bcrypt.compare(password, existingUser.password);
+      return isMatch ? res.status(200).json({email}) : res.status(401).json({error: "Password is wrong"});
     } else {
-      return res.status(404).json({"error":"User does not exists!"});
+      return res.status(404).json({error:"User does not exists!"});
     }
   } catch(e) {
-    return res.status(500).json({"error": "Internal server error!"});
+    return res.status(500).json({error: "Internal server error!"});
   }
 });
