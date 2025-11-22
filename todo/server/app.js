@@ -166,10 +166,13 @@ app.listen(3000, () => {
 ///////////////////////////////////////// LOGIN / REGISTRATION ///////////////////////////////////////////
 
 app.post('/api/auth/register', async (req, res) => {
-  const {email, password} = req.body;
+  const {email, password, confirmPassword} = req.body;
   
-  if (!email || !password) {
-    return res.status(400).json({error: "Missing user or password!"});
+  if (!email || !password || !confirmPassword) {
+    return res.status(400).json({error: "Missing user, password or confirmPassword!"});
+  }
+  if (password !== confirmPassword) {
+    return res.status(400).json({error: "Password does not matches confirmPassword!"});
   }
   
   const userExists = getUserByEmail(email);
@@ -198,9 +201,10 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const existingUser = getUserByEmail(email);
+
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.status(200).json({email}) : res.status(401).json({error: "Password is wrong"});
+      return isMatch ? res.status(200).json({email: email}) : res.status(401).json({error: "Password is wrong"});
     } else {
       return res.status(404).json({error:"User does not exists!"});
     }
