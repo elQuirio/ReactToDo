@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../thunks/authThunks";
+import { registerUser, loginUser } from "../thunks/authThunks";
 import validator from "validator";
 
 export default function LoginForm() {
@@ -13,27 +13,30 @@ export default function LoginForm() {
 
     let loginContent;
 
-    function handleRegisterOnClick () {
+    async function handleRegisterOnClick () {
         const errors = validateRegistrationForm('registration', {email, password, confirmPassword});
-        if (Object.keys(errors).length >0 ) {
+        if (Object.keys(errors).length > 0 ) {
             console.log('ERRORS!') // manage errors
             console.log(errors);
         } else {
-            console.log('Registration') // dispatch registration
-            dispatch(registerUser({email, password}));
+            console.log('Registration');
+            const respEmail = await dispatch(registerUser({email, password, confirmPassword})).unwrap();
+            console.log(respEmail);
+            console.log(respEmail === email ? 'LOGGED': 'NOT LOGGED');
         }
     }
 
-    function handleLoginOnClick () {
-        console.log('hello');
+    async function handleLoginOnClick () {
         const errors = validateRegistrationForm('login', {email, password, confirmPassword});
-        if (Object.keys(errors).length >0 ) {
+        if (Object.keys(errors).length > 0 ) {
             console.log('ERRORS!') // manage errors
             console.log(errors);
         } else {
-            console.log('login') // dispatch registration
+            console.log('login');
+            const resplogin = await dispatch(loginUser({email, password})).unwrap();
+            console.log(resplogin);
+            console.log(resplogin.email ? 'LOGGED' : 'NOT LOGGED');
         }
-        //dispatch per login
     }
 
     function handlePasswordOnChange(e, eventName) {

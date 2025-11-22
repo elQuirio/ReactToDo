@@ -8,6 +8,20 @@ export const registerUser = createAsyncThunk('auth/registerUser',
                 body: JSON.stringify(credentials)
              });
         const respRegister = await resp.json();
-        return respRegister;
+        console.log(respRegister);
+        return respRegister; // aggiungere dispatch allo store
+    }
+);
+
+export const loginUser = createAsyncThunk('auth/loginUser',
+    async (credentials , {dispatch}) => {
+        const res = await fetch('http://localhost:3000/api/auth/login', {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials)
+        });
+        const respLogin = await res.json();
+        console.log(respLogin);
+        return respLogin; // aggiungere dispatch allo store
     }
 );
