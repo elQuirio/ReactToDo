@@ -1,4 +1,4 @@
-import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const registerUser = createAsyncThunk('auth/registerUser', 
     async ( credentials, {dispatch, rejectWithValue}) => {
