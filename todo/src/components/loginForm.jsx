@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../thunks/authThunks";
+import { selectIsLogged } from '../selectors/authSelector';
 import validator from "validator";
 
 export default function LoginForm() {
@@ -11,6 +12,7 @@ export default function LoginForm() {
     const [email, setEmail] = useState("");
     const [loginError, setLoginError] = useState("");
     const [registerError, setRegisterError] = useState("");
+    const isLogged = useSelector(selectIsLogged);
     const dispatch = useDispatch();
 
     let loginContent;
@@ -25,7 +27,7 @@ export default function LoginForm() {
                 console.log('Registration');
                 const respEmail = await dispatch(registerUser({email, password, confirmPassword})).unwrap();
                 console.log(respEmail);
-                console.log(respEmail === email ? 'LOGGED': 'NOT LOGGED');
+                console.log(isLogged ? 'LOGGED': 'NOT LOGGED');
             } catch (e) {
                 setRegisterError(e);
                 console.log('REGISTRATION ERROR:', e);
@@ -43,7 +45,8 @@ export default function LoginForm() {
                 console.log('login');
                 const resplogin = await dispatch(loginUser({email, password})).unwrap();
                 console.log(resplogin);
-                console.log(resplogin.email ? 'LOGGED' : 'NOT LOGGED');
+                console.log(isLogged ? 'LOGGED' : 'NOT LOGGED');
+                console.log('isLogged:', isLogged);
             } catch (e) {
                 setLoginError(e); //migliorare il messaggio
                 console.log('LOGIN ERROR:', e);
