@@ -5,8 +5,14 @@ import TodoList from '../components/todoList';
 import CompletedTodoList from '../components/completedTodoList';
 import Sidebar from '../components/sidebar';
 import { useEffect } from "react";
+import { selectIsLogged } from '../selectors/authSelector';
+import { useSelector } from "react-redux";
+import LoginForm  from '../components/loginForm';
 
 function App() {
+  let body = '';
+  const isLogged = useSelector(selectIsLogged);
+  
   //drag and drop prevented by default
   useEffect(() => {
   const prevent = (e) => e.preventDefault();
@@ -20,26 +26,31 @@ function App() {
   };
 }, []);
 
-  return (
-    <div className="main-container">
-      <aside>
-        <Sidebar/>
-      </aside>
-      <main className='todo-content'>
-        <div className='todo-content-inner'>
-          <section className="active" >
-            <TodoList />
-          </section>
-          <section className='controls'>
-            <AddTodoInputbox />
-          </section>
-          <section className='done'>
-            <CompletedTodoList />
-          </section>
-        </div>
-      </main>
-    </div>
-  )
+  if (isLogged) {
+    body = (<div className="main-container">
+              <aside>
+                <Sidebar/>
+              </aside>
+              <main className='todo-content'>
+                <div className='todo-content-inner'>
+                  <section className="active" >
+                    <TodoList />
+                  </section>
+                  <section className='controls'>
+                    <AddTodoInputbox />
+                  </section>
+                  <section className='done'>
+                    <CompletedTodoList />
+                  </section>
+                </div>
+              </main>
+            </div>)
+  } else {
+    body = (<div className="main-container"><LoginForm/></div>)
+
+  }
+
+  return body
 }
 
 export default App

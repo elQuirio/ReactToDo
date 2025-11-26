@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../thunks/authThunks";
 import { selectIsLogged } from '../selectors/authSelector';
@@ -16,6 +16,10 @@ export default function LoginForm() {
     const dispatch = useDispatch();
 
     let loginContent;
+
+    const logged = useEffect(()=> {
+        console.log('isLogged', isLogged)
+    }, [isLogged]);
 
     async function handleRegisterOnClick () {
         const errors = validateRegistrationForm('registration', {email, password, confirmPassword});
@@ -46,7 +50,7 @@ export default function LoginForm() {
                 const resplogin = await dispatch(loginUser({email, password})).unwrap();
                 console.log(resplogin);
                 console.log(isLogged ? 'LOGGED' : 'NOT LOGGED');
-                console.log('isLogged:', isLogged);
+                //console.log('isLogged:', isLogged);
             } catch (e) {
                 setLoginError(e); //migliorare il messaggio
                 console.log('LOGIN ERROR:', e);
