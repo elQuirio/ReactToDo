@@ -3,8 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const registerUser = createAsyncThunk('auth/registerUser', 
     async ( credentials, {dispatch, rejectWithValue}) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/auth/register', 
-            {   method:"POST",
+            const resp = await fetch('http://localhost:3000/api/auth/register', {   
+                method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(credentials)
              });
@@ -16,8 +16,7 @@ export const registerUser = createAsyncThunk('auth/registerUser',
             }
             console.log(respRegister);
             return respRegister; // aggiungere dispatch allo store
-        }
-        catch (e) {
+        } catch (e) {
             return rejectWithValue(e);
         }
 });
@@ -40,4 +39,23 @@ export const loginUser = createAsyncThunk('auth/loginUser',
         } catch (e) {
             return rejectWithValue(e);
     }
+});
+
+
+export const checkLogin = createAsyncThunk('auth/checkAuth', 
+    async ( _ , {dispatch}) => {
+        try {
+            const resp = await fetch('http://localhost:3000/api/auth/checkAuth', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+            const data = await resp.json();
+            if (!resp.ok) {
+                return rejectWithValue(data.error|| 'Auth check failed!');
+            }
+            return data;
+        } catch (e) {
+            return rejectWithValue(e);
+        }
 });

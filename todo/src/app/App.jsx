@@ -6,25 +6,29 @@ import CompletedTodoList from '../components/completedTodoList';
 import Sidebar from '../components/sidebar';
 import { useEffect } from "react";
 import { selectIsLogged } from '../selectors/authSelector';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LoginForm  from '../components/loginForm';
+import { checkLogin } from '../thunks/authThunks';
 
 function App() {
   let body = '';
   const isLogged = useSelector(selectIsLogged);
+  const dispatch = useDispatch();
   
   //drag and drop prevented by default
   useEffect(() => {
-  const prevent = (e) => e.preventDefault();
+    const prevent = (e) => e.preventDefault();
 
-  window.addEventListener("dragover", prevent);
-  window.addEventListener("drop", prevent);
+    window.addEventListener("dragover", prevent);
+    window.addEventListener("drop", prevent);
 
-  return () => {
-    window.removeEventListener("dragover", prevent);
-    window.removeEventListener("drop", prevent);
-  };
-}, []);
+    return () => {
+      window.removeEventListener("dragover", prevent);
+      window.removeEventListener("drop", prevent);
+    };
+  }, []);
+
+  useEffect(() => {dispatch(checkLogin())}, [])
 
   if (isLogged) {
     body = (<div className="main-container">

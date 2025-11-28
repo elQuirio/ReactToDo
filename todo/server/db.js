@@ -203,3 +203,13 @@ export function saveNewUser(userInfo) {
         return null;
     }
 }
+
+export function getUserByUserId(userId){
+    try {
+        const userData = readUsers();
+        const user = userData.find((u) => u.userId === userId)
+        return user || null;
+    } catch (e) {
+        return null;
+    }
+};
