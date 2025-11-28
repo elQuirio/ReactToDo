@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bcrypt from "bcrypt";
 
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, getUserByUserId } from './db.js';
 
 
 const app = express();
@@ -128,22 +128,6 @@ import cookieParser from "cookie-parser";
 app.use(cookieParser());
 app.use(express.json());
 
-app.use((req, res, next) => {
-  let userId = req.cookies.userId;
-  if(!userId) {
-    userId = String(getMaxUserId());
-    res.cookie(
-      "userId", userId, 
-      {
-        httpOnly: true,
-        sameSite: "Lax",
-        secure: false,
-        maxAge: 365*24*60*60*1000
-      });
-  }
-  req.userId = userId;
-  next()
-});
 
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
@@ -176,19 +160,22 @@ app.post('/api/auth/register', async (req, res) => {
   }
   
   const userExists = getUserByEmail(email);
-  const hashedPwd = await bcrypt.hash(password, 10);
   
   if (userExists) {
     console.log("User exists");
     return res.status(409).json({error: "Email already registered!"});
   }
-  const saveInfo = saveNewUser({email, password: hashedPwd});
+
+  const hashedPwd = await bcrypt.hash(password, 10);
+  const userId = crypto.randomUUID();
+  const saveInfo = saveNewUser({email, password: hashedPwd, userId: userId});
   console.log(saveInfo);
+
   if (saveInfo) {
-    return res.status(201).json(saveInfo);
+    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json(saveInfo);
   } else {
     return res.status(500).json({error: "Internal error saving user!"});
-  }  
+  }
 });
 
 
@@ -211,4 +198,21 @@ app.post('/api/auth/login', async (req, res) => {
   } catch(e) {
     return res.status(500).json({error: "Internal server error!"});
   }
+});
+
+
+app.get('/api/auth/checkAuth', (req, res) => {
+  const userId = req.cookies.userId;
+  
+  if (!userId) {
+    return res.status(200).json({isLogged: false});
+  }
+
+  const userData = getUserByUserId(userId);
+
+  if(!userData) {
+    return res.status(200).json({isLogged: false});
+  }
+
+  return res.status(200).json({isLogged: true, userId: userId, email: userData.email });
 });
