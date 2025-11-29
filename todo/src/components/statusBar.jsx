@@ -38,13 +38,11 @@ export function StatusBar({ searchString }) {
         dispatch(searchBtnToggle());
     }
 
-    if (currentDirection==="asc") {
-        sortComponent = <ArrowUpAZ className='sort-icon' size={18}/>
-    } else if (currentDirection === "desc") {
+    if (currentDirection === "desc") {
         sortComponent = <ArrowDownZA className='sort-icon' size={18}/>
+    } else {
+        sortComponent = <ArrowUpAZ className='sort-icon' size={18}/>
     }
-
-    
 
     // aggiungere cambio button con ordinamento e collapse expand
     return <div className="status-bar-mini">

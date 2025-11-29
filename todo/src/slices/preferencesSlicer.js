@@ -6,6 +6,7 @@ const preferencesSlice = createSlice({
     initialState: {preferences:{"sortDirection": "asc"}},
     reducers: {
         resetPreferences: (state, action) => {
+            console.log(action.payload);
             state.preferences = action.payload;
         }
     }

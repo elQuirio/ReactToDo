@@ -133,10 +133,11 @@ export function getPreferencesByUserID(userId) {
         if (pref) {
             return pref;
         } else {
-            return {userId: userId, sortDirection: 'manual'}; //defualt preferences object
+            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc'};
+            return defaultPreferences;
         }
     } catch (err) {
-        return {userId: userId, sortDirection: 'manual'}
+        return {userId: userId, sortBy: 'manual', sortDirection: 'asc'};
     }
 };
 
@@ -154,12 +155,12 @@ export function patchPreferencesByUserId(userId, prefObj) {
         const prefIndex = allPref.findIndex((i) => i.userId == userId);
         const pref = getPreferencesByUserID(userId);
         if (prefIndex!== -1) {
-            const newPref = {...pref, ...prefObj};
+            const newPref = {userId, ...pref, ...prefObj};
             allPref[prefIndex] = newPref;
             fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
             return newPref;
         } else {
-            const defaultPreferences = {userId: userId, sortDirection: 'asc', ...prefObj};
+            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', ...prefObj};
             allPref.push(defaultPreferences);
             fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
             return defaultPreferences;
@@ -198,7 +199,7 @@ export function saveNewUser(userInfo) {
         const usersDb = readUsers();
         usersDb.push(userInfo);
         fs.writeFileSync(users, JSON.stringify(usersDb, null, 2));
-        return userInfo.email;
+        return userInfo;
     } catch(e) {
         return null;
     }

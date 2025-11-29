@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const registerUser = createAsyncThunk('auth/registerUser', 
-    async ( credentials, {dispatch, rejectWithValue}) => {
+    async ( credentials, { rejectWithValue }) => {
         try {
             const resp = await fetch('http://localhost:3000/api/auth/register', {   
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: 'include',
                 body: JSON.stringify(credentials)
              });
             const respRegister = await resp.json();
@@ -15,18 +16,19 @@ export const registerUser = createAsyncThunk('auth/registerUser',
                 return rejectWithValue(respRegister.error);
             }
             console.log(respRegister);
-            return respRegister; // aggiungere dispatch allo store
+            return respRegister;
         } catch (e) {
             return rejectWithValue(e);
         }
 });
 
 export const loginUser = createAsyncThunk('auth/loginUser',
-    async (credentials , {dispatch, rejectWithValue}) => {
+    async (credentials , { rejectWithValue }) => {
         try {
             const resp = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
+                credentials: 'include',
                 body: JSON.stringify(credentials)
             });
             const respLogin = await resp.json();
@@ -35,7 +37,7 @@ export const loginUser = createAsyncThunk('auth/loginUser',
                 return rejectWithValue(respLogin.error);
             }
             console.log(respLogin);
-            return respLogin; // aggiungere dispatch allo store
+            return respLogin;
         } catch (e) {
             return rejectWithValue(e);
     }
@@ -43,7 +45,7 @@ export const loginUser = createAsyncThunk('auth/loginUser',
 
 
 export const checkLogin = createAsyncThunk('auth/checkAuth', 
-    async ( _ , {dispatch}) => {
+    async ( _ ) => {
         try {
             const resp = await fetch('http://localhost:3000/api/auth/checkAuth', {
                 method: 'GET',

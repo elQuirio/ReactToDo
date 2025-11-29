@@ -131,13 +131,18 @@ app.use(express.json());
 
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
-  const preferences = patchPreferencesByUserId(req.userId, req.body);
+  const preferences = patchPreferencesByUserId(req.cookies.userId, req.body);
   return res.json(preferences);
 });
 
 app.get('/api/preferences', (req, res) => {
-  const preferences = getPreferencesByUserID(req.userId);
-  return res.json(preferences);
+  const userId = req.cookies.userId;
+  if (!userId) {
+    return res.status(401).json({error: 'Not authenticated'});
+  } else {
+    const preferences = getPreferencesByUserID(userId);
+    return res.json(preferences);
+  } 
 });
 
 app.listen(3000, () => {
@@ -168,11 +173,10 @@ app.post('/api/auth/register', async (req, res) => {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   const userId = crypto.randomUUID();
-  const saveInfo = saveNewUser({email, password: hashedPwd, userId: userId});
-  console.log(saveInfo);
+  const savedUser = saveNewUser({email, password: hashedPwd, userId: userId});
 
-  if (saveInfo) {
-    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json(saveInfo);
+  if (savedUser) {
+    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({savedUser});
   } else {
     return res.status(500).json({error: "Internal error saving user!"});
   }
@@ -191,7 +195,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.status(200).json({email: email}) : res.status(401).json({error: "Password is wrong"});
+      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({email: email}) : res.status(401).json({error: "Password is wrong"});
     } else {
       return res.status(404).json({error:"User does not exists!"});
     }
