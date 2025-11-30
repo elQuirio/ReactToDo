@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from "bcrypt";
+import { clearCookies } from './utils/helpers.js';
 
 import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, getUserByUserId } from './db.js';
 
@@ -158,17 +159,17 @@ app.post('/api/auth/register', async (req, res) => {
   const {email, password, confirmPassword} = req.body;
   
   if (!email || !password || !confirmPassword) {
-    return res.status(400).json({error: "Missing user, password or confirmPassword!"});
+    return clearCookies(res).status(400).json({data: {isLogged:false}, message: "Missing user, password or confirmPassword!"});
   }
   if (password !== confirmPassword) {
-    return res.status(400).json({error: "Password does not matches confirmPassword!"});
+    return clearCookies(res).status(400).json({data: {isLogged:false}, message: "Password does not matches confirmPassword!"});
   }
   
   const userExists = getUserByEmail(email);
   
   if (userExists) {
     console.log("User exists");
-    return res.status(409).json({error: "Email already registered!"});
+    return clearCookies(res).status(409).json({data: {isLogged:false}, message: "Email already registered!"});
   }
 
   const hashedPwd = await bcrypt.hash(password, 10);
@@ -176,9 +177,9 @@ app.post('/api/auth/register', async (req, res) => {
   const savedUser = saveNewUser({email, password: hashedPwd, userId: userId});
 
   if (savedUser) {
-    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({savedUser});
+    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
   } else {
-    return res.status(500).json({error: "Internal error saving user!"});
+    return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
   }
 });
 
@@ -188,19 +189,19 @@ app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({error: "User or password missing!"});
+      return clearCookies(res).status(400).json({message: "User or password missing!"});
     }
 
     const existingUser = getUserByEmail(email);
 
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({email: email}) : res.status(401).json({error: "Password is wrong"});
+      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "Password is wrong"});
     } else {
-      return res.status(404).json({error:"User does not exists!"});
+      return clearCookies(res).status(404).json({data:{isLogged: false}, message: "User does not exists!"});
     }
   } catch(e) {
-    return res.status(500).json({error: "Internal server error!"});
+    return clearCookies(res).status(500).json({data:{isLogged:false}, message: "Internal server error!"});
   }
 });
 
@@ -209,14 +210,19 @@ app.get('/api/auth/checkAuth', (req, res) => {
   const userId = req.cookies.userId;
   
   if (!userId) {
-    return res.status(200).json({isLogged: false});
+    return clearCookies(res).status(200).json({data: {isLogged: false}, message: "Missing user id!"});
   }
 
   const userData = getUserByUserId(userId);
 
   if(!userData) {
-    return res.status(200).json({isLogged: false});
+    return clearCookies(res).status(200).json({data: { isLogged: false}, message: "User not found!"});
   }
 
-  return res.status(200).json({isLogged: true, userId: userId, email: userData.email });
+  return res.status(200).json({data: {isLogged: true, userId: userId, email: userData.email}});
+});
+
+
+app.post('/api/auth/logout', (req,res) => {
+  return clearCookies(res).status(200).json({data:{isLogged:false}, message: 'User logged out'});
 });

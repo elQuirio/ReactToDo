@@ -10,15 +10,13 @@ export const registerUser = createAsyncThunk('auth/registerUser',
                 body: JSON.stringify(credentials)
              });
             const respRegister = await resp.json();
-            console.log(resp);
             if (!resp.ok) {
                 console.log('RESP not ok');
-                return rejectWithValue(respRegister.error);
+                return rejectWithValue(respRegister.message || 'registration unsuccessful!');
             }
-            console.log(respRegister);
             return respRegister;
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e.message || 'Internal error!');
         }
 });
 
@@ -33,31 +31,47 @@ export const loginUser = createAsyncThunk('auth/loginUser',
             });
             const respLogin = await resp.json();
             if (!resp.ok) {
-                console.log('RESP not ok');
-                return rejectWithValue(respLogin.error);
+                return rejectWithValue(respLogin.message || 'Login unsuccessful!');
             }
-            console.log(respLogin);
             return respLogin;
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e.message || 'Internal error!');
     }
 });
 
 
 export const checkLogin = createAsyncThunk('auth/checkAuth', 
-    async ( _ ) => {
+    async ( _, { rejectWithValue } ) => {
         try {
             const resp = await fetch('http://localhost:3000/api/auth/checkAuth', {
                 method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
             });
             const data = await resp.json();
             if (!resp.ok) {
-                return rejectWithValue(data.error|| 'Auth check failed!');
+                return rejectWithValue(data.message|| 'Auth check failed!');
             }
             return data;
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e.message || 'Check login failed!');
+        }
+});
+
+
+export const logoutUser = createAsyncThunk('auth/logout', 
+    async ( _ , { rejectWithValue }) => {
+        try {
+            const resp = await fetch('http://localhost:3000/api/auth/logout', {
+                method: 'POST',
+                credentials: 'include',
+            });
+            const data = await resp.json()
+            if (!resp.ok) { //modificare anche negli altri dopo aver adattato i messaggi nelle rotte
+                return rejectWithValue(data.message || 'Logout failed!');
+            }
+            return data;
+        }
+        catch (e) {
+            return rejectWithValue(e.message || 'Logout failed!');
         }
 });
