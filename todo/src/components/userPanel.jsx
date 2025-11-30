@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux';
 import { User } from "lucide-react";
-import { logout } from '../slices/authSlice';
+import { logoutUser } from "../thunks/authThunks";
 
 export default function UserPanel () {
     const dispatch = useDispatch();
 
     function handleLogoutOnClick () {
-        dispatch(logout());
+        dispatch(logoutUser());
     }
 
     return (<div>

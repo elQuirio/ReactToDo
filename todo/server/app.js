@@ -220,3 +220,8 @@ app.get('/api/auth/checkAuth', (req, res) => {
 
   return res.status(200).json({isLogged: true, userId: userId, email: userData.email });
 });
+
+
+app.post('/api/auth/logout', (req,res) => {
+  return res.cookie("userId", '', { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 0 }).status(200).json({ success: true, message: 'User logged out'});
+});
