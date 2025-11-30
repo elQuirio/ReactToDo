@@ -10,15 +10,13 @@ export const registerUser = createAsyncThunk('auth/registerUser',
                 body: JSON.stringify(credentials)
              });
             const respRegister = await resp.json();
-            console.log(resp);
             if (!resp.ok) {
                 console.log('RESP not ok');
-                return rejectWithValue(respRegister.error);
+                return rejectWithValue(respRegister.message || 'registration unsuccessful!');
             }
-            console.log(respRegister);
             return respRegister;
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e.message || 'Internal error!');
         }
 });
 
@@ -33,13 +31,11 @@ export const loginUser = createAsyncThunk('auth/loginUser',
             });
             const respLogin = await resp.json();
             if (!resp.ok) {
-                console.log('RESP not ok');
-                return rejectWithValue(respLogin.error);
+                return rejectWithValue(respLogin.message || 'Login unsuccessful!');
             }
-            console.log(respLogin);
             return respLogin;
         } catch (e) {
-            return rejectWithValue(e);
+            return rejectWithValue(e.message || 'Internal error!');
     }
 });
 
@@ -53,7 +49,7 @@ export const checkLogin = createAsyncThunk('auth/checkAuth',
             });
             const data = await resp.json();
             if (!resp.ok) {
-                return rejectWithValue(data.error|| 'Auth check failed!');
+                return rejectWithValue(data.message|| 'Auth check failed!');
             }
             return data;
         } catch (e) {
@@ -70,8 +66,8 @@ export const logoutUser = createAsyncThunk('auth/logout',
                 credentials: 'include',
             });
             const data = await resp.json()
-            if (!resp.ok || !data.success) { //modificare anche negli altri dopo aver adattato i messaggi nelle rotte
-                return rejectWithValue(data.error || 'Logout failed!');
+            if (!resp.ok) { //modificare anche negli altri dopo aver adattato i messaggi nelle rotte
+                return rejectWithValue(data.message || 'Logout failed!');
             }
             return data;
         }
