@@ -4,7 +4,7 @@ import { addTodo, resetTodos, updateTodo } from '../slices/todoSlicer';
 export const fetchTodos = createAsyncThunk(
     "todos/fetchTodos", 
     async ( _ , { dispatch }) => {
-        const res = await fetch('http://localhost:3000/api/todos');
+        const res = await fetch('http://localhost:3000/api/todos', {credentials: 'include',});
         const data = await res.json();
         dispatch(resetTodos(data));
     }
@@ -17,7 +17,8 @@ export const saveTodo = createAsyncThunk(
         const res = await fetch('http://localhost:3000/api/todos', {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(todo)
+            body: JSON.stringify(todo),
+            credentials: 'include',
         });
         const data = await res.json();
         dispatch(updateTodo(data));
@@ -31,7 +32,8 @@ export const insertTodo = createAsyncThunk(
         const res = await fetch('http://localhost:3000/api/todos', {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(todo)
+                body: JSON.stringify(todo),
+                credentials: 'include',
             });
         const data = await res.json();
         dispatch(addTodo(data));
@@ -45,7 +47,8 @@ export const clearTodos = createAsyncThunk(
         const res = await fetch('http://localhost:3000/api/todos',
             {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
             });
         const data = await res.json();
         dispatch(resetTodos(data));
@@ -57,7 +60,8 @@ export const clearCompletedTodos = createAsyncThunk(
     async ( _ , { dispatch }) => {
         const res = await fetch('http://localhost:3000/api/todos?status=completed', {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
         });
         const data = await res.json();
         dispatch(resetTodos(data));
@@ -70,7 +74,8 @@ export const markAllAsCompletedTodos = createAsyncThunk(
     async ( _ , { dispatch }) => {
         const res = await fetch('http://localhost:3000/api/todos/mark-all-as-completed', {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
         })
         const data = await res.json();
         dispatch(resetTodos(data));
@@ -82,7 +87,8 @@ export const markAllAsActiveTodos = createAsyncThunk(
     async (_ , { dispatch} ) => {
         const res = await fetch('http://localhost:3000/api/todos/mark-all-as-active', {
             method: 'PATCH',
-            headers: { "Content-Type": "application/json" }
+            headers: { "Content-Type": "application/json" },
+            credentials: 'include',
         })
         const data = await res.json();
         dispatch(resetTodos(data));
@@ -96,6 +102,7 @@ export const sortByTodos = createAsyncThunk(
         const res = await fetch(`http://localhost:3000/api/todos`, { 
             method: 'PATCH', 
             headers: { 'Content-Type': 'application/json' }, 
+            credentials: 'include',
             body: JSON.stringify({ "sortDirection": sortDirection , "sortBy": sortBy }) 
         })
         const sortedTodos = await res.json();
@@ -107,7 +114,8 @@ export const dragAndDropReorderTodos = createAsyncThunk("todos/dragAndDropReorde
     const res = await fetch('http://localhost:3000/api/todos/reorder', {
         method: 'PATCH', 
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({fromId, toId})
+        body: JSON.stringify({fromId, toId}),
+        credentials: 'include',
     })
     // aggiungere il reset dei todo con la response
     const sortedTodos = await res.json();
