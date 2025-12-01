@@ -6,10 +6,17 @@ export const db = path.resolve("../src/assets/todos.json");
 export const preferences = path.resolve("../src/assets/preferences.json");
 export const users = path.resolve("../src/assets/users.json")
 
-export const readTodos = () => {
+export const readTodos = (userId) => {
     try {
+        if (!userId) {
+            return [];
+        }
         const data = fs.readFileSync(db, "utf-8");
-        return data ? JSON.parse(data) : [];
+        if (!data) {
+            return [];
+        }
+        const userData = JSON.parse(data).filter((t) => t.userId === userId);
+        return userData;
     } catch (err) {
         return [];
     }
@@ -49,8 +56,8 @@ export const clearTodos = (status="all") => {
     }
 };
 
-export const getNewPosition = () => {
-    const dbTodos = readTodos();
+export const getNewPosition = (userId) => {
+    const dbTodos = readTodos(userId);
     const maxPosition = dbTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
     return maxPosition +1;
 };
