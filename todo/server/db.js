@@ -6,24 +6,21 @@ export const db = path.resolve("../src/assets/todos.json");
 export const preferences = path.resolve("../src/assets/preferences.json");
 export const users = path.resolve("../src/assets/users.json")
 
-export const readTodos = (userId) => {
+export const readTodos = () => {
     try {
-        if (!userId) {
-            return [];
-        }
         const data = fs.readFileSync(db, "utf-8");
         if (!data) {
             return [];
         }
-        const userData = JSON.parse(data).filter((t) => t.userId === userId);
-        return userData;
+        const userData = JSON.parse(data);
+        return userData ? userData : [];
     } catch (err) {
         return [];
     }
 };
 
-export const writeTodo = (todo) => {
-    const dbTodos = readTodos();
+export const writeTodo = (todo, userId) => {
+    const dbTodos = readTodos(userId);
     const index = dbTodos.findIndex((t) => t.id == todo.id);
     if (index !== -1) {
         //update if exists
@@ -44,31 +41,36 @@ export const writeAllTodos = (todos) => {
 }
 
 
-export const clearTodos = (status="all") => {
+export const clearTodos = (userId, status="all") => {
     if (status==="completed") {
         const dbTodos = readTodos();
-        const newDbTodos = dbTodos.filter((t) => t.status !== "completed");
-        fs.writeFileSync(db, JSON.stringify(newDbTodos, null, 2));
-        return newDbTodos;
+        const userTodos = dbTodos.filter((t) => t.status !== "completed" && t.userId === userId);
+        const otherTodos = dbTodos.filter((t) => t.userId !== userId);
+        fs.writeFileSync(db, JSON.stringify([...userTodos, ...otherTodos], null, 2));
+        return userTodos;
     } else if (status === "all") {
-        fs.writeFileSync(db, JSON.stringify([], null, 2));
+        const dbTodos = readTodos();
+        const newDbTodos = dbTodos.filter((t) => t.userId !== userId);
+        fs.writeFileSync(db, JSON.stringify(newDbTodos, null, 2));
         return [];
     }
 };
 
 export const getNewPosition = (userId) => {
-    const dbTodos = readTodos(userId);
-    const maxPosition = dbTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
+    const dbTodos = readTodos();
+    const userTodos = dbTodos.filter((t)=> t.userId === userId);
+    const maxPosition = userTodos.reduce((acc, t) => Math.max(acc, t.position ?? 0), 0);
     return maxPosition +1;
 };
 
-export function manualResortTodos(fromId, toId) {
-    if (fromId === toId) return todos;
+export function manualResortTodos(fromId, toId, userId) {
+    if (fromId === toId) return;
     try {
-        const todos = readTodos();
-        const activeTodos = todos.filter((t) => t.status === 'active');
-        const completedTodos = todos.filter((t) => t.status === 'completed');
-
+        const allTodos = readTodos();
+        const userTodos = allTodos.filter((t) => t.userId === userId);
+        const otherTodos = allTodos.filter((t) => t.userId !== userId);
+        const activeTodos = userTodos.filter((t) => t.status === 'active');
+        const completedTodos = userTodos.filter((t) => t.status === 'completed');
         const fromIdIndex = activeTodos.findIndex((t) => t.id === fromId);
         let toIdIndex = activeTodos.findIndex((t) => t.id === toId);
 
@@ -83,19 +85,20 @@ export function manualResortTodos(fromId, toId) {
         for (let i=0; i<activeTodos.length; i++) {
             activeTodos[i].position = i+1;
         }
-        const todosAll = [...activeTodos, ...completedTodos];
-        clearTodos();
+        const todosAll = [...activeTodos, ...completedTodos, ...otherTodos];
         writeAllTodos(todosAll);
-        return todosAll;
+        return [...activeTodos, ...completedTodos];
     } catch (e) {
         throw new Error(e);
     }
 };
 
-export function sortTodos(sortDirection, sortBy) {
-    const todos = readTodos();
-    const activeTodos = todos.filter((t) => t.status === "active");
-    const completedTodos = todos.filter((t) => t.status === "completed");
+export function sortTodos(sortDirection, sortBy, userId) {
+    const allTodos = readTodos();
+    const userTodos = allTodos.filter((t)=> t.userId === userId);
+    const otherTodos = allTodos.filter((t)=> t.userId !== userId);
+    const activeTodos = userTodos.filter((t) => t.status === "active");
+    const completedTodos = userTodos.filter((t) => t.status === "completed");
 
     const SORTBY_MAP = {
         "manual": "position",
@@ -105,7 +108,6 @@ export function sortTodos(sortDirection, sortBy) {
     }
     const sortMethod = SORTBY_MAP[sortBy];
     if (!sortMethod) throw new Error("SortBy method not found!");
-
     try {
         activeTodos.sort((a, b) => {
             const valA = a[sortMethod];
@@ -116,10 +118,11 @@ export function sortTodos(sortDirection, sortBy) {
                 return sortDirection === 'asc' ? valA - valB : valB - valA;
             }
         });
-        clearTodos();
-        const todosAll = [...activeTodos, ...completedTodos];
+        console.log(activeTodos);
+        console.log(completedTodos);
+        const todosAll = [...activeTodos, ...completedTodos, ...otherTodos];
         writeAllTodos(todosAll);
-        return todosAll;
+        return [...activeTodos, ...completedTodos];
     } catch (e) {
         throw new Error(e);
     }

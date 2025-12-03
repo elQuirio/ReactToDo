@@ -115,6 +115,10 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
+    function handleOnDragEnd() {
+        
+    }
+
 
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);

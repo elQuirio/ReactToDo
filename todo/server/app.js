@@ -112,8 +112,9 @@ app.use('/api/preferences', requireAuth);
 // GET
 app.get("/api/todos", (req, res) => {
   const userId = req.user.userId; // posso fare una funzione getter
-  const todos = readTodos(userId);
-  return res.status(200).send(todos);
+  const allTodos = readTodos();
+  const userTodos = allTodos.filter((t)=> t.userId === userId);
+  return res.status(200).send({data: userTodos});
 });
 
 // PATCH
@@ -122,13 +123,14 @@ app.patch("/api/todos", (req, res) => {
   const sortBy = req.body.sortBy;
   if (sortDirection || sortBy) {
     if (sortDirection != 'asc' && sortDirection != 'desc') {
-      return res.status(400).json({error: "Sort direction must be 'asc' or 'desc'"});
+      return res.status(400).json({message: "Sort direction must be 'asc' or 'desc'"});
     }
     try {
-      const todos = sortTodos(sortDirection, sortBy);
-      return res.status(200).send(todos);
+      const userId = req.user.userId;
+      const todos = sortTodos(sortDirection, sortBy, userId);
+      return res.status(200).send({data: todos});
     } catch (err) {
-      return res.status(500).json({error: "Error sorting json"})
+      return res.status(500).json({message: "Error sorting json"})
     }
   } 
   else {
@@ -136,10 +138,10 @@ app.patch("/api/todos", (req, res) => {
     const todo = {userId, ...req.body};
     try {
       writeTodo(todo); //capire se posso passare userId come parametro senza dover ricostruire il todo
-      return res.status(200).json(todo);
+      return res.status(200).json({data: todo});
     } 
     catch (err) {
-      return res.status(500).json({ error: "Error saving todo" })
+      return res.status(500).json({message: "Error saving todo"})
     }
   }
 });
@@ -148,18 +150,22 @@ app.patch("/api/todos", (req, res) => {
 app.patch("/api/todos/reorder", (req, res) => {
   try{
     const { fromId, toId } = req.body;
-    const sortedTodos = manualResortTodos(fromId, toId);
-    return res.status(200).json(sortedTodos);
+    const userId = req.user.userId;
+    const sortedTodos = manualResortTodos(fromId, toId, userId);
+    return res.status(200).json({data: sortedTodos});
   } catch (e) {
-    return res.status(500).json({error: "Error sorting todos"});
+    return res.status(500).json({message: "Error sorting todos"});
   }
 });
 
 
 //capire se possibile accorpare e semplificare
 app.patch("/api/todos/mark-all-as-completed", (req, res) => {
+  const userId = req.user.userId;
   const todos = readTodos();
-  const updatedTodos = todos.map((t) => {
+  const userTodos = todos.filter((t)=> t.userId === userId);
+  const otherTodos = todos.filter((t)=> t.userId !== userId);
+  const updatedTodos = userTodos.map((t) => {
     if (t.status !== 'completed') {
       return { ...t, status: 'completed', updatedAt: Date.now() };
     } else {
@@ -168,16 +174,20 @@ app.patch("/api/todos/mark-all-as-completed", (req, res) => {
   });
 
   try {
-    updatedTodos.forEach((t) => writeTodo(t));
-    return res.status(200).json(readTodos());
+    const allTodos = [...updatedTodos, ...otherTodos];
+    allTodos.forEach((t) => writeTodo(t));
+    return res.status(200).json({data: updatedTodos});
   } catch (err) {
-    return res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({message: "Error saving todo"})
   }
 });
 
 app.patch("/api/todos/mark-all-as-active", (req, res) => {
-  const todos = readTodos();
-  const updatedTodos = todos.map(t => {
+  const userId = req.user.userId;
+  const allTodos = readTodos();
+  const userTodos = allTodos.filter((t) => t.userId === userId);
+  const otherTodos = allTodos.filter((t) => t.userId !== userId);
+  const updatedTodos = userTodos.map(t => {
     if (t.status !== "active") {
       return {...t, status: 'active', updatedAt: Date.now()}
     } else {
@@ -185,10 +195,10 @@ app.patch("/api/todos/mark-all-as-active", (req, res) => {
     }
   });
   try {
-    updatedTodos.forEach((t) => writeTodo(t));
-    return res.status(200).json(readTodos());
+    [...updatedTodos,...otherTodos].forEach((t) => writeTodo(t));
+    return res.status(200).json({data: updatedTodos});
   } catch {
-    return res.status(500).json({error: "Error saving todo"});
+    return res.status(500).json({message: "Error saving todo"});
   }
 });
 
@@ -197,21 +207,22 @@ app.patch("/api/todos/mark-all-as-active", (req, res) => {
 app.post("/api/todos", (req, res) => {
   const userId = req.user.userId;
   const todo = { userId, ...req.body};
-  todo.position = getNewPosition(userId); //modificare con logica per user id
+  todo.position = getNewPosition(userId);
   try {
-    writeTodo(todo);
-    return res.status(201).json(todo);
+    writeTodo(todo, userId);
+    return res.status(201).json({data: todo});
   } catch (err) {
-    return res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({message: "Error saving todo"})
   }
 });
 
 
 // DELETE
 app.delete("/api/todos", (req, res) => {
+  const userId = req.user.userId;
   const status = req.query.status;
-  const todos = clearTodos(status);
-  return res.status(200).json(todos);
+  const todos = clearTodos(userId, status);
+  return res.status(200).json({data: todos});
 });
 
 
@@ -220,18 +231,15 @@ app.delete("/api/todos", (req, res) => {
 
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
-  const preferences = patchPreferencesByUserId(req.cookies.userId, req.body);
-  return res.json(preferences);
+  const userId = req.user.userId;
+  const preferences = patchPreferencesByUserId(userId, req.body);
+  return res.json({data: preferences});
 });
 
 app.get('/api/preferences', (req, res) => {
-  const userId = req.cookies.userId;
-  if (!userId) {
-    return res.status(401).json({error: 'Not authenticated'});
-  } else {
-    const preferences = getPreferencesByUserID(userId);
-    return res.json(preferences);
-  } 
+  const userId = req.user.userId;
+  const preferences = getPreferencesByUserID(userId);
+  return res.json({data: preferences});
 });
 
 app.listen(3000, () => {
