@@ -114,7 +114,7 @@ app.get("/api/todos", (req, res) => {
   const userId = req.user.userId; // posso fare una funzione getter
   const allTodos = readTodos();
   const userTodos = allTodos.filter((t)=> t.userId === userId);
-  return res.status(200).send(userTodos);
+  return res.status(200).send({data: userTodos});
 });
 
 // PATCH
@@ -123,14 +123,14 @@ app.patch("/api/todos", (req, res) => {
   const sortBy = req.body.sortBy;
   if (sortDirection || sortBy) {
     if (sortDirection != 'asc' && sortDirection != 'desc') {
-      return res.status(400).json({error: "Sort direction must be 'asc' or 'desc'"});
+      return res.status(400).json({message: "Sort direction must be 'asc' or 'desc'"});
     }
     try {
       const userId = req.user.userId;
       const todos = sortTodos(sortDirection, sortBy, userId);
-      return res.status(200).send(todos);
+      return res.status(200).send({data: todos});
     } catch (err) {
-      return res.status(500).json({error: "Error sorting json"})
+      return res.status(500).json({message: "Error sorting json"})
     }
   } 
   else {
@@ -138,10 +138,10 @@ app.patch("/api/todos", (req, res) => {
     const todo = {userId, ...req.body};
     try {
       writeTodo(todo); //capire se posso passare userId come parametro senza dover ricostruire il todo
-      return res.status(200).json(todo);
+      return res.status(200).json({data: todo});
     } 
     catch (err) {
-      return res.status(500).json({ error: "Error saving todo" })
+      return res.status(500).json({message: "Error saving todo"})
     }
   }
 });
@@ -152,9 +152,9 @@ app.patch("/api/todos/reorder", (req, res) => {
     const { fromId, toId } = req.body;
     const userId = req.user.userId;
     const sortedTodos = manualResortTodos(fromId, toId, userId);
-    return res.status(200).json(sortedTodos);
+    return res.status(200).json({data: sortedTodos});
   } catch (e) {
-    return res.status(500).json({error: "Error sorting todos"});
+    return res.status(500).json({message: "Error sorting todos"});
   }
 });
 
@@ -176,9 +176,9 @@ app.patch("/api/todos/mark-all-as-completed", (req, res) => {
   try {
     const allTodos = [...updatedTodos, ...otherTodos];
     allTodos.forEach((t) => writeTodo(t));
-    return res.status(200).json(updatedTodos);
+    return res.status(200).json({data: updatedTodos});
   } catch (err) {
-    return res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({message: "Error saving todo"})
   }
 });
 
@@ -196,9 +196,9 @@ app.patch("/api/todos/mark-all-as-active", (req, res) => {
   });
   try {
     [...updatedTodos,...otherTodos].forEach((t) => writeTodo(t));
-    return res.status(200).json(updatedTodos);
+    return res.status(200).json({data: updatedTodos});
   } catch {
-    return res.status(500).json({error: "Error saving todo"});
+    return res.status(500).json({message: "Error saving todo"});
   }
 });
 
@@ -210,9 +210,9 @@ app.post("/api/todos", (req, res) => {
   todo.position = getNewPosition(userId);
   try {
     writeTodo(todo, userId);
-    return res.status(201).json(todo);
+    return res.status(201).json({data: todo});
   } catch (err) {
-    return res.status(500).json({ error: "Error saving todo" })
+    return res.status(500).json({message: "Error saving todo"})
   }
 });
 
@@ -222,7 +222,7 @@ app.delete("/api/todos", (req, res) => {
   const userId = req.user.userId;
   const status = req.query.status;
   const todos = clearTodos(userId, status);
-  return res.status(200).json(todos);
+  return res.status(200).json({data: todos});
 });
 
 
@@ -233,13 +233,13 @@ app.delete("/api/todos", (req, res) => {
 app.patch('/api/preferences', (req, res) => {
   const userId = req.user.userId;
   const preferences = patchPreferencesByUserId(userId, req.body);
-  return res.json(preferences);
+  return res.json({data: preferences});
 });
 
 app.get('/api/preferences', (req, res) => {
   const userId = req.user.userId;
   const preferences = getPreferencesByUserID(userId);
-  return res.json(preferences);
+  return res.json({data: preferences});
 });
 
 app.listen(3000, () => {

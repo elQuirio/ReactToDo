@@ -11,7 +11,6 @@ export const registerUser = createAsyncThunk('auth/registerUser',
              });
             const respRegister = await resp.json();
             if (!resp.ok) {
-                console.log('RESP not ok');
                 return rejectWithValue(respRegister.message || 'registration unsuccessful!');
             }
             return respRegister;
