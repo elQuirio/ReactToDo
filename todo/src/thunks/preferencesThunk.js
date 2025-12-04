@@ -13,7 +13,7 @@ export const fetchPreferences = createAsyncThunk(
             if (!resp.ok) {
                 return rejectWithValue(data.message || "Server error fetching user parameters!");
             }
-            dispatch(resetPreferences(data));
+            dispatch(resetPreferences(data.data));
         } 
         catch (e) {
             return rejectWithValue(e.message || "Error fetching user preferences!");
@@ -36,8 +36,7 @@ export const updatePreferences = createAsyncThunk(
             if (!resp.ok) {
                 return rejectWithValue(data.message || "Server error saving preferences!")
             }
-            
-            dispatch(resetPreferences(data));
+            dispatch(resetPreferences(data.data));
         } catch (e) {
             return rejectWithValue(e.message || "Error updating preferences!");
         }
