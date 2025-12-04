@@ -101,19 +101,19 @@ export default function LoginForm() {
 
     if (registrationMode) {
         loginContent = <div className="login-form-container">
-                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)}></input>
-                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password"></input>
-                            <input type="password" placeholder="Confirm password..." className={passwordError ? 'password-error' : 'input-password'} onChange={(e) => handlePasswordOnChange(e, 'confirmPassword')}></input>
-                            <button onClick={handleRegisterOnClick}>Confirm</button>
-                            <button onClick={() => setRegistrationMode(false)}>Login</button>
+                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
+                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
+                            <input type="password" placeholder="Confirm password..." className={passwordError ? 'password-error login-form-input' : 'input-password login-form-input'} onChange={(e) => handlePasswordOnChange(e, 'confirmPassword')}></input>
+                            <button onClick={handleRegisterOnClick} className="login-form-button">Confirm</button>
+                            <button onClick={() => setRegistrationMode(false)} className="login-form-button">Login</button>
                             {registerError && <div className="error-box">{registerError}</div>}
                         </div>
     } else {
         loginContent =  <div className="login-form-container">
-                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)}></input>
-                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password"></input>
-                            <button onClick={handleLoginOnClick}>Login</button>
-                            <button onClick={() => {setRegistrationMode(true)}}>Register</button>
+                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
+                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
+                            <button onClick={handleLoginOnClick} className="login-form-button">Login</button>
+                            <button onClick={() => {setRegistrationMode(true)}} className="login-form-button">Register</button>
                             {loginError && <div className="error-box">{loginError}</div>}
                         </div>
     }
