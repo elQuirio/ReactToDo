@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import { User, Sun, Moon } from "lucide-react";
 import { logoutUser } from "../thunks/authThunks";
 import { updatePreferences } from '../thunks/preferencesThunk';
@@ -14,12 +15,13 @@ export default function UserPanel () {
 
     function handleOnChangeDarkSwitch(e) {
         console.log(e.target.checked);
-        dispatch(updatePreferences({isDarkMode: e.target.checked}))
+        dispatch(updatePreferences({isDarkMode: e.target.checked}));
     }
 
+
     return (<div>
-                <User size={20} strokeWidth={2} style={{ border: "1px solid white", padding: 8, borderRadius: 20 }}/>
-                <button onClick={handleLogoutOnClick}>Logout</button>
+                <User size={20} className='user-preferences-button' strokeWidth={2}/>
+                <button className='logout-button' onClick={handleLogoutOnClick}>Logout</button>
                 <label className='switch'>
                     <input type='checkbox' checked={isDarkMode} onChange={(e)=> handleOnChangeDarkSwitch(e)}/>
                     <span className="slider round">

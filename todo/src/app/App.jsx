@@ -6,6 +6,7 @@ import CompletedTodoList from '../components/completedTodoList';
 import Sidebar from '../components/sidebar';
 import { useEffect } from "react";
 import { selectIsLogged } from '../selectors/authSelector';
+import { selectIsDarkMode } from '../selectors/preferencesSelector';
 import { useSelector, useDispatch } from "react-redux";
 import LoginForm  from '../components/loginForm';
 import { checkLogin } from '../thunks/authThunks';
@@ -13,8 +14,9 @@ import { checkLogin } from '../thunks/authThunks';
 function App() {
   let body = '';
   const isLogged = useSelector(selectIsLogged);
+  const isDarkMode = useSelector(selectIsDarkMode);
   const dispatch = useDispatch();
-  
+
   //drag and drop prevented by default
   useEffect(() => {
     const prevent = (e) => e.preventDefault();
@@ -29,6 +31,14 @@ function App() {
   }, []);
 
   useEffect(() => {dispatch(checkLogin())}, [])
+
+  useEffect(() => {
+    if (!isDarkMode) {
+      document.body.classList.add("light");
+    } else {
+      document.body.classList.remove("light");
+    }
+  }, [isDarkMode]);
 
   if (isLogged) {
     body = (<div className="main-container">
