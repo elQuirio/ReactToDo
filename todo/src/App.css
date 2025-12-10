@@ -543,6 +543,7 @@ body.light .due-date-button:hover {
 
 input:checked + .slider {
   background-color: #1a1a1a;
+  color: white;
 }
 
 
