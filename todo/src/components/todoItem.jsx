@@ -4,7 +4,7 @@ import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
 import { useRef } from "react";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
-import { AlertCircle, Plus, Minus } from "lucide-react";
+import { AlertCircle, Plus, Minus, GripVertical } from "lucide-react";
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -139,7 +139,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDragEnd={() => handleOnDragEnd()} onDoubleClick={() => handleDoubleClick(status)} >
                 <div className="todo-header">
-                    <div className="drag-handle">⋮⋮</div>
+                    < GripVertical size={24} className="drag-handle"/>
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
                     <button className="expand-todo-btn" onClick={handleOnClick}>{isExpanded ? <Minus size={26}/> : <Plus size={26}/> }</button>
