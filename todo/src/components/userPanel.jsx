@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import { User, Sun, Moon } from "lucide-react";
 import { logoutUser } from "../thunks/authThunks";
 import { updatePreferences } from '../thunks/preferencesThunk';
@@ -14,10 +13,11 @@ export default function UserPanel () {
     }
 
     function handleOnChangeDarkSwitch(e) {
-        console.log(e.target.checked);
-        dispatch(updatePreferences({isLightMode: e.target.checked}));
+        const isLightModeValue = e.target.checked;
+        console.log(isLightModeValue);
+        dispatch(updatePreferences({isLightMode: isLightModeValue}));
+        localStorage.setItem('isLightMode', String(isLightModeValue));
     }
-
 
     return (<div>
                 <User size={20} className='user-preferences-button' strokeWidth={2}/>

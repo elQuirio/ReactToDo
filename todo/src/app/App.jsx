@@ -30,13 +30,14 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {dispatch(checkLogin())}, [])
-
+  useEffect(() => {dispatch(checkLogin())}, [dispatch]);
+  
   useEffect(() => {
-    if (isLightMode) {
-      document.body.classList.add("light");
-    } else {
+    console.log('APP->isLightmode', isLightMode);
+    if (isLightMode === false) {
       document.body.classList.remove("light");
+    } else {
+      document.body.classList.add("light");
     }
   }, [isLightMode]);
 

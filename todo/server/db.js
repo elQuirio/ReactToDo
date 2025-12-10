@@ -143,11 +143,11 @@ export function getPreferencesByUserID(userId) {
         if (pref) {
             return pref;
         } else {
-            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc'};
+            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true};
             return defaultPreferences;
         }
     } catch (err) {
-        return {userId: userId, sortBy: 'manual', sortDirection: 'asc'};
+        return {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true};
     }
 };
 

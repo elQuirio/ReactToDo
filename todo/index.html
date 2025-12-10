@@ -7,6 +7,17 @@
     <title>React todo manager</title>
   </head>
   <body>
+    <script>(function () {
+      try {
+        let isLightModeStored = localStorage.getItem('isLightMode');
+        let isLightMode = isLightModeStored === null ? true : isLightModeStored === 'true';
+        if (isLightMode) {
+          document.body.classList.add('light');
+        }
+      } catch(e) {
+        console.log(e);
+      }
+      })()</script>
     <div id="root"></div>
     <script type="module" src="./src/main.jsx"></script>
   </body>
