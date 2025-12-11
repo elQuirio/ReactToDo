@@ -575,3 +575,29 @@ color:#1a1a1a;
 .moon-slider {
 
 }
+
+/* ----- Spinner ----- */
+
+.loader-container {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+
+
+.spinner {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 6px solid rgba(var(--bg-color5) / 0.15);
+  border-top-color: rgba(var(--bg-color5) / 0.8);
+  backdrop-filter: blur(10px);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

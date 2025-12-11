@@ -7,6 +7,7 @@ import { selectIsLightMode } from '../selectors/preferencesSelector';
 export default function UserPanel () {
     const dispatch = useDispatch();
     const isLightMode = useSelector(selectIsLightMode);
+    console.log('islightmode', isLightMode);
 
     function handleLogoutOnClick () {
         dispatch(logoutUser());

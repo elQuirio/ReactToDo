@@ -5,3 +5,5 @@ function selectAuth (state) {
 };
 
 export const selectIsLogged = createSelector([selectAuth], (a) => a.isLogged);
+
+export const selectloginUserPending = (state) => state.auth.loading;
