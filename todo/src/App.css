@@ -133,11 +133,23 @@ h1 {
   padding: 8px 12px;
 }
 
+.user-preferences-icon {
+  /*background: var(--bg-color4);
+  color: var(--btn-text);
+  border: 1px solid white; 
+  padding: 8px;
+  border-radius: 20px;*/
+}
+
 .user-preferences-button {
+  cursor: pointer;
+  /*position: fixed;
+  top: 5px;
+  right: 20px;*/
   background: var(--bg-color4);
   color: var(--btn-text);
   border: 1px solid white; 
-  padding: 8px; 
+  padding: 7px 8px;
   border-radius: 20px;
 }
 
@@ -575,6 +587,35 @@ color:#1a1a1a;
 .moon-slider {
 
 }
+
+/* ----- User Panel ----- */
+
+.user-menu-container {
+  position: fixed;
+  top: 5px;
+  right: 20px;
+}
+
+.user-menu-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 220px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgb(var(--bg-color5) / 0.06);
+  border: 1px solid rgb(var(--bg-color5) / 0.18);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.user-panel-item {
+  margin: 10px 0;
+}
+
 
 /* ----- Spinner ----- */
 
