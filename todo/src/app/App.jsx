@@ -1,22 +1,22 @@
-//import { useState } from 'react';
 import '../App.css';
 import AddTodoInputbox from '../components/addTodoInputbox';
 import TodoList from '../components/todoList';
 import CompletedTodoList from '../components/completedTodoList';
-import Sidebar from '../components/sidebar';
 import { useEffect, useState } from "react";
-import { selectIsLogged, selectloginUserPending } from '../selectors/authSelector';
+import { selectIsLogged, selectAuthLoading } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
 import { useSelector, useDispatch } from "react-redux";
 import LoginForm  from '../components/loginForm';
 import { checkLogin } from '../thunks/authThunks';
+import UserMenu from '../components/userMenu';
 
 function App() {
   let body = '';
   const [showLoader, setShowLoader] = useState(true);
   const isLogged = useSelector(selectIsLogged);
   const isLightMode = useSelector(selectIsLightMode);
-  const isLoginUserLoading = useSelector(selectloginUserPending);
+  const isAuthLoading = useSelector(selectAuthLoading);
+
   const dispatch = useDispatch();
 
   //drag and drop prevented by default
@@ -51,12 +51,11 @@ function App() {
     return () => clearTimeout(t);
   }, []);
 
-  if (isLoginUserLoading || showLoader) {
+  if (isAuthLoading || showLoader) {
     body = (<div className='loader-container'><div className='spinner'></div></div>)
   } else if (isLogged) {
     body = (<div className="main-container">
               <aside>
-                <Sidebar/>
               </aside>
               <main className='todo-content'>
                 <div className='todo-content-inner'>
@@ -71,6 +70,7 @@ function App() {
                   </section>
                 </div>
               </main>
+              <UserMenu/>
             </div>)
   } else {
     body = (<div className="main-container"><LoginForm/></div>)

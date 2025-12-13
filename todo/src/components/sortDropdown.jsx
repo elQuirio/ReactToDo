@@ -20,7 +20,7 @@ export default function SortDropdown() {
         dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: e.target.value}));
     }
 
-    return <div className={"sort-dropdown"}>
+    return <div className={"sort-dropdown user-panel-item"}>
             <span className='sort-dropdown-label'>Sort by:</span>
             <select className='sort-dropdown-value' value={currentSortBy} onChange={handleOnClick}>
                 { SORT_OPTIONS.map((o) => { return <option key={o.value} value={o.value}>{o.label}</option> }) }
