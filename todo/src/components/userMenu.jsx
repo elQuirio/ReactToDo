@@ -12,6 +12,7 @@ export default function UserMenu() {
     const isLightMode = useSelector(selectIsLightMode);
     const user = useSelector(selectUser);
     const [isOpen, setIsOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const rootRef = useRef(null);
     const dispatch = useDispatch();
 
@@ -33,8 +34,20 @@ export default function UserMenu() {
         }
     }, []);
 
+    useEffect(() => {
+        if (isOpen) return;
+        const t = setTimeout(() => setIsMounted(false), 200);
+        return () => clearTimeout(t);
+
+    }, [isOpen]);
+
     function handleOpenMenu() {
-        setIsOpen(!isOpen);
+        if (isOpen) {
+            setIsOpen(false);
+            return;
+        }
+        setIsMounted(true);
+        requestAnimationFrame(() => setIsOpen(true));
     }
 
     function handleLogoutOnClick () {
@@ -52,7 +65,7 @@ export default function UserMenu() {
                 <button className='user-preferences-button' onClick={handleOpenMenu}>
                     <User size={20} className='user-preferences-icon' strokeWidth={2}/>
                 </button>
-              <div className={`user-menu-panel ${isOpen ? 'open' : ''}`}>
+              {isMounted && <div className={`user-menu-panel ${isOpen ? 'open' : ''}`}>
                             <div className='user-info-wrapper'>
                                 <div>User email: {user}</div>
                             </div>
@@ -66,6 +79,6 @@ export default function UserMenu() {
                                 </span>
                             </label>
                             <button className='logout-button user-panel-item' onClick={handleLogoutOnClick}>Logout</button>
-                        </div>
+                        </div>}
               </div>);
 }

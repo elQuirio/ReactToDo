@@ -118,7 +118,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
     } else if (!isEditing) {
-        todoContent = (<span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text} { (toBeCompletedAt && toBeCompletedAt < Date.now() && status !== 'completed' ) && <AlertCircle /> }</span>);
+        todoContent = (<div className="todo-text-wrapper"><span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text} { (toBeCompletedAt && toBeCompletedAt < Date.now() && status !== 'completed' ) && <AlertCircle className="todo-alert"/> }</span></div>);
     }
 
     if (status !== 'completed') {
