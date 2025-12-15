@@ -4,12 +4,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser } from "../thunks/authThunks";
 import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
+import { selectUser } from '../selectors/authSelector';
 import SortDropdown from './sortDropdown';
 
 
 export default function UserMenu() {
     const isLightMode = useSelector(selectIsLightMode);
+    const user = useSelector(selectUser);
     const [isOpen, setIsOpen] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const rootRef = useRef(null);
     const dispatch = useDispatch();
 
@@ -31,8 +34,20 @@ export default function UserMenu() {
         }
     }, []);
 
+    useEffect(() => {
+        if (isOpen) return;
+        const t = setTimeout(() => setIsMounted(false), 200);
+        return () => clearTimeout(t);
+
+    }, [isOpen]);
+
     function handleOpenMenu() {
-        setIsOpen(!isOpen);
+        if (isOpen) {
+            setIsOpen(false);
+            return;
+        }
+        setIsMounted(true);
+        requestAnimationFrame(() => setIsOpen(true));
     }
 
     function handleLogoutOnClick () {
@@ -48,9 +63,13 @@ export default function UserMenu() {
 
     return (<div className='user-menu-container' ref={rootRef}>
                 <button className='user-preferences-button' onClick={handleOpenMenu}>
-                <User size={20} className='user-preferences-icon' strokeWidth={2}/>
-              </button>
-              {isOpen && <div className='user-menu-panel'>
+                    <User size={20} className='user-preferences-icon' strokeWidth={2}/>
+                </button>
+              {isMounted && <div className={`user-menu-panel ${isOpen ? 'open' : ''}`}>
+                            <div className='user-info-wrapper'>
+                                <div>User email: {user}</div>
+                            </div>
+                            <div className='user-divider'></div>
                             <SortDropdown className='user-panel-item'/> 
                             <label className='switch user-panel-item'>
                                 <input type='checkbox' checked={isLightMode} onChange={(e)=> handleOnChangeDarkSwitch(e)}/>
