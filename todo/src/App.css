@@ -148,7 +148,7 @@ h1 {
   right: 20px;*/
   background: var(--bg-color4);
   color: var(--btn-text);
-  border: 1px solid white; 
+  border: 1px solid rgb(var(--bg-color5) / 0.25); 
   padding: 7px 8px;
   border-radius: 20px;
 }
@@ -610,12 +610,26 @@ color:#1a1a1a;
   border: 1px solid rgb(var(--bg-color5) / 0.18);
   backdrop-filter: blur(12px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.user-menu-panel.open {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .user-panel-item {
   margin: 10px 0;
 }
 
+.user-divider {
+  height: 2px;
+  background: rgb(var(--bg-color5) / 0.18);
+  margin: 8px 0;
+  width: 100%;
+}
 
 /* ----- Spinner ----- */
 

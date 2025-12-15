@@ -115,11 +115,6 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
-    function handleOnDragEnd() {
-        
-    }
-
-
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
     } else if (!isEditing) {
@@ -137,7 +132,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         dueDateCommands = <div className="due-date-box-commands"></div>;
     }
 
-    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDragEnd={() => handleOnDragEnd()} onDoubleClick={() => handleDoubleClick(status)} >
+    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => handleDoubleClick(status)} >
                 <div className="todo-header">
                     < GripVertical size={24} className="drag-handle"/>
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
