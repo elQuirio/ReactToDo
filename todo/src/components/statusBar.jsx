@@ -5,7 +5,8 @@ import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectSortDirection, selectSortBy } from '../selectors/preferencesSelector';
 import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
-import { Search, ArrowUpAZ, ArrowDownZA, Minimize2, Maximize2 } from "lucide-react";
+import { SortMethodButton } from '../components/sortMethodButton';
+import { Search, Minimize2, ArrowUpNarrowWide, ArrowDownNarrowWide } from "lucide-react";
 
 export function StatusBar({ searchString }) {
     const activeTodos = useSelector(selectActiveTodos);
@@ -39,9 +40,9 @@ export function StatusBar({ searchString }) {
     }
 
     if (currentDirection === "desc") {
-        sortComponent = <ArrowDownZA className='sort-icon' size={18}/>
+        sortComponent = <ArrowDownNarrowWide className='sort-icon' size={18}/>
     } else {
-        sortComponent = <ArrowUpAZ className='sort-icon' size={18}/>
+        sortComponent = <ArrowUpNarrowWide className='sort-icon' size={18}/>
     }
 
     // aggiungere cambio button con ordinamento e collapse expand
@@ -50,6 +51,7 @@ export function StatusBar({ searchString }) {
                 <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch}><Search className='search-icon' size={18}/></button>
                 <button className='sort-button quick-actions-button' onClick={handleSortTodos}>{sortComponent}</button>
                 <button className='collapse-button quick-actions-button' onClick={handleCollapseAll}><Minimize2 className='collapse-icon' size={18}/></button>
+                <SortMethodButton />
             </span>
             <span className='status-chip-container'>
                 <span className='status-chip'>Active: {activeTodos.length}</span>
