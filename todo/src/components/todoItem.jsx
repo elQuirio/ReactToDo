@@ -123,9 +123,9 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     if (status !== 'completed') {
         dueDateCommands = (<div className="due-date-box-commands">
-                            <button className="detail-row due-date-button" onClick={handlePlus1d} >+1d</button>
-                            <button className="detail-row due-date-button" onClick={handleResetDue} >Reset</button>
-                            <button className="detail-row due-date-button" onClick={handleSetDue} >Set</button>
+                            <button className="detail-row due-date-button" onClick={handlePlus1d} title="Add 1 day" aria-label="Add 1 day">+1d</button>
+                            <button className="detail-row due-date-button" onClick={handleResetDue} title="Reset due date" aria-label="Reset due date">Reset</button>
+                            <button className="detail-row due-date-button" onClick={handleSetDue} title="Pick due date" aria-label="Pick due date">Set</button>
                             <input type="date" ref={refDatePicker} className="hidden-date-picker" onChange={(e) => handleOnChangeDatePicker(e)}></input>
                         </div>);
     } else {
@@ -137,7 +137,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                     < GripVertical size={24} className="drag-handle"/>
                     <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
                     {todoContent}
-                    <button className="expand-todo-btn" onClick={handleOnClick}>{isExpanded ? <Minus size={26}/> : <Plus size={26}/> }</button>
+                    <button className="expand-todo-btn" onClick={handleOnClick} title={isExpanded ? 'Collapse': 'Expand'} aria-label={isExpanded ? 'Collapse': 'Expand'}>{isExpanded ? <Minus size={26}/> : <Plus size={26}/> }</button>
                 </div>
 
                 {isExpanded && (<div className="todo-details">

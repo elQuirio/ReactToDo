@@ -5,7 +5,6 @@ import { logoutUser } from "../thunks/authThunks";
 import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
 import { selectUser } from '../selectors/authSelector';
-import SortDropdown from './sortDropdown';
 
 
 export default function UserMenu() {
@@ -70,7 +69,6 @@ export default function UserMenu() {
                                 <div>User email: {user}</div>
                             </div>
                             <div className='user-divider'></div>
-                            <SortDropdown className='user-panel-item'/> 
                             <label className='switch user-panel-item'>
                                 <input type='checkbox' checked={isLightMode} onChange={(e)=> handleOnChangeDarkSwitch(e)}/>
                                 <span className="slider round">

@@ -1,4 +1,4 @@
-import { GripVertical, CalendarPlus, CalendarCog, ArrowDownAz } from "lucide-react";
+import { GripVertical, CalendarPlus, CalendarCog, ArrowDownAz, ChevronsRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSortBy, selectSortDirection } from '../selectors/preferencesSelector';
@@ -9,7 +9,10 @@ export function SortMethodButton () {
     const dispatch = useDispatch();
     const currentSortBy = useSelector(selectSortBy);
     const currentSortDirection = useSelector(selectSortDirection);
-    const METHODS = [ {key: 'manual', icon: GripVertical}, {key: 'createdAt', icon: CalendarPlus}, {key: 'updatedAt', icon: CalendarCog}, {key: 'alpha', icon: ArrowDownAz} ]
+    const METHODS = [ {key: 'manual', icon: GripVertical, title: 'Sorted manually'},
+                      {key: 'createdAt', icon: CalendarPlus, title: 'Sorted by creation date'},
+                      {key: 'updatedAt', icon: CalendarCog, title: 'Sorted by update date'},
+                      {key: 'alpha', icon: ArrowDownAz, title: 'Sorted alphabetically'} ]
     const [ isExpanded, setIsExpanded ] = useState(false);
     const [ activeKey, setActiveKey ] = useState(currentSortBy);
     const [ activeFade, setActiveFade ] = useState(false);
@@ -75,14 +78,17 @@ export function SortMethodButton () {
             <div className="active-wrapper">
                     {METHODS.map((m) => {
                         if (activeKey === m.key) {
-                            return <button key={m.key} className={`quick-actions-button ${activeKey === m.key ? 'active':'hidden' }`} onClick={() => handleOnClickMain(m.key)}>{<m.icon size={18} className={`active-icon ${activeFade?'fade':''}`}/>} </button>
+                            return <button key={m.key} className={`quick-actions-button ${activeKey === m.key ? 'active':'hidden' }`} onClick={() => handleOnClickMain(m.key)} title={m.title} aria-label={m.title}>
+                                        <m.icon size={18} className={`active-icon ${activeFade?'fade':''}`}/> 
+                                        {isExpanded ? '' : <ChevronsRight className='active-icon' size={10}/>}
+                                    </button>
                         }
                     })}
             </div>
             <div className="hidden-wrapper" ref={hiddenRef}>
                 {METHODS.map((m) => {
                         if (activeKey !== m.key) {
-                            return <button key={m.key} className={`quick-actions-button hidden`} onClick={() => handleOnClickHidden(m.key)}>{<m.icon size={18}/>} </button>
+                            return <button key={m.key} className={`quick-actions-button hidden`} onClick={() => handleOnClickHidden(m.key)} title={m.title} aria-label={m.title}>{<m.icon size={18}/>} </button>
                         }
                     })}
             </div>

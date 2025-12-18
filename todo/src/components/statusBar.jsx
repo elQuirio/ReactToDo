@@ -48,9 +48,9 @@ export function StatusBar({ searchString }) {
     // aggiungere cambio button con ordinamento e collapse expand
     return <div className="status-bar-mini">
             <span className='quick-actions-container'>
-                <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch}><Search className='search-icon' size={18}/></button>
-                <button className='sort-button quick-actions-button' onClick={handleSortTodos}>{sortComponent}</button>
-                <button className='collapse-button quick-actions-button' onClick={handleCollapseAll}><Minimize2 className='collapse-icon' size={18}/></button>
+                <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch} title='Search mode' aria-label='Search mode'><Search className='search-icon' size={18}/></button>
+                <button className='sort-button quick-actions-button' onClick={handleSortTodos} title='Sort direction' aria-label='Sort direction'>{sortComponent}</button>
+                <button className='collapse-button quick-actions-button' onClick={handleCollapseAll} title='Collapse all todos' aria-label='Collapse all todos' ><Minimize2 className='collapse-icon' size={18}/></button>
                 <SortMethodButton />
             </span>
             <span className='status-chip-container'>
