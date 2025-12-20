@@ -5,7 +5,7 @@ import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectSortDirection, selectSortBy } from '../selectors/preferencesSelector';
 import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
-import { SortMethodButton } from '../components/sortMethodButton';
+import { SortMethodSwitch } from '../components/sortMethodSwitch';
 import { Search, Minimize2, ArrowUpNarrowWide, ArrowDownNarrowWide } from "lucide-react";
 
 export function StatusBar({ searchString }) {
@@ -45,13 +45,16 @@ export function StatusBar({ searchString }) {
         sortComponent = <ArrowUpNarrowWide className='sort-icon' size={18}/>
     }
 
-    // aggiungere cambio button con ordinamento e collapse expand
+    window.addEventListener('resize', () => {
+    console.log(window.innerWidth);
+    });
+
     return <div className="status-bar-mini">
             <span className='quick-actions-container'>
                 <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch} title='Search mode' aria-label='Search mode'><Search className='search-icon' size={18}/></button>
                 <button className='sort-button quick-actions-button' onClick={handleSortTodos} title='Sort direction' aria-label='Sort direction'>{sortComponent}</button>
                 <button className='collapse-button quick-actions-button' onClick={handleCollapseAll} title='Collapse all todos' aria-label='Collapse all todos' ><Minimize2 className='collapse-icon' size={18}/></button>
-                <SortMethodButton />
+                <SortMethodSwitch />
             </span>
             <span className='status-chip-container'>
                 <span className='status-chip'>Active: {activeTodos.length}</span>
@@ -60,5 +63,6 @@ export function StatusBar({ searchString }) {
                 <span className="dot"> | </span>
                 <span className='status-chip'>Overdue: {overdueTodos.length}</span>
             </span>
+            <span></span>
         </div>
 }

@@ -61,8 +61,10 @@ export default function AddTodoInputbox() {
 
     return (<div className="control-bar">
                 <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown} placeholder={handlePlaceholder()}/>
-                <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
-                < DropDownButton handleOnClick={handleClearAllTodos} />
+                <div className="control-bar-buttons-wrapper">
+                    <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
+                    <DropDownButton handleOnClick={handleClearAllTodos} />
+                </div>
                 <StatusBar searchString={text}/>
             </div>)
 }

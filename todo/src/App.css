@@ -210,6 +210,13 @@ h1 {
   outline: none;
 }
 
+.control-bar-buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  justify-content: center;
+}
+
 .todo-controls-button {
   padding: 10px 16px;
   border-radius: 8px;
@@ -258,13 +265,21 @@ h1 {
 
 .quick-actions-container {
   display: flex;
-  position: absolute;
-  left: 20px;
+  /*gap: 8px; */
+  justify-self: start;
+  align-items: center;
+  min-width: 310px;
 }
 
 .quick-actions-button {
-  margin: 0 8px;
-  padding: 0 5px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  line-height: 1;
+  margin: 0 5px;
+  margin-top: 2px;
   border-radius: 20px;
   border: 1px solid rgb(var(--bg-color5) / 0.25);
   background: var(--bg-color4);
@@ -273,6 +288,8 @@ h1 {
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  min-height: 32px;
+  min-width: 32px;
 }
 
 .quick-actions-button.active {
@@ -281,10 +298,18 @@ h1 {
   align-items: center;
 }
 
+.quick-actions-button.active.extended {
+  background: var(--bt-active);
+}
+
+
+.quick-actions-button.active.collapsed {
+  padding-right: 0px;
+}
+
 body.light .quick-actions-button:hover {
   color: var(--text-color);
 }
-
 
 .quick-actions-button:hover
 /*.quick-actions-button.active*/ {
@@ -311,12 +336,24 @@ body.light .quick-actions-button.active.search-button {
 
 .status-bar-mini {
   flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
   padding-top: 2px;
   border-top: 1px solid rgb(var(--bg-color5) / 0.2);
   text-align: center;
   font-size: 14px;
   color: var(--text-color);
 }
+
+.status-chip-container {
+  justify-self: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+
 
 /* ----- todoItem ----- */
 
@@ -489,7 +526,7 @@ body.light .due-date-button:hover {
 
 .login-form-container {
   width: 25%;
-  height: 40vh;
+  min-height: 20vh;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -500,39 +537,44 @@ body.light .due-date-button:hover {
   border: 1px solid rgb(var(--bg-color5) / 0.2);
   background: rgb(var(--bg-color5) / 0.05);
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  gap: 15px;
 }
 
 .login-form-button {
   padding: 15px;
-  margin: 10px 5px;
-  border-radius: 10px;;
+  height: 55px;
+  margin: 0 5px;
   /*background: linear-gradient(135deg, #1f2933, #2d2e30);*/
-  background: var(--bg-color2);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-  color: white;
   font-size: 1.1rem;
   outline: none;
+  /*******/
+  background: var(--bg-color4);
+  color: var(--btn-text);
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgb(var(--bg-color5) / 0.25);
 }
 
 .login-form-button:hover {
   outline: none;
   border-color: rgb(var(--bg-color5) / 0.35);
   transform: translateY(2px);
-  background: var(--bg-color2)
+  background: var(--bg-color2);
+  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
 }
 
 .login-form-input {
-  height: 15%;
-  margin: 5px 5px;
+  height: 25px;
+  margin: 0 5px;
   border: 0px;
   border-radius: 10px;
-  background: rgb(var(--bg-color5) / 0.15);
+  background: transparent rgb(var(--bg-color5) / 0.15);
   padding: 10px;
   /*box-shadow: 0 8px 20px rgba(0,0,0,0.6);*/
   color: #ffffff;
   font-size: 1.15rem;
   font-weight: 500;
-  background: transparent;
 }
 
 .login-form-input:focus {
@@ -540,7 +582,6 @@ body.light .due-date-button:hover {
   border-color: rgb(var(--bg-color5) / 0.6);
   outline: none;
 }
-
 
 
 /* ----- Slider ----- */
@@ -623,6 +664,7 @@ color:#1a1a1a;
   position: fixed;
   top: 5px;
   right: 20px;
+  z-index: 100;
 }
 
 .user-menu-panel {
@@ -705,8 +747,6 @@ color:#1a1a1a;
 }
 
 
-
-
 /* ----- Spinner ----- */
 
 .loader-container {
@@ -731,4 +771,29 @@ color:#1a1a1a;
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+
+
+/******** Media Queries ********/
+
+@media (max-width:860px) {
+ .status-bar-mini {
+  grid-template-columns: 1fr auto;
+ } 
+}
+
+@media (max-width:630px) {
+  .status-bar-mini {
+    grid-template-columns: 1fr;
+  }
+  .quick-actions-container {
+    justify-self: center;
+  }
+  .status-chip-container {
+    display: none;
+  }
+  .control-bar {
+    display: grid;
+  }
 }
