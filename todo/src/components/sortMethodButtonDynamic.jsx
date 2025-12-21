@@ -19,6 +19,7 @@ export function SortMethodButtonDynamic () {
     const [ pendingKey, setPendingKey ] = useState(null);
 
     const hiddenRef = useRef(null);
+    const activeRef = useRef(null);
     const rootRef = useRef(null);
 
     useEffect(()=>{ setVisualKey(currentSortBy) },[currentSortBy]);
@@ -30,29 +31,46 @@ export function SortMethodButtonDynamic () {
     function handleOnClickHidden(key) {
         setPendingKey(key);
         setIsExpanded(false);
-        dispatch(updatePreferences({sortBy: key}));
-        dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
     }
 
     useEffect(() => {
         const el = hiddenRef.current;
+        const ar = activeRef.current;
         if (!el) return;
+        if (!ar) return;
 
-        function onEnd(e) {
-        if (e.propertyName != 'max-width') return;
-        if (isExpanded) return;
-        if (!pendingKey) return;
-        
-        setActiveFade(true);
-        requestAnimationFrame(() => {
-            setVisualKey(pendingKey);
-            setPendingKey(null);
-            requestAnimationFrame(() => setActiveFade(false));
-        })
-    }
-    el.addEventListener('transitionend', onEnd);
-    return () => el.removeEventListener('transitionend', onEnd);
-    }, [isExpanded, pendingKey]);
+        function onEndCollpse(e) {
+            if (e.propertyName != 'max-width') return;
+            if (isExpanded) return;
+            if (!pendingKey) return;
+            
+            requestAnimationFrame(() => setActiveFade(true));
+        }
+
+        function onEndFade(e) {
+            if (e.propertyName != 'opacity') return;
+            if (isExpanded) return;
+            if (!pendingKey) return;
+
+            requestAnimationFrame(() => {
+                setVisualKey(pendingKey);
+                console.log(pendingKey);
+                dispatch(updatePreferences({sortBy: pendingKey}));
+                dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: pendingKey}));
+                setPendingKey(null);
+                requestAnimationFrame(() => setActiveFade(false));
+            })
+        }
+
+        el.addEventListener('transitionend', onEndCollpse);
+        ar.addEventListener('transitionend', onEndFade);
+
+        return () => {
+            el.removeEventListener('transitionend', onEndCollpse);
+            ar.removeEventListener('transitionend', onEndFade);
+        };
+        }, [isExpanded, pendingKey]);
+
 
     useEffect(()=>{
         function onEsc(e) {
@@ -75,7 +93,7 @@ export function SortMethodButtonDynamic () {
     
 
     return <div className={`sort-method-wrapper ${isExpanded ? 'open':''}`} ref={rootRef}>
-            <div className="active-wrapper">
+            <div className="active-wrapper" ref={activeRef}>
                     {METHODS.map((m) => {
                         if (visualKey === m.key) {
                             return <button key={m.key} className={`quick-actions-button active ${isExpanded ? '' : 'collapsed'}`} onClick={() => handleOnClickMain(m.key)} title={m.title} aria-label={m.title}>
