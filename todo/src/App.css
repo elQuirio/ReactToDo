@@ -724,7 +724,7 @@ color:#1a1a1a;
   opacity:0;
   transform: translateX(-10px);
   pointer-events:none;
-  transition: max-width .45s ease, opacity .45s ease, transform .45s ease;
+  transition: max-width .2s ease, opacity .2s ease, transform .2s ease;
 }
 
 .sort-method-wrapper.open .hidden-wrapper{
