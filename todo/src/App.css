@@ -523,9 +523,12 @@ body.light .due-date-button:hover {
 
 
 /* ----- loginForm ----- */
+.login-form-wrapper {
+  margin: auto;
+}
+
 
 .login-form-container {
-  width: 25%;
   min-height: 20vh;
   margin: auto;
   display: flex;
@@ -564,6 +567,10 @@ body.light .due-date-button:hover {
   box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
 }
 
+.login-form-input::placeholder {
+  font-style: italic;
+}
+
 .login-form-input {
   height: 25px;
   margin: 0 5px;
@@ -572,7 +579,7 @@ body.light .due-date-button:hover {
   background: transparent rgb(var(--bg-color5) / 0.15);
   padding: 10px;
   /*box-shadow: 0 8px 20px rgba(0,0,0,0.6);*/
-  color: #ffffff;
+  color: var(--text-color);
   font-size: 1.15rem;
   font-weight: 500;
 }

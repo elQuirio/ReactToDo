@@ -58,6 +58,8 @@ const authSlice = createSlice({
                 state.user = null;
                 state.userId = null;
                 state.isLogged = false;
+                state.loading = false;
+                state.error = null;
             }
         })
         .addCase(registerUser.pending, (state) => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../thunks/authThunks";
 import { selectIsLogged } from '../selectors/authSelector';
@@ -16,10 +16,17 @@ export default function LoginForm() {
     const dispatch = useDispatch();
 
     let loginContent;
-
-    const logged = useEffect(()=> {
-        console.log('isLogged', isLogged)
-    }, [isLogged]);
+    
+    async function handleOnSubmit(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        if (registrationMode) {
+            await handleRegisterOnClick();
+        }
+        else {
+            await handleLoginOnClick();
+        } 
+    }
 
     async function handleRegisterOnClick () {
         const errors = validateRegistrationForm('registration', {email, password, confirmPassword});
@@ -50,7 +57,6 @@ export default function LoginForm() {
                 const resplogin = await dispatch(loginUser({email, password})).unwrap();
                 console.log(resplogin);
                 console.log(isLogged ? 'LOGGED' : 'NOT LOGGED');
-                //console.log('isLogged:', isLogged);
             } catch (e) {
                 setLoginError(e); //migliorare il messaggio
                 console.log('LOGIN ERROR:', e);
@@ -89,12 +95,10 @@ export default function LoginForm() {
             //addError('password', !password.length>3, 'Password is too short!');
             addError('confirmPassword', !(password===confirmPassword), 'Conform password is different!');
         } 
-        //if (eventName === 'login') {
-            addError('email', !email, 'Email is missing!');
-            addError('email', !validator.isEmail(email), 'Email is not a valid format!');
-            addError('password', !password, 'Password is null!');
-        //}
-
+        addError('email', !email, 'Email is missing!');
+        addError('email', !validator.isEmail(email), 'Email is not a valid format!');
+        addError('password', !password, 'Password is null!');
+        
         return errors;
     }
 
@@ -104,19 +108,19 @@ export default function LoginForm() {
                             <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
                             <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
                             <input type="password" placeholder="Confirm password..." className={passwordError ? 'password-error login-form-input' : 'input-password login-form-input'} onChange={(e) => handlePasswordOnChange(e, 'confirmPassword')}></input>
-                            <button onClick={handleRegisterOnClick} className="login-form-button">Confirm</button>
-                            <button onClick={() => setRegistrationMode(false)} className="login-form-button">Login</button>
+                            <button type='submit' className="login-form-button">Confirm</button>
+                            <button type="button" onClick={() => setRegistrationMode(false)} className="login-form-button">Login</button>
                             {registerError && <div className="error-box">{registerError}</div>}
                         </div>
     } else {
         loginContent =  <div className="login-form-container">
                             <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
                             <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
-                            <button onClick={handleLoginOnClick} className="login-form-button">Login</button>
-                            <button onClick={() => {setRegistrationMode(true)}} className="login-form-button">Register</button>
+                            <button type="submit" className="login-form-button">Login</button>
+                            <button type='button' onClick={() => {setRegistrationMode(true)}} className="login-form-button">Register</button>
                             {loginError && <div className="error-box">{loginError}</div>}
                         </div>
     }
 
-    return  loginContent;
+    return  <form onSubmit={handleOnSubmit} className="login-form-wrapper">{loginContent}</form>;
 };
