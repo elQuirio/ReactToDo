@@ -2,13 +2,17 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
+import { DueDatePicker } from "./dueDatePicker";
 import { useRef } from "react";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle, Plus, Minus, GripVertical } from "lucide-react";
 
+
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
+    const [pickedDate, setPickedDate] = useState(toBeCompletedAt);
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
     const dispatch = useDispatch();
     const refDatePicker = useRef(null);
@@ -59,17 +63,23 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
-    function handleSetDue() {
-        if (status !== 'completed') {
-            refDatePicker.current.showPicker();
-        }
+    function handleSetDue(e) {
+        e.stopPropagation();
+        setIsDatePickerOpen(true);
     }
 
-    function handleOnChangeDatePicker(e) {
-        const selectedDate = new Date(e.target.value);
-        selectedDate.setHours(9, 0, 0, 0);
-        const dueDate = selectedDate.getTime();
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }))
+    function handleOnChangeDatePicker(date) {
+        console.log(date);
+        //console.log(date.getTime());
+        //console.log(date.getDate());
+        //const selectedDate = date.getTime()
+        setPickedDate(date);
+        //dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: selectedDate, position: position }));
+    }
+
+    function handleOnConfirmDatePicker() {
+        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: pickedDate, position: position }));
+        setIsDatePickerOpen(false);
     }
 
     function handleKeyDown(e) {
@@ -125,9 +135,9 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         dueDateCommands = (<div className="due-date-box-commands">
                             <button className="detail-row due-date-button" onClick={handlePlus1d} title="Add 1 day" aria-label="Add 1 day">+1d</button>
                             <button className="detail-row due-date-button" onClick={handleResetDue} title="Reset due date" aria-label="Reset due date">Reset</button>
-                            <button className="detail-row due-date-button" onClick={handleSetDue} title="Pick due date" aria-label="Pick due date">Set</button>
-                            <input type="date" ref={refDatePicker} className="hidden-date-picker" onChange={(e) => handleOnChangeDatePicker(e)}></input>
-                        </div>);
+                            <button className="detail-row due-date-button" onClick={handleSetDue} title="Pick due date" aria-label="Pick due date" ref={refDatePicker}>Pick</button>
+                            {isDatePickerOpen && (<DueDatePicker initialValue={pickedDate} onConfirm={handleOnConfirmDatePicker} onCancel={() => setIsDatePickerOpen(false)} anchorElement={refDatePicker.current} onChange={handleOnChangeDatePicker} />)}
+                            </div>);
     } else {
         dueDateCommands = <div className="due-date-box-commands"></div>;
     }
@@ -151,7 +161,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                     </div>
                     <div className="detail-row due-date-box">
                         <div className="due-date-box-label">
-                            <span className="label">Due:</span> 
+                            <span className="label">Due:</span>
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
                         {dueDateCommands}

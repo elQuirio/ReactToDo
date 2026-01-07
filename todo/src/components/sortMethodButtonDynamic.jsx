@@ -69,7 +69,7 @@ export function SortMethodButtonDynamic () {
             el.removeEventListener('transitionend', onEndCollpse);
             ar.removeEventListener('transitionend', onEndFade);
         };
-        }, [isExpanded, pendingKey]);
+        }, [isExpanded, pendingKey, currentSortDirection, dispatch]);
 
 
     useEffect(()=>{
@@ -96,14 +96,14 @@ export function SortMethodButtonDynamic () {
             <div className="active-wrapper" ref={activeRef}>
                     {METHODS.map((m) => {
                         if (visualKey === m.key) {
-                            return <button key={m.key} className={`quick-actions-button active ${isExpanded ? '' : 'collapsed'}`} onClick={() => handleOnClickMain(m.key)} title={m.title} aria-label={m.title}>
+                            return <button key={m.key} className={`quick-actions-button active ${isExpanded ? '' : 'collapsed'}`} onClick={handleOnClickMain} title={m.title} aria-label={m.title}>
                                         <m.icon size={18} className={`active-icon ${activeFade?'fade':''}`}/> 
-                                        {isExpanded ? '' : <ChevronsRight className='active-icon' size={11}/>}
+                                        {isExpanded ? '' : <ChevronsRight className={`active-icon ${activeFade?'fade':''}`} size={11}/>}
                                     </button>
                         }
                     })}
             </div>
-            <div className="hidden-wrapper" ref={hiddenRef}>
+            <div className="hidden-wrapper" ref={hiddenRef}> 
                 {METHODS.map((m) => {
                         if (visualKey !== m.key) {
                             return <button key={m.key} className={`quick-actions-button ${isExpanded ? '' : 'hidden'}`} onClick={() => handleOnClickHidden(m.key)} title={m.title} aria-label={m.title}>{<m.icon size={18}/>} </button>

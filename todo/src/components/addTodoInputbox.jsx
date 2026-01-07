@@ -55,7 +55,7 @@ export default function AddTodoInputbox() {
         if(searchButtonActive) {
             return 'Type to search...';
         } else {
-            return 'Write here...';
+            return 'Write something to do...';
         }
     }
 
