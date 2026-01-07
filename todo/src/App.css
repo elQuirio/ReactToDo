@@ -475,6 +475,7 @@ body.light .quick-actions-button.active.search-button {
 
 .due-date-box-commands {
   display: flex;
+  justify-content: center;
 }
 
 .due-date-button {
@@ -508,6 +509,56 @@ body.light .due-date-button:hover {
   opacity: 0;
   width: 0;
   height: 0;
+}
+
+.flatpickr-calendar * {
+  color:var(--text-color) !important;
+  background: var(--bg-color1) !important;
+  stroke: var(--text-color) !important;
+}
+
+
+.flatpickr-calendar {
+  border: 1px solid rgb(var(--bg-color5)/ 0.3) !important;
+}
+
+.flatpickr-day:hover {
+  border: 1px solid rgb(var(--bg-color5)/ 0.25) !important;
+}
+
+.flatpickr-day.selected {
+  border: 1px solid var(--bt-active) !important; 
+}
+
+.flatpickr-day.today {
+
+}
+
+.date-picker-popover {
+
+
+}
+
+.date-picker-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+}
+
+.date-picker-popover{
+  position: absolute;
+  padding: 10px;
+  border-radius: 12px;
+  background: var(--bg-color4);
+  border: 1px solid rgb(var(--bg-color5) / 0.25);
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+}
+
+.date-picker-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .drag-handle {
