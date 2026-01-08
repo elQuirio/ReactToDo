@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
-import { DueDatePicker } from "./dueDatePicker";
-import { useRef } from "react";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle, Plus, Minus, GripVertical } from "lucide-react";
+import { TodoItemCommands } from '../components/todoItemCommands';
 
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
@@ -15,10 +14,8 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
     const dispatch = useDispatch();
-    const refDatePicker = useRef(null);
     const oneDay = 24 * 60 * 60 * 1000;
     let todoContent = '';
-    let dueDateCommands = '';
 
     function handleOnClick() {
         if (status === 'active')
@@ -69,12 +66,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
     }
 
     function handleOnChangeDatePicker(date) {
-        console.log(date);
-        //console.log(date.getTime());
-        //console.log(date.getDate());
-        //const selectedDate = date.getTime()
         setPickedDate(date);
-        //dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: selectedDate, position: position }));
     }
 
     function handleOnConfirmDatePicker() {
@@ -125,21 +117,14 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
+    function handleOnCancelDatePicker() {
+        setIsDatePickerOpen(false);
+    }
+
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
     } else if (!isEditing) {
         todoContent = (<div className="todo-text-wrapper"><span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text} { (toBeCompletedAt && toBeCompletedAt < Date.now() && status !== 'completed' ) && <AlertCircle className="todo-alert"/> }</span></div>);
-    }
-
-    if (status !== 'completed') {
-        dueDateCommands = (<div className="due-date-box-commands">
-                            <button className="detail-row due-date-button" onClick={handlePlus1d} title="Add 1 day" aria-label="Add 1 day">+1d</button>
-                            <button className="detail-row due-date-button" onClick={handleResetDue} title="Reset due date" aria-label="Reset due date">Reset</button>
-                            <button className="detail-row due-date-button" onClick={handleSetDue} title="Pick due date" aria-label="Pick due date" ref={refDatePicker}>Pick</button>
-                            {isDatePickerOpen && (<DueDatePicker initialValue={pickedDate} onConfirm={handleOnConfirmDatePicker} onCancel={() => setIsDatePickerOpen(false)} anchorElement={refDatePicker.current} onChange={handleOnChangeDatePicker} />)}
-                            </div>);
-    } else {
-        dueDateCommands = <div className="due-date-box-commands"></div>;
     }
 
     return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => handleDoubleClick(status)} >
@@ -164,7 +149,7 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
                             <span className="label">Due:</span>
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
-                        {dueDateCommands}
+                        <TodoItemCommands todoStatus={status} handlePlus1d={handlePlus1d} handleResetDue={handleResetDue} handleSetDue={handleSetDue} currentValue={pickedDate} handleOnConfirmDatePicker={handleOnConfirmDatePicker} handleOnCancelDatePicker={handleOnCancelDatePicker} handleOnChangeDatePicker={handleOnChangeDatePicker} isDatePickerOpen={isDatePickerOpen} />
                     </div>
                 </div>)}
             </div>
