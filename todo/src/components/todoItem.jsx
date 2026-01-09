@@ -5,16 +5,15 @@ import { updatePreferences } from "../thunks/preferencesThunk";
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 import { AlertCircle, Plus, Minus, GripVertical } from "lucide-react";
 import { TodoItemCommands } from '../components/todoItemCommands';
+import { useTodoItem } from "../hooks/useTodoItem";
 
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
-    const [pickedDate, setPickedDate] = useState(toBeCompletedAt);
-    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const { handlePlus1d, handleResetDue, handleOnCancelDatePicker, isDatePickerOpen, handleSetDue, handleOnChangeDatePicker, pickedDate, handleOnConfirmDatePicker } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position });    
 
     const dispatch = useDispatch();
-    const oneDay = 24 * 60 * 60 * 1000;
     let todoContent = '';
 
     function handleOnClick() {
@@ -41,38 +40,6 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
         dispatch(collapseId({id: id}));
     };
-
-    function handlePlus1d() {
-        if (status !== 'completed') {
-            let dueDate;
-            if (!toBeCompletedAt) {
-                dueDate = Date.now() + oneDay; //add one day
-            } else {
-                dueDate = toBeCompletedAt + oneDay;
-            }
-            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }))
-        }
-    }
-
-    function handleResetDue() {
-        if (status !== 'completed') {
-            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null, position: position }))
-        }
-    }
-
-    function handleSetDue(e) {
-        e.stopPropagation();
-        setIsDatePickerOpen(true);
-    }
-
-    function handleOnChangeDatePicker(date) {
-        setPickedDate(date);
-    }
-
-    function handleOnConfirmDatePicker() {
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: pickedDate, position: position }));
-        setIsDatePickerOpen(false);
-    }
 
     function handleKeyDown(e) {
         if (e.key === 'Enter') 
@@ -117,9 +84,6 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
-    function handleOnCancelDatePicker() {
-        setIsDatePickerOpen(false);
-    }
 
     if (isEditing) {
         todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);

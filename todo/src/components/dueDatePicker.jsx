@@ -21,9 +21,14 @@ export function DueDatePicker({anchorElement, currentValue, onConfirm, onCancel,
 
     if (!pos) return null;
 
-    pickerContent = createPortal(<div className="date-picker-overlay" onPointerDown={(e) => {if (e.target === e.currentTarget) onCancel()}}>
+    pickerContent = createPortal(<div className="date-picker-overlay" onPointerDown={(e) => {if (e.target === e.currentTarget) onCancel()}} onDoubleClick={(e) => e.stopPropagation()}>
                         <div className="date-picker-popover" style={{top: pos.top, left: pos.left}} onClick={(e) => e.stopPropagation()}>
-                        <Flatpickr className='hidden-date-picker' options={{ enableTime: true, time_24hr: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S", defaultHour: 9, disableMobile: true, inline: true }} value={currentValue} onChange={onChange} />
+                        <Flatpickr className='hidden-date-picker' options={{ enableTime: true, time_24hr: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S", defaultHour: 9, disableMobile: true, inline: true }} value={currentValue} 
+                        onChange={(selectedDates) => {
+                            const date = selectedDates?.[0];
+                            if (!date) return;
+                            onChange(date);
+                            }} />
                             <div className="date-picker-actions">
                                 <button className="date-picker-button" onClick={onConfirm}>Confirm</button>
                                 <button className="date-picker-button" onClick={onCancel}>Cancel</button>
