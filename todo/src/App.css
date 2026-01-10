@@ -4,10 +4,15 @@
   font-weight: 400;
   --text-color: rgba(255, 255, 255, 0.87); 
   --bg-color1: #242424;
+  --bg-color1-rgb: 36, 36, 36;
   --bg-color2:#ffffff0d;
+  --bg-color2-rgb: 255, 255, 255;
   --bg-color3: #5555555c;
+  --bg-color3-rgb: 85, 85, 85;
   --bg-color4: #1b1b1b;
+  --bg-color4-rgb: 27, 27, 27;
   --bg-color5: 255 255 255;
+  --bg-color6: 
   --bt-active: #220ad6;
   --checkbox-color: #4caf50;
   font-synthesis: none;
@@ -23,15 +28,19 @@ body {
   height: 100%;
   background-color: var(--bg-color1);
   color: var(--text-color);
-
+  --bt-active: #220ad6;
 }
 
 body.light {
   color-scheme: light;
   --bg-color1: #DBF0E4;
+  --bg-color1-rgb: 219, 240, 228;
   --bg-color2: #B6E2CA;
+  --bg-color2-rgb: 182, 226, 202;
   --bg-color3: #92D3AF;
+  --bg-color3-rgb: 146, 211, 175;
   --bg-color4: #00665F;
+  --bg-color4-rgb: 0, 102, 95;
   --bg-color5: 0 0 0;
   --text-color: #213547;
   --btn-text: #EDF8F2;
@@ -517,7 +526,6 @@ body.light .due-date-button:hover {
   stroke: var(--text-color) !important;
 }
 
-
 .flatpickr-calendar {
   border: 1px solid rgb(var(--bg-color5)/ 0.3) !important;
 }
@@ -530,13 +538,27 @@ body.light .due-date-button:hover {
   border: 1px solid var(--bt-active) !important; 
 }
 
-.flatpickr-day.today {
 
+
+.date-picker-button {
+  padding: 8px 8px;
+  border-radius: 8px;
+  border: 1px solid rgb(var(--bg-color5) / 0.25);
+  background: var(--bg-color4);
+  color: var(--btn-text);
+  font-size: 14px;
+  cursor: pointer;
+
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
-.date-picker-popover {
-
-
+.date-picker-button:hover {
+  background: var(--bg-color2);
+  border-color: rgb(var(--bg-color5) / 0.35);
+  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  transform: translateY(-1px);
 }
 
 .date-picker-overlay{
@@ -549,7 +571,7 @@ body.light .due-date-button:hover {
   position: absolute;
   padding: 10px;
   border-radius: 12px;
-  background: var(--bg-color4);
+  background: rgba(var(--bg-color1-rgb), 0.9);
   border: 1px solid rgb(var(--bg-color5) / 0.25);
   box-shadow: 0 18px 60px rgba(0,0,0,.35);
 }

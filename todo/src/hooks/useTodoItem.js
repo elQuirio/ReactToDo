@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { saveTodo } from '../thunks/todoThunks';
 
 export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
