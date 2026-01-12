@@ -11,36 +11,45 @@ export function DueDatePicker({anchorElement, currentValue, onConfirm, onCancel,
 
     useEffect(() => {
         if (!anchorElement) return;
-        const ae = anchorElement.getBoundingClientRect();
-        setPos({
-            top: ae.bottom + window.scrollY + 8,
-            left: ae.left + window.scrollX,
-        });
+
+        const updatePos = () => {
+            const ae = anchorElement.getBoundingClientRect();
+            setPos({
+                top: ae.bottom + 8,
+                left: ae.left,
+            });
+        }
+        updatePos();
+
+        document.addEventListener('scroll', updatePos, true);
+        window.addEventListener('resize', updatePos);
+
+        return () => {
+            document.removeEventListener('scroll', updatePos, true);
+            window.removeEventListener('resize', updatePos);
+        }
+        
     }, [anchorElement]);
 
     useEffect(() => {
         if (!isDatePickerOpen) return;
+
+        const close = () => onCancel();
+
         const onGlobalPointerDown = (e) => {
             if (popoverRef.current.contains(e.target)) return;
             onCancel();
         };
 
+        window.addEventListener('blur', close);
         document.addEventListener('pointerdown', onGlobalPointerDown);
 
-        return () => document.removeEventListener('pointerdown', onGlobalPointerDown);
+        return () => {
+            document.removeEventListener('pointerdown', onGlobalPointerDown);
+            window.removeEventListener('blur', close);
+        };
 
     }, [isDatePickerOpen, onCancel]);
-
-    useEffect(() => { // capire se posso unire i due useEffect
-        if (!isDatePickerOpen) return;
-        const close = () => onCancel();
-
-        window.addEventListener('blur', close);
-
-        return () => { 
-            window.removeEventListener('blur', close);
-        }
-    },[isDatePickerOpen, onCancel])
 
     let pickerContent = '';
 
