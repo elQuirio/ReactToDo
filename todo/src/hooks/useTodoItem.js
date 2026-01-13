@@ -1,8 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useCallback, useState } from "react";
 import { saveTodo } from '../thunks/todoThunks';
+import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 
-export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
+export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position, isEditing, setIsEditing, tempText, setTempText }) {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [pickedDate, setPickedDate] = useState(toBeCompletedAt);
     const dispatch = useDispatch();
@@ -45,6 +46,43 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         setIsDatePickerOpen(false);
     }, [dispatch, id, text, status, createdAt, pickedDate, position]);
 
+    const handleOnClick = useCallback(() => {
+        if (status === 'active')
+        {
+            dispatch(toggleId({ id: id }));
+        }
+    }, [dispatch, status, id]);
+
+    const handleDoubleClick = useCallback(() => {
+        if (status !== 'completed') {
+            setIsEditing(true);
+        }
+    }, [dispatch, status]);
+
+    const handleCheckboxChange = useCallback(() => {
+        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
+        dispatch(collapseId({id: id}));
+    }, [dispatch, id, text, status, createdAt, toBeCompletedAt, position]);
+
+
+    const handleOnBlur = useCallback(() => {
+        if (tempText !== '') {
+            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
+        }
+        setIsEditing(false);
+    }, [dispatch, id, tempText, status, createdAt, toBeCompletedAt, position, setIsEditing]);
+
+
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter') 
+        {
+            handleOnBlur();
+        } else if (e.key === 'Escape') {
+            setTempText(text);
+            setIsEditing(false);
+        }
+    }, [setTempText, handleOnBlur, setIsEditing]);
+
     return { 
         handlePlus1d, 
         handleResetDue, 
@@ -53,7 +91,12 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         handleSetDue, 
         handleOnChangeDatePicker, 
         pickedDate, 
-        handleOnConfirmDatePicker
+        handleOnConfirmDatePicker,
+        handleOnClick,
+        handleDoubleClick,
+        handleCheckboxChange,
+        handleOnBlur,
+        handleKeyDown
     };
     
 }
