@@ -2,54 +2,20 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
-import { toggleId, collapseId } from "../slices/uiTodoSlicer";
-import { AlertCircle, Plus, Minus, GripVertical } from "lucide-react";
-import { TodoItemCommands } from '../components/todoItemCommands';
+
 import { useTodoItem } from "../hooks/useTodoItem";
+import { TodoDetails } from "./todoDetails";
+import { TodoHeader } from "./todoHeader";
 
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isEditing, setIsEditing] = useState(false);
     const [tempText, setTempText] = useState(text);
-    const { handlePlus1d, handleResetDue, handleOnCancelDatePicker, isDatePickerOpen, handleSetDue, handleOnChangeDatePicker, pickedDate, handleOnConfirmDatePicker } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position });    
+    const { handlePlus1d, handleResetDue, handleOnCancelDatePicker, isDatePickerOpen, handleSetDue, handleOnChangeDatePicker, pickedDate, handleOnConfirmDatePicker, handleOnClick, handleDoubleClick, handleCheckboxChange, handleOnBlur, handleKeyDown } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position, isEditing, setIsEditing, tempText, setTempText });
 
     const dispatch = useDispatch();
-    let todoContent = '';
 
-    function handleOnClick() {
-        if (status === 'active')
-        {
-            dispatch(toggleId({ id: id }));
-        }
-    };
 
-    function handleDoubleClick() {
-        if (status !== 'completed') {
-            setIsEditing(true);
-        }
-    };
-
-    function handleOnBlur() {
-        if (tempText !== '') {
-            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }))
-        }
-        setIsEditing(false);
-    };
-
-    function handleCheckboxChange() {
-        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
-        dispatch(collapseId({id: id}));
-    };
-
-    function handleKeyDown(e) {
-        if (e.key === 'Enter') 
-        {
-            handleOnBlur();
-        } else if (e.key === 'Escape') {
-            setTempText(text);
-            setIsEditing(false);
-        }
-    }
 
     function handleOnDragStart(e, id) {
         if (status !== 'completed') {
@@ -84,37 +50,13 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
-
-    if (isEditing) {
-        todoContent = (<input className = {`todo-edit-input ${status === "active" ? "todo-active" : "todo-done"}`} autoFocus value={tempText} onChange={(e) => {setTempText(e.target.value)}} onBlur={handleOnBlur} onKeyDown={handleKeyDown} />);
-    } else if (!isEditing) {
-        todoContent = (<div className="todo-text-wrapper"><span className={`todo-text ${status === "active" ? "todo-active" : "todo-done"}`} > {text} { (toBeCompletedAt && toBeCompletedAt < Date.now() && status !== 'completed' ) && <AlertCircle className="todo-alert"/> }</span></div>);
+    function handleTextChange(e) {
+        setTempText(e.target.value)
     }
 
-    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => handleDoubleClick(status)} >
-                <div className="todo-header">
-                    < GripVertical size={24} className="drag-handle"/>
-                    <input type="checkbox" checked={status === "active" ? false : true} onChange={() => handleCheckboxChange(id)} onClick={(e) => e.stopPropagation()}/> 
-                    {todoContent}
-                    <button className="expand-todo-btn" onClick={handleOnClick} title={isExpanded ? 'Collapse': 'Expand'} aria-label={isExpanded ? 'Collapse': 'Expand'}>{isExpanded ? <Minus size={26}/> : <Plus size={26}/> }</button>
-                </div>
 
-                {isExpanded && (<div className="todo-details">
-                    <div className="detail-row">
-                        <span className="label">Created:</span>
-                        <span> {createdAt ? new Date(createdAt).toLocaleString() : "—"}</span>
-                    </div>
-                    <div className="detail-row">
-                        <span className="label">Updated:</span> 
-                        <span> {updatedAt ? new Date(updatedAt).toLocaleString() : "—"}</span>
-                    </div>
-                    <div className="detail-row due-date-box">
-                        <div className="due-date-box-label">
-                            <span className="label">Due:</span>
-                            <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
-                        </div>
-                        <TodoItemCommands todoStatus={status} handlePlus1d={handlePlus1d} handleResetDue={handleResetDue} handleSetDue={handleSetDue} currentValue={pickedDate} handleOnConfirmDatePicker={handleOnConfirmDatePicker} handleOnCancelDatePicker={handleOnCancelDatePicker} handleOnChangeDatePicker={handleOnChangeDatePicker} isDatePickerOpen={isDatePickerOpen} />
-                    </div>
-                </div>)}
+    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => handleDoubleClick(status)} >
+                < TodoHeader id={id} status={status} isEditing={isEditing} tempText={tempText} handleOnBlur={handleOnBlur} handleKeyDown={handleKeyDown} text={text} toBeCompletedAt={toBeCompletedAt} handleOnClick={handleOnClick} isExpanded={isExpanded} handleCheckboxChange={handleCheckboxChange} handleTextChange={handleTextChange} />
+                { isExpanded && <TodoDetails createdAt={createdAt} updatedAt={updatedAt} toBeCompletedAt={toBeCompletedAt} status={status} handlePlus1d={handlePlus1d} handleResetDue={handleResetDue} handleSetDue={handleSetDue} pickedDate={pickedDate} handleOnConfirmDatePicker={handleOnConfirmDatePicker} handleOnCancelDatePicker={handleOnCancelDatePicker} handleOnChangeDatePicker={handleOnChangeDatePicker} isDatePickerOpen={isDatePickerOpen}/> }
             </div>
 };
