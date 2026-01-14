@@ -1,6 +1,6 @@
 import { TodoItemCommands } from '../components/todoItemCommands';
 
-export function TodoDetails({createdAt, updatedAt, toBeCompletedAt, status, handlePlus1d, handleResetDue, handleSetDue, pickedDate, handleOnConfirmDatePicker, handleOnCancelDatePicker, handleOnChangeDatePicker, isDatePickerOpen}) {
+export function TodoDetails({createdAt, updatedAt, toBeCompletedAt, status, todoDetailsPlus1d, todoDetailsResetDueDate, todoItemCommandsPickDueDate, pickedDate, datePickerHandleConfirm, datePickerHandleCancel, todoItemCommandsHandleDateChange, isDatePickerOpen}) {
 
 
 
@@ -18,7 +18,7 @@ export function TodoDetails({createdAt, updatedAt, toBeCompletedAt, status, hand
                             <span className="label">Due:</span>
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
-                        <TodoItemCommands todoStatus={status} handlePlus1d={handlePlus1d} handleResetDue={handleResetDue} handleSetDue={handleSetDue} currentValue={pickedDate} handleOnConfirmDatePicker={handleOnConfirmDatePicker} handleOnCancelDatePicker={handleOnCancelDatePicker} handleOnChangeDatePicker={handleOnChangeDatePicker} isDatePickerOpen={isDatePickerOpen} />
+                        <TodoItemCommands todoStatus={status} todoDetailsPlus1d={todoDetailsPlus1d} todoDetailsResetDueDate={todoDetailsResetDueDate} todoItemCommandsPickDueDate={todoItemCommandsPickDueDate} currentValue={pickedDate} datePickerHandleConfirm={datePickerHandleConfirm} datePickerHandleCancel={datePickerHandleCancel} todoItemCommandsHandleDateChange={todoItemCommandsHandleDateChange} isDatePickerOpen={isDatePickerOpen} />
                     </div>
                 </div>
 
