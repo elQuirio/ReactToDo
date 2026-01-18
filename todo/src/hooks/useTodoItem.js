@@ -1,11 +1,14 @@
 import { useDispatch } from "react-redux";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { saveTodo } from '../thunks/todoThunks';
 import { toggleId, collapseId } from "../slices/uiTodoSlicer";
 
-export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position, isEditing, setIsEditing, tempText, setTempText }) {
+export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [pickedDate, setPickedDate] = useState(toBeCompletedAt);
+    const [isEditing, setIsEditing] = useState(false);
+    const [tempText, setTempText] = useState(text);
+
     const dispatch = useDispatch();
     const oneDay = 24 * 60 * 60 * 1000;
 
@@ -83,20 +86,47 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         }
     }, [setTempText, todoHeaderOnBlur, setIsEditing]);
 
-    return { 
-        todoDetailsPlus1d, 
-        todoDetailsResetDueDate, 
-        datePickerHandleCancel, 
-        isDatePickerOpen, 
-        todoItemCommandsPickDueDate, 
-        todoItemCommandsHandleDateChange, 
-        pickedDate, 
-        datePickerHandleConfirm,
-        todoHeaderToggleDetails,
-        todoItemDoubleClick,
-        todoHeaderCheckboxChange,
-        todoHeaderOnBlur,
-        todoHeaderKeyDown
+    const handleTextChange = useCallback((e) => {
+        setTempText(e.target.value);
+    }, [setTempText]);
+
+
+    const todoDetails = useMemo(() => ({ 
+            plus1d: todoDetailsPlus1d, 
+            resetDueDate: todoDetailsResetDueDate 
+        }), [todoDetailsPlus1d, todoDetailsResetDueDate]);
+
+    const datePicker = useMemo(() => ({ 
+            handleCancel: datePickerHandleCancel,
+            isDatePickerOpen: isDatePickerOpen,
+            pickedDate: pickedDate,
+            handleConfirm: datePickerHandleConfirm
+        }), [datePickerHandleCancel, isDatePickerOpen, pickedDate, datePickerHandleConfirm]);
+
+    const todoItemCommands = useMemo(() => ({
+            pickDueDate: todoItemCommandsPickDueDate,
+            handleDateChange: todoItemCommandsHandleDateChange
+        }), [todoItemCommandsPickDueDate, todoItemCommandsHandleDateChange]);
+
+    const todoHeader = useMemo(() => ({ 
+            toggleDetails: todoHeaderToggleDetails, 
+            onCheckboxChange: todoHeaderCheckboxChange, 
+            onBlur: todoHeaderOnBlur, 
+            keyDown: todoHeaderKeyDown,
+            onTextChange: handleTextChange,
+            isEditing: isEditing,
+            tempText: tempText
+        }), [todoHeaderToggleDetails, todoHeaderCheckboxChange, todoHeaderOnBlur, todoHeaderKeyDown, handleTextChange, isEditing, tempText]);
+
+    const todoItem = useMemo(() => ({ 
+            doubleClick: todoItemDoubleClick
+        }), [todoItemDoubleClick]);
+
+    return {
+        todoDetails,
+        datePicker,
+        todoItemCommands,
+        todoHeader,
+        todoItem
     };
-    
 }

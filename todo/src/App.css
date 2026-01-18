@@ -513,6 +513,21 @@ body.light .due-date-button:hover {
   color:#1a1a1a;
 }
 
+
+.drag-handle {
+  cursor: grab;
+  user-select: none;
+  padding-right: 20px;
+  font-size: 16px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+
+/*********************** Date Picker ******************/
+
 .hidden-date-picker {
   position: absolute;
   opacity: 0;
@@ -537,8 +552,6 @@ body.light .due-date-button:hover {
 .flatpickr-day.selected {
   border: 1px solid var(--bt-active) !important; 
 }
-
-
 
 .date-picker-button {
   padding: 8px 8px;
@@ -584,16 +597,38 @@ body.light .due-date-button:hover {
   margin-top: 10px;
 }
 
-.drag-handle {
-  cursor: grab;
-  user-select: none;
-  padding-right: 20px;
-  font-size: 16px;
+
+.flatpickr-time .numInputWrapper span.arrowUp,
+.flatpickr-time .numInputWrapper span.arrowDown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 20px;
+  padding: 2px 0;
 }
 
-.drag-handle:active {
-  cursor: grabbing;
+.flatpickr-time .numInputWrapper span.arrowUp::after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: solid 10px rgb(var(--bg-color5) / 0.8) !important;
+  top: 18% !important;
 }
+
+.flatpickr-time .numInputWrapper span.arrowDown::after {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: solid 10px rgb(var(--bg-color5) / 0.8) !important;
+}
+
+.flatpickr-time .numInputWrapper span.arrowDown {
+  top: 40% !important;
+}
+
+.numInputWrapper:hover span {
+  border: none;
+}
+
 
 
 /* ----- loginForm ----- */
