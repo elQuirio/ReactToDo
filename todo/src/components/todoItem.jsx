@@ -1,35 +1,27 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useDispatch } from "react-redux";
-import { saveTodo, dragAndDropReorderTodos } from "../thunks/todoThunks";
+import { dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
-
 import { useTodoItem } from "../hooks/useTodoItem";
 import { TodoDetails } from "./todoDetails";
 import { TodoHeader } from "./todoHeader";
 
 
 export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [tempText, setTempText] = useState(text);
-    const { 
-        todoDetailsPlus1d, //handlePlus1d 
-        todoDetailsResetDueDate, //handleResetDue 
-        datePickerHandleCancel, //handleOnCancelDatePicker
-        isDatePickerOpen, 
-        todoItemCommandsPickDueDate, //handleSetDue 
-        todoItemCommandsHandleDateChange, //handleOnChangeDatePicker
-        pickedDate, 
-        datePickerHandleConfirm, //handleOnConfirmDatePicker
-        todoHeaderToggleDetails, //handleOnClick
-        todoItemDoubleClick, //handleDoubleClick
-        todoHeaderCheckboxChange, //handleCheckboxChange
-        todoHeaderOnBlur, //handleOnBlur
-        todoHeaderKeyDown 
-
-    } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position, isEditing, setIsEditing, tempText, setTempText });
 
     const dispatch = useDispatch();
 
+    const {
+        todoDetails,
+        datePicker,
+        todoItemCommands,
+        todoHeader,
+        todoItem: { doubleClick }
+    } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position });
+
+    const todoData = useMemo(() => ({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position}), 
+        [id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position]
+    );
 
     function handleOnDragStart(e, id) {
         if (status !== 'completed') {
@@ -64,13 +56,9 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
         }
     }
 
-    function handleTextChange(e) {
-        setTempText(e.target.value)
-    }
 
-
-    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => todoItemDoubleClick(status)} >
-                < TodoHeader id={id} status={status} isEditing={isEditing} tempText={tempText} todoHeaderOnBlur={todoHeaderOnBlur} todoHeaderKeyDown={todoHeaderKeyDown} text={text} toBeCompletedAt={toBeCompletedAt} todoHeaderToggleDetails={todoHeaderToggleDetails} isExpanded={isExpanded} todoHeaderCheckboxChange={todoHeaderCheckboxChange} handleTextChange={handleTextChange} />
-                { isExpanded && <TodoDetails createdAt={createdAt} updatedAt={updatedAt} toBeCompletedAt={toBeCompletedAt} status={status} todoDetailsPlus1d={todoDetailsPlus1d} todoDetailsResetDueDate={todoDetailsResetDueDate} todoItemCommandsPickDueDate={todoItemCommandsPickDueDate} pickedDate={pickedDate} datePickerHandleConfirm={datePickerHandleConfirm} datePickerHandleCancel={datePickerHandleCancel} todoItemCommandsHandleDateChange={todoItemCommandsHandleDateChange} isDatePickerOpen={isDatePickerOpen}/> }
+    return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => doubleClick(status)} >
+                < TodoHeader todoHeader={todoHeader} todoData={todoData} />
+                { isExpanded && <TodoDetails todoData={todoData} todoDetails={todoDetails} todoItemCommands={todoItemCommands} datePicker={datePicker} /> }
             </div>
 };

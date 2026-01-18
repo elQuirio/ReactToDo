@@ -5,10 +5,13 @@ import Flatpickr from "react-flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 
-export function DueDatePicker({anchorElement, currentValue, onConfirm, onCancel, onChange, isDatePickerOpen}) {
+export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
     const [pos, setPos] = useState(null);
     const popoverRef = useRef(null);
 
+    const { pickedDate: currentValue, handleConfirm, handleCancel, isDatePickerOpen} = datePicker;
+    const { handleDateChange } = todoItemCommands;
+    
     useEffect(() => {
         if (!anchorElement) return;
 
@@ -34,38 +37,64 @@ export function DueDatePicker({anchorElement, currentValue, onConfirm, onCancel,
     useEffect(() => {
         if (!isDatePickerOpen) return;
 
-        const close = () => onCancel();
+        const close = () => handleCancel();
 
         const onGlobalPointerDown = (e) => {
             if (popoverRef.current.contains(e.target)) return;
-            onCancel();
+            handleCancel();
         };
 
-        window.addEventListener('blur', close);
-        document.addEventListener('pointerdown', onGlobalPointerDown);
+//        window.addEventListener('blur', close);
+//        document.addEventListener('pointerdown', onGlobalPointerDown);
 
         return () => {
             document.removeEventListener('pointerdown', onGlobalPointerDown);
             window.removeEventListener('blur', close);
         };
 
-    }, [isDatePickerOpen, onCancel]);
+    }, [isDatePickerOpen, handleCancel]);
+
+    useEffect(() => {
+  if (!isDatePickerOpen) return;
+
+  const onKeyDownCapture = (e) => {
+    if (e.key !== "Enter") return;
+
+    const pop = popoverRef.current;
+    if (!pop || !pop.contains(e.target)) return;
+
+    e.stopPropagation();
+    //patch for Firefox commit on Enter button glitch
+    requestAnimationFrame(() => {
+      const ae = document.activeElement;
+      if (ae && pop.contains(ae) && typeof ae.blur === "function") {
+        ae.blur();
+      }
+    });
+  };
+
+  window.addEventListener("keydown", onKeyDownCapture, true); // capture
+  return () => window.removeEventListener("keydown", onKeyDownCapture, true);
+}, [isDatePickerOpen]);
 
     let pickerContent = '';
 
     if (!pos) return null;
 
+
     pickerContent = createPortal(<div className="date-picker-overlay"  onDoubleClick={(e) => e.stopPropagation()}>
-                        <div className="date-picker-popover" style={{top: pos.top, left: pos.left}} onClick={(e) => e.stopPropagation()} ref={popoverRef}>
+                        <div className="date-picker-popover" style={{top: pos.top, left: pos.left}} onClick={(e) => e.stopPropagation()}  ref={popoverRef} >
                         <Flatpickr className='hidden-date-picker' options={{ enableTime: true, time_24hr: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S", defaultHour: 9, disableMobile: true, inline: true }} value={currentValue} 
                         onChange={(selectedDates) => {
                             const date = selectedDates?.[0];
                             if (!date) return;
-                            onChange(date);
-                            }} />
+                            console.log(date);
+                            handleDateChange(date);
+                            }}
+                        />
                             <div className="date-picker-actions">
-                                <button className="date-picker-button" onClick={onConfirm}>Confirm</button>
-                                <button className="date-picker-button" onClick={onCancel}>Cancel</button>
+                                <button type="button" className="date-picker-button" onClick={handleConfirm}>Confirm</button>
+                                <button type="button" className="date-picker-button" onClick={handleCancel}>Cancel</button>
                             </div>
                         </div>
                     </div>, document.body)
