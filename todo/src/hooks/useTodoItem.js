@@ -86,7 +86,7 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         }
     }, [setTempText, todoHeaderOnBlur, setIsEditing]);
 
-    const handleTextChange = useCallback((e) => {
+    const todoHeaderTextChange = useCallback((e) => {
         setTempText(e.target.value);
     }, [setTempText]);
 
@@ -113,10 +113,10 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
             onCheckboxChange: todoHeaderCheckboxChange, 
             onBlur: todoHeaderOnBlur, 
             keyDown: todoHeaderKeyDown,
-            onTextChange: handleTextChange,
+            onTextChange: todoHeaderTextChange,
             isEditing: isEditing,
             tempText: tempText
-        }), [todoHeaderToggleDetails, todoHeaderCheckboxChange, todoHeaderOnBlur, todoHeaderKeyDown, handleTextChange, isEditing, tempText]);
+        }), [todoHeaderToggleDetails, todoHeaderCheckboxChange, todoHeaderOnBlur, todoHeaderKeyDown, todoHeaderTextChange, isEditing, tempText]);
 
     const todoItem = useMemo(() => ({ 
             doubleClick: todoItemDoubleClick

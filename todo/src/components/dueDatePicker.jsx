@@ -44,8 +44,8 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
             handleCancel();
         };
 
-//        window.addEventListener('blur', close);
-//        document.addEventListener('pointerdown', onGlobalPointerDown);
+        window.addEventListener('blur', close);
+        document.addEventListener('pointerdown', onGlobalPointerDown);
 
         return () => {
             document.removeEventListener('pointerdown', onGlobalPointerDown);
@@ -84,11 +84,10 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
 
     pickerContent = createPortal(<div className="date-picker-overlay"  onDoubleClick={(e) => e.stopPropagation()}>
                         <div className="date-picker-popover" style={{top: pos.top, left: pos.left}} onClick={(e) => e.stopPropagation()}  ref={popoverRef} >
-                        <Flatpickr className='hidden-date-picker' options={{ enableTime: true, time_24hr: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S", defaultHour: 9, disableMobile: true, inline: true }} value={currentValue} 
+                        <Flatpickr className='hidden-date-picker' options={{ enableTime: true, time_24hr: true, enableSeconds: true, dateFormat: "Y-m-d H:i:S", defaultHour: 9, disableMobile: true, inline: true }} value={currentValue ?? new Date()} 
                         onChange={(selectedDates) => {
                             const date = selectedDates?.[0];
                             if (!date) return;
-                            console.log(date);
                             handleDateChange(date);
                             }}
                         />

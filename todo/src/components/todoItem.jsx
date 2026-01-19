@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
