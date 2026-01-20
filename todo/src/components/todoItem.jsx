@@ -7,21 +7,20 @@ import { TodoDetails } from "./todoDetails";
 import { TodoHeader } from "./todoHeader";
 
 
-export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position }) {
-
+export function TodoItem({todoData}) {
+    
     const dispatch = useDispatch();
 
+    const {id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position} = todoData;
+
     const {
-        todoDetails,
         datePicker,
         todoItemCommands,
         todoHeader,
         todoItem: { doubleClick }
     } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position });
 
-    const todoData = useMemo(() => ({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position}), 
-        [id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position]
-    );
+    //const todoData = useMemo(() => ({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position}), [id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position]);
 
     function handleOnDragStart(e, id) {
         if (status !== 'completed') {
@@ -59,6 +58,6 @@ export function TodoItem({id, status, text, createdAt, updatedAt, toBeCompletedA
 
     return  <div className={`todo-item`} draggable onDragStart={(e) => handleOnDragStart(e, id)} onDragOver={(e) => handleOnDragOver(e, id)} onDrop={(e) => handleOnDrop(e, id)} onDoubleClick={() => doubleClick(status)} >
                 < TodoHeader todoHeader={todoHeader} todoData={todoData} />
-                { isExpanded && <TodoDetails todoData={todoData} todoDetails={todoDetails} todoItemCommands={todoItemCommands} datePicker={datePicker} /> }
+                { isExpanded && <TodoDetails todoData={todoData} todoItemCommands={todoItemCommands} datePicker={datePicker} /> }
             </div>
 };

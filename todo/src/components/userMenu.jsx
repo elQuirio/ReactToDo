@@ -55,7 +55,6 @@ export default function UserMenu() {
 
     function handleOnChangeDarkSwitch(e) {
         const isLightModeValue = e.target.checked;
-        console.log(isLightModeValue);
         dispatch(updatePreferences({isLightMode: isLightModeValue}));
         localStorage.setItem('isLightMode', String(isLightModeValue));
     }

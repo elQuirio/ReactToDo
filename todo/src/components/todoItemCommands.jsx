@@ -1,10 +1,9 @@
 import { DueDatePicker } from "./dueDatePicker";
 import { useRef } from "react";
 
-export function TodoItemCommands ({todoData, todoDetails, todoItemCommands, datePicker }) {
+export function TodoItemCommands ({todoData, todoItemCommands, datePicker }) {
     const {status} = todoData;
-    const {plus1d, resetDueDate} = todoDetails;
-    const {pickDueDate} = todoItemCommands;
+    const {plus1d, resetDueDate, pickDueDate} = todoItemCommands;
     const {isDatePickerOpen} = datePicker;
 
     const refDatePicker = useRef(null);

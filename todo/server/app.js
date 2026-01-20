@@ -29,7 +29,6 @@ app.post('/api/auth/register', async (req, res) => {
   const userExists = getUserByEmail(email);
   
   if (userExists) {
-    console.log("User exists");
     return clearCookies(res).status(409).json({data: {isLogged:false}, message: "Email already registered!"});
   }
 

@@ -7,7 +7,6 @@ const preferencesSlice = createSlice({
     initialState: {preferences:{"sortDirection": "asc", isLightMode: storedIsLightMode !== null ? storedIsLightMode === 'true' : true }},
     reducers: {
         resetPreferences: (state, action) => {
-            console.log(action.payload);
             state.preferences = action.payload;
         }
     }

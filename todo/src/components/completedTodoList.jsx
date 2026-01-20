@@ -15,5 +15,7 @@ export default function CompletedTodoList() {
         todoList = completedTodoList;
     }
 
-    return <div> {todoList.map((td) => <TodoItem key={td.id} id={td.id} status={td.status} text={td.text} createdAt={td.createdAt} updatedAt={td.updatedAt} toBeCompletedAt={td.toBeCompletedAt} position={td.position} />)} </div>
+    return <div> {todoList.map((td) => 
+    <TodoItem key={td.id} todoData={{...td }} /> )} 
+    </div>
 };

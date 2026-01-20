@@ -118,8 +118,6 @@ export function sortTodos(sortDirection, sortBy, userId) {
                 return sortDirection === 'asc' ? valA - valB : valB - valA;
             }
         });
-        console.log(activeTodos);
-        console.log(completedTodos);
         const todosAll = [...activeTodos, ...completedTodos, ...otherTodos];
         writeAllTodos(todosAll);
         return [...activeTodos, ...completedTodos];
