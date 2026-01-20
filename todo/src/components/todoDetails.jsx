@@ -1,6 +1,6 @@
 import { TodoItemCommands } from '../components/todoItemCommands';
 
-export function TodoDetails({todoData, todoDetails, todoItemCommands, datePicker}) {
+export function TodoDetails({todoData, todoItemCommands, datePicker}) {
 
     const {createdAt, updatedAt, toBeCompletedAt} = todoData;
 
@@ -18,7 +18,7 @@ export function TodoDetails({todoData, todoDetails, todoItemCommands, datePicker
                             <span className="label">Due:</span>
                             <span> {toBeCompletedAt ? new Date(toBeCompletedAt).toLocaleString() : "—"}</span>
                         </div>
-                        <TodoItemCommands todoData={todoData} todoDetails={todoDetails} todoItemCommands={todoItemCommands} datePicker={datePicker} />
+                        <TodoItemCommands todoData={todoData} todoItemCommands={todoItemCommands} datePicker={datePicker} />
                     </div>
                 </div>
 

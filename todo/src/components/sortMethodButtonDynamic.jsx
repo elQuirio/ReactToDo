@@ -54,7 +54,6 @@ export function SortMethodButtonDynamic () {
 
             requestAnimationFrame(() => {
                 setVisualKey(pendingKey);
-                console.log(pendingKey);
                 dispatch(updatePreferences({sortBy: pendingKey}));
                 dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: pendingKey}));
                 setPendingKey(null);

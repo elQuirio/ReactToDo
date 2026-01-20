@@ -91,11 +91,6 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
     }, [setTempText]);
 
 
-    const todoDetails = useMemo(() => ({ 
-            plus1d: todoDetailsPlus1d, 
-            resetDueDate: todoDetailsResetDueDate 
-        }), [todoDetailsPlus1d, todoDetailsResetDueDate]);
-
     const datePicker = useMemo(() => ({ 
             handleCancel: datePickerHandleCancel,
             isDatePickerOpen: isDatePickerOpen,
@@ -104,9 +99,11 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         }), [datePickerHandleCancel, isDatePickerOpen, pickedDate, datePickerHandleConfirm]);
 
     const todoItemCommands = useMemo(() => ({
+            plus1d: todoDetailsPlus1d, 
+            resetDueDate: todoDetailsResetDueDate,
             pickDueDate: todoItemCommandsPickDueDate,
             handleDateChange: todoItemCommandsHandleDateChange
-        }), [todoItemCommandsPickDueDate, todoItemCommandsHandleDateChange]);
+        }), [todoItemCommandsPickDueDate, todoItemCommandsHandleDateChange, todoDetailsResetDueDate, todoDetailsPlus1d]);
 
     const todoHeader = useMemo(() => ({ 
             toggleDetails: todoHeaderToggleDetails, 
@@ -123,7 +120,6 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
         }), [todoItemDoubleClick]);
 
     return {
-        todoDetails,
         datePicker,
         todoItemCommands,
         todoHeader,

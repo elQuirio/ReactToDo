@@ -21,7 +21,8 @@ export default function TodoList() {
 
     return (
         <div>
-            {todoList.map(td => <TodoItem key={td.id} id={td.id} status={td.status} text={td.text} createdAt={td.createdAt} updatedAt={td.updatedAt} toBeCompletedAt={td.toBeCompletedAt} isExpanded={ !!expandedTodos[td.id] } position={td.position}/> )}
+            {todoList.map(td => 
+            <TodoItem key={td.id} todoData={{...td, isExpanded: !!expandedTodos[td.id] }} /> )}
         </div>
     )
 };

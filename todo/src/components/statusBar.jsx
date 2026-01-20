@@ -45,9 +45,6 @@ export function StatusBar({ searchString }) {
         sortComponent = <ArrowUpNarrowWide className='sort-icon' size={18}/>
     }
 
-    window.addEventListener('resize', () => {
-    console.log(window.innerWidth);
-    });
 
     return <div className="status-bar-mini">
             <span className='quick-actions-container'>
