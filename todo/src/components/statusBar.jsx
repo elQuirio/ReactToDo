@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
 import { sortByTodos } from '../thunks/todoThunks';
 import { updatePreferences } from '../thunks/preferencesThunk';
-import { selectSortDirection, selectSortBy } from '../selectors/preferencesSelector';
+import { selectSortDirection, selectSortBy, selectViewMode } from '../selectors/preferencesSelector';
 import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { SortMethodSwitch } from '../components/sortMethodSwitch';
@@ -14,10 +14,13 @@ export function StatusBar({ searchString }) {
     const overdueTodos = useSelector(selectOverdueTodos);
     const currentDirection = useSelector(selectSortDirection);
     const currentSortBy = useSelector(selectSortBy);
+    const viewMode = useSelector(selectViewMode);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
+
     let sortComponent = '';
 
     const dispatch = useDispatch();
+
 
     function handleCollapseAll() {
         dispatch(collapseAll());
@@ -31,6 +34,14 @@ export function StatusBar({ searchString }) {
             dispatch(sortByTodos({sortDirection: 'asc', sortBy:currentSortBy}));
             dispatch(updatePreferences({sortDirection: "asc"}));
         } 
+    }
+
+    function handleShowAll() {
+        dispatch(updatePreferences({viewMode: 'all'}));
+    }
+
+    function handleShowActive() {
+        dispatch(updatePreferences({viewMode: 'active'}));
     }
 
     function handleToggleSearch() {
@@ -60,6 +71,11 @@ export function StatusBar({ searchString }) {
                 <span className="dot"> | </span>
                 <span className='status-chip'>Overdue: {overdueTodos.length}</span>
             </span>
-            <span></span>
+            <span>
+                <div className='viewMode-selector-container'>
+                    <button type='button' className={`viewMode-button ${viewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
+                    <button type='button' className={`viewMode-button ${viewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
+                </div>
+            </span>
         </div>
 }
