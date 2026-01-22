@@ -1,7 +1,6 @@
 import '../App.css';
 import AddTodoInputbox from '../components/addTodoInputbox';
 import TodoList from '../components/todoList';
-import CompletedTodoList from '../components/completedTodoList';
 import { useEffect, useState } from "react";
 import { selectIsLogged, selectAuthLoading } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
@@ -64,9 +63,6 @@ function App() {
                   </section>
                   <section className='controls'>
                     <AddTodoInputbox />
-                  </section>
-                  <section className='done'>
-                    <CompletedTodoList />
                   </section>
                 </div>
               </main>

@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
-import { selectActiveTodos, selectSearchedActiveTodo } from "../selectors/todoSelectors";
+import { selectActiveTodos, selectSearchedActiveTodo, selectTodos } from "../selectors/todoSelectors";
 import { selectUiTodos } from "../selectors/uiSelectors";
+import { selectViewMode } from '../selectors/preferencesSelector';
 import { TodoItem } from "./todoItem";
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
@@ -10,13 +11,19 @@ export default function TodoList() {
     const expandedTodos = useSelector( selectUiTodos );
     const searchButtonActive = useSelector(selectSearchBtnToggled);
     const searchedTodos = useSelector(selectSearchedActiveTodo);
+    let currentViewMode = useSelector(selectViewMode);
+    const allTodos = useSelector(selectTodos);
 
     let todoList = [];
 
     if (searchButtonActive) {
         todoList = searchedTodos;
     } else {
-        todoList = activeTodoSelector;
+        if (currentViewMode === 'all') {
+            todoList = allTodos;
+        } else {
+            todoList = activeTodoSelector;
+        }
     }
 
     return (

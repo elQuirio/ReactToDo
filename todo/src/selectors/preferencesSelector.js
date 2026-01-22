@@ -9,3 +9,5 @@ export const selectSortDirection = createSelector([selectPreferences], (p) => p.
 export const selectSortBy = createSelector([selectPreferences], (p) => p.sortBy);
 
 export const selectIsLightMode = createSelector([selectPreferences], (p) => p.isLightMode === false ? false : true );
+
+export const selectViewMode = createSelector([selectPreferences], (p) => p.viewMode);
