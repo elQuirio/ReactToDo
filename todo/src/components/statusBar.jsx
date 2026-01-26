@@ -73,9 +73,10 @@ export function StatusBar({ searchString }) {
             </span>
             <span>
                 <div className='viewMode-selector-container'>
-                    <button type='button' className={`viewMode-button ${viewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
-                    <button type='button' className={`viewMode-button ${viewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
-                </div>
+                    <div className={`selector-thumb ${viewMode}`}/>
+                        <button type='button' className={`viewMode-button ${viewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
+                        <button type='button' className={`viewMode-button ${viewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
+                    </div>
             </span>
         </div>
 }

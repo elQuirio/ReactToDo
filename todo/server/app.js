@@ -93,14 +93,14 @@ app.post('/api/auth/logout', (req,res) => {
 function requireAuth(req, res, next) {
   const userId = req.cookies.userId;
   if (!userId) {
-    return clearCookies(res).status(401).json({message: "User not authenticated!"})
+    return clearCookies(res).status(401).json({message: "User not authenticated!"});
   }
   const user = getUserByUserId(userId);
   if (!user) {
     return clearCookies(res).status(401).json({message: "User not authenticated!"});
   }
   req.user = user;
-  next()
+  next();
 };
 
 app.use('/api/todos', requireAuth);
