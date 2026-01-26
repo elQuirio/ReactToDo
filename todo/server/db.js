@@ -136,16 +136,16 @@ export function readPreferences() {
 };
 
 export function getPreferencesByUserID(userId) {
+    const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true, viewMode: 'all' };
     try {
         const pref = readPreferences().find((p) => p.userId == userId);
         if (pref) {
             return pref;
         } else {
-            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true};
             return defaultPreferences;
         }
     } catch (err) {
-        return {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true};
+        return defaultPreferences;
     }
 };
 
@@ -162,13 +162,13 @@ export function patchPreferencesByUserId(userId, prefObj) {
         const allPref = readPreferences();
         const prefIndex = allPref.findIndex((i) => i.userId == userId);
         const pref = getPreferencesByUserID(userId);
-        if (prefIndex!== -1) {
+        if (prefIndex !== -1) {
             const newPref = {userId, ...pref, ...prefObj};
             allPref[prefIndex] = newPref;
             fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
             return newPref;
         } else {
-            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', ...prefObj};
+            const defaultPreferences = {userId: userId, sortBy: 'manual', sortDirection: 'asc', viewMode: 'all', ...prefObj};
             allPref.push(defaultPreferences);
             fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
             return defaultPreferences;
