@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../thunks/authThunks";
 import { selectIsLogged } from '../selectors/authSelector';
 import validator from "validator";
+import { LoginFormRegister } from './loginFormRegister';
+import { LoginFormLogin } from './loginFormLogin';
 
-export default function LoginForm() {
+export function LoginForm() {
     const [registrationMode, setRegistrationMode] = useState(false);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [passwordError, setPasswordError] = useState(false);
     const [email, setEmail] = useState("");
-    const [loginError, setLoginError] = useState("");
-    const [registerError, setRegisterError] = useState("");
+    const [fieldErrors, setFieldErrors] = useState({});
+    const [serverError, setServerErrors] = useState('');
     const isLogged = useSelector(selectIsLogged);
     const dispatch = useDispatch();
 
     let loginContent;
+
+    useEffect(() => {
+        setFieldErrors({});
+        setServerErrors('');
+    },[registrationMode]);
     
     async function handleOnSubmit(e) {
           e.preventDefault();
@@ -31,6 +37,7 @@ export default function LoginForm() {
     async function handleRegisterOnClick () {
         const errors = validateRegistrationForm('registration', {email, password, confirmPassword});
         if (Object.keys(errors).length > 0 ) {
+            setFieldErrors(errors);
             console.log('ERRORS!') // manage errors
             console.log(errors);
         } else {
@@ -40,7 +47,7 @@ export default function LoginForm() {
                 console.log(respEmail);
                 console.log(isLogged ? 'LOGGED': 'NOT LOGGED');
             } catch (e) {
-                setRegisterError(e);
+                setServerErrors(e);
                 console.log('REGISTRATION ERROR:', e);
             }
         }
@@ -49,6 +56,7 @@ export default function LoginForm() {
     async function handleLoginOnClick () {
         const errors = validateRegistrationForm('login', {email, password, confirmPassword});
         if (Object.keys(errors).length > 0 ) {
+            setFieldErrors(errors);
             console.log('ERRORS!') // manage errors
             console.log(errors);
         } else {
@@ -58,27 +66,39 @@ export default function LoginForm() {
                 console.log(resplogin);
                 console.log(isLogged ? 'LOGGED' : 'NOT LOGGED');
             } catch (e) {
-                setLoginError(e); //migliorare il messaggio
+                setServerErrors(e); //migliorare il messaggio
                 console.log('LOGIN ERROR:', e);
             }
         }
+    };
+
+    function handleEmailOnChange(e) {
+        setServerErrors("");
+        removeError('email');
+        setEmail(e.target.value);
+    };
+
+    function handleConfirmPasswordChange(e) {
+        setServerErrors("");
+        const value = e.target.value;
+        
+        if (!registrationMode) return;
+        removeError('confirmPassword');
+        setConfirmPassword(value);
+        validateConfirmPassword(password, value);
     }
 
-    function handlePasswordOnChange(e, eventName) {
+
+    function handlePasswordOnChange(e) {
+        setServerErrors("");
         const value = e.target.value;
-        if (eventName === 'password') {
-            setPassword(value);
-            if (confirmPassword !== "") {
-                setPasswordError(value !== confirmPassword);
-            }
-        } else if (eventName === 'confirmPassword') {
-            setConfirmPassword(value);
-            if (value === "") {// da capire se importo una lunghezza minima allora error puo partire da count >3
-                setPasswordError(false);
-            } else {
-                setPasswordError(value !== password);
-            }
+        
+        if (value==='') { 
+            removeError('confirmPassword');
         }
+
+        removeError('password');
+        setPassword(value);
     }
 
     function validateRegistrationForm(eventName, {email, password, confirmPassword}) {
@@ -90,36 +110,42 @@ export default function LoginForm() {
             }
         }
 
+        addError('email', !email, 'Email is required.');
+        addError('email', !validator.isEmail(email), 'Please enter a valid email address.');
+        addError('password', !password, 'Password is required.');
+
         if (eventName === 'registration') {
-            addError('confirmPassword', !confirmPassword, 'Confirm password is null!');
-            //addError('password', !password.length>3, 'Password is too short!');
-            addError('confirmPassword', !(password===confirmPassword), 'Conform password is different!');
+            addError('confirmPassword', !confirmPassword, 'Please confirm password.');
+            addError('password', password.length<8, 'Password must be at least 8 characters.');
+            addError('confirmPassword', !(password===confirmPassword), "Passwords don't match.");
         } 
-        addError('email', !email, 'Email is missing!');
-        addError('email', !validator.isEmail(email), 'Email is not a valid format!');
-        addError('password', !password, 'Password is null!');
         
         return errors;
-    }
+    };
+
+    function validateConfirmPassword(password, confirmPassword) {
+        if (password==='' || confirmPassword==='') {
+            return;
+        }
+        else if (password===confirmPassword) {
+            setFieldErrors({confirmPassword: ''});
+        } else {
+            setFieldErrors({confirmPassword: "Passwords don't match."});
+        }
+    };
+
+    function removeError(field) {
+        setFieldErrors(prev => {
+            const {[field]: _, ...rest} = prev;
+            return rest;
+        })
+    };
 
 
     if (registrationMode) {
-        loginContent = <div className="login-form-container">
-                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
-                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
-                            <input type="password" placeholder="Confirm password..." className={passwordError ? 'password-error login-form-input' : 'input-password login-form-input'} onChange={(e) => handlePasswordOnChange(e, 'confirmPassword')}></input>
-                            <button type='submit' className="login-form-button">Confirm</button>
-                            <button type="button" onClick={() => setRegistrationMode(false)} className="login-form-button">Login</button>
-                            {registerError && <div className="error-box">{registerError}</div>}
-                        </div>
+        loginContent = <LoginFormRegister fieldErrors={fieldErrors} handleEmailOnChange={handleEmailOnChange} handlePasswordOnChange={handlePasswordOnChange} handleConfirmPasswordChange={handleConfirmPasswordChange} setRegistrationMode={setRegistrationMode} />
     } else {
-        loginContent =  <div className="login-form-container">
-                            <input type="email" placeholder="Email..." onChange={(e)=> setEmail(e.target.value)} className="login-form-input"></input>
-                            <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e, 'password')} className="input-password login-form-input"></input>
-                            <button type="submit" className="login-form-button">Login</button>
-                            <button type='button' onClick={() => {setRegistrationMode(true)}} className="login-form-button">Register</button>
-                            {loginError && <div className="error-box">{loginError}</div>}
-                        </div>
+        loginContent = <LoginFormLogin fieldErrors={fieldErrors} handleEmailOnChange={handleEmailOnChange} handlePasswordOnChange={handlePasswordOnChange} setRegistrationMode={setRegistrationMode} />
     }
 
     return  <form onSubmit={handleOnSubmit} className="login-form-wrapper">{loginContent}</form>;

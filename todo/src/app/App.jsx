@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { selectIsLogged, selectAuthLoading } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
 import { useSelector, useDispatch } from "react-redux";
-import LoginForm  from '../components/loginForm';
+import { LoginForm }  from '../components/loginForm';
 import { checkLogin } from '../thunks/authThunks';
 import UserMenu from '../components/userMenu';
 
