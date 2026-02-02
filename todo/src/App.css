@@ -727,6 +727,9 @@ body.light .due-date-button:hover {
 }
 
 .login-form-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 15px;
   height: 55px;
   margin: 0 5px;
@@ -949,12 +952,27 @@ color:#1a1a1a;
 }
 
 
-.spinner {
+.bootstrap-spinner {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   border: 6px solid rgba(var(--bg-color5) / 0.15);
   border-top-color: rgba(var(--bg-color5) / 0.8);
+  backdrop-filter: blur(10px);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.button-spinner{
+  width: 14px;
+  height: 14px;
+  margin: 0 5px;
+  border-radius: 50%;
+  border: 5px solid color-mix(in srgb, var(--btn-text) 25%, transparent);
+  border-top-color: var(--btn-text);
   backdrop-filter: blur(10px);
   animation: spin 1s ease-in-out infinite;
 }

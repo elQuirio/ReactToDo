@@ -9,3 +9,5 @@ export const selectIsLogged = createSelector([selectAuth], (a) => a.isLogged);
 export const selectAuthLoading = (state) => state.auth.loading;
 
 export const selectUser = (state) => state.auth.user;
+
+export const selectError = (state) => state.auth.error;
