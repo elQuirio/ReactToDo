@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, loginUser } from "../thunks/authThunks";
-import { selectIsLogged } from '../selectors/authSelector';
+import { selectIsLogged, selectError } from '../selectors/authSelector';
 import validator from "validator";
 import { LoginFormRegister } from './loginFormRegister';
 import { LoginFormLogin } from './loginFormLogin';
+import { clearError } from '../slices/authSlice';
 
 export function LoginForm() {
     const [registrationMode, setRegistrationMode] = useState(false);
@@ -12,15 +13,22 @@ export function LoginForm() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [email, setEmail] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
-    const [serverError, setServerErrors] = useState('');
+    //const [serverError, setServerErrors] = useState('');
     const isLogged = useSelector(selectIsLogged);
+    const serverError = useSelector(selectError);
     const dispatch = useDispatch();
+    const isFirstRender = useRef(true);
 
     let loginContent;
 
     useEffect(() => {
+        if (isFirstRender.current === true) {
+            isFirstRender.current = false;
+            return
+        }
         setFieldErrors({});
-        setServerErrors('');
+        //setServerErrors('');
+        dispatch(clearError());
     },[registrationMode]);
     
     async function handleOnSubmit(e) {
@@ -47,7 +55,7 @@ export function LoginForm() {
                 console.log(respEmail);
                 console.log(isLogged ? 'LOGGED': 'NOT LOGGED');
             } catch (e) {
-                setServerErrors(e);
+                //setServerErrors(e);
                 console.log('REGISTRATION ERROR:', e);
             }
         }
@@ -66,20 +74,21 @@ export function LoginForm() {
                 console.log(resplogin);
                 console.log(isLogged ? 'LOGGED' : 'NOT LOGGED');
             } catch (e) {
-                setServerErrors(e); //migliorare il messaggio
+                //setServerErrors(e);
                 console.log('LOGIN ERROR:', e);
             }
         }
     };
 
     function handleEmailOnChange(e) {
-        setServerErrors("");
+        //setServerErrors("");
+        dispatch(clearError());
         removeError('email');
         setEmail(e.target.value);
     };
 
     function handleConfirmPasswordChange(e) {
-        setServerErrors("");
+        //setServerErrors("");
         const value = e.target.value;
         
         if (!registrationMode) return;
@@ -90,7 +99,7 @@ export function LoginForm() {
 
 
     function handlePasswordOnChange(e) {
-        setServerErrors("");
+        //setServerErrors("");
         const value = e.target.value;
         
         if (value==='') { 
@@ -141,12 +150,14 @@ export function LoginForm() {
         })
     };
 
-
     if (registrationMode) {
         loginContent = <LoginFormRegister fieldErrors={fieldErrors} handleEmailOnChange={handleEmailOnChange} handlePasswordOnChange={handlePasswordOnChange} handleConfirmPasswordChange={handleConfirmPasswordChange} setRegistrationMode={setRegistrationMode} />
     } else {
         loginContent = <LoginFormLogin fieldErrors={fieldErrors} handleEmailOnChange={handleEmailOnChange} handlePasswordOnChange={handlePasswordOnChange} setRegistrationMode={setRegistrationMode} />
     }
 
-    return  <form onSubmit={handleOnSubmit} className="login-form-wrapper">{loginContent}</form>;
+    return  (<form onSubmit={handleOnSubmit} className="login-form-wrapper">
+                {<div className="error-box">{serverError}</div>}
+                {loginContent}
+             </form>);
 };
