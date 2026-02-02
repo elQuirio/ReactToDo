@@ -14,7 +14,7 @@ function App() {
   const [showLoader, setShowLoader] = useState(true);
   const isLogged = useSelector(selectIsLogged);
   const isLightMode = useSelector(selectIsLightMode);
-  const isAuthLoading = useSelector(selectAuthLoading);
+  //const isAuthLoading = useSelector(selectAuthLoading);
 
   const dispatch = useDispatch();
 
@@ -50,12 +50,12 @@ function App() {
     return () => clearTimeout(t);
   }, []);
 
-  if (isAuthLoading || showLoader) {
-    body = (<div className='loader-container'><div className='spinner'></div></div>)
+
+  if (showLoader) {
+    body = (<div className='loader-container'><div className='bootstrap-spinner'></div></div>)
   } else if (isLogged) {
     body = (<div className="main-container">
-              <aside>
-              </aside>
+              <aside></aside>
               <main className='todo-content'>
                 <div className='todo-content-inner'>
                   <section className="active" >
@@ -69,7 +69,9 @@ function App() {
               <UserMenu/>
             </div>)
   } else {
-    body = (<div className="main-container"><LoginForm/></div>)
+    body = (<div className="main-container">
+              <LoginForm />
+            </div>)
 
   }
 
