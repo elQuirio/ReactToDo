@@ -26,8 +26,10 @@ export function LoginForm() {
             isFirstRender.current = false;
             return
         }
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
         setFieldErrors({});
-        //setServerErrors('');
         dispatch(clearError());
     },[registrationMode]);
     
@@ -81,14 +83,12 @@ export function LoginForm() {
     };
 
     function handleEmailOnChange(e) {
-        //setServerErrors("");
         dispatch(clearError());
         removeError('email');
         setEmail(e.target.value);
     };
 
     function handleConfirmPasswordChange(e) {
-        //setServerErrors("");
         const value = e.target.value;
         
         if (!registrationMode) return;
@@ -99,7 +99,6 @@ export function LoginForm() {
 
 
     function handlePasswordOnChange(e) {
-        //setServerErrors("");
         const value = e.target.value;
         
         if (value==='') { 
@@ -157,7 +156,7 @@ export function LoginForm() {
     }
 
     return  (<form onSubmit={handleOnSubmit} className="login-form-wrapper">
-                {<div className="error-box">{serverError}</div>}
+                {<div className={`server-error-box ${serverError && 'visible'}`}>{serverError}</div>}
                 {loginContent}
              </form>);
 };
