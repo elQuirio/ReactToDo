@@ -1,6 +1,6 @@
 import { selectAuthLoading } from '../selectors/authSelector';
 import { useSelector } from 'react-redux';
-
+import { LoginFormInput } from "./loginFormInput";
 
 export function LoginFormRegister({fieldErrors, handleEmailOnChange, handlePasswordOnChange, handleConfirmPasswordChange, setRegistrationMode}) {
     const isAuthLoading = useSelector(selectAuthLoading);
@@ -8,27 +8,10 @@ export function LoginFormRegister({fieldErrors, handleEmailOnChange, handlePassw
 
     return <div className="login-form-container">
                 <div>
-                    <div className="login-form-input-wrapper">
-                        <input type="email" placeholder="Email..." onChange={(e)=> handleEmailOnChange(e)} className="login-form-input"/>
-                        {fieldErrors.email && <div className="login-form-input-bubble">
-                                                    {fieldErrors.email}
-                                                    <span className='error-arrow'/>
-                                                </div>}
-                    </div>
-                    <div className="login-form-input-wrapper">
-                        <input type="password" placeholder="Password..." onChange={(e) => handlePasswordOnChange(e)} className="input-password login-form-input"/>
-                        {fieldErrors.password && <div className="login-form-input-bubble">
-                                                    {fieldErrors.password}
-                                                    <span className='error-arrow'/>
-                                                </div>}
-                    </div>
-                    <div className="login-form-input-wrapper">
-                        <input type="password" placeholder="Confirm password..." className={fieldErrors.password ? 'password-error login-form-input' : 'input-password login-form-input'} onChange={(e) => handleConfirmPasswordChange(e)}/>
-                        {fieldErrors.confirmPassword && <div className="login-form-input-bubble">
-                                                            {fieldErrors.confirmPassword}
-                                                            <span className='error-arrow'/>
-                                                        </div>}
-                    </div>
+
+                    <LoginFormInput fieldError={fieldErrors.email} inputType={'email'} placeholder={'Email...'} onChange={handleEmailOnChange} />
+                    <LoginFormInput fieldError={fieldErrors.password} inputType={'password'} placeholder={'Password...'} onChange={handlePasswordOnChange} />
+                    <LoginFormInput fieldError={fieldErrors.confirmPassword} inputType={'password'} placeholder={'Confirm password...'} onChange={handleConfirmPasswordChange} extraClass={fieldErrors.password ? 'password-error login-form-input' : 'login-form-input'} />
                 </div>
 
                 <button type='submit' className="login-form-button">
