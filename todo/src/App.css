@@ -6,15 +6,15 @@
   --bg-color1: #242424;
   --bg-color1-rgb: 36, 36, 36;
   --bg-color2:#ffffff0d;
-  --bg-color2-rgb: 255, 255, 255;
   --bg-color3: #5555555c;
-  --bg-color3-rgb: 85, 85, 85;
   --bg-color4: #1b1b1b;
-  --bg-color4-rgb: 27, 27, 27;
   --bg-color5: 255 255 255;
-  --bg-color6: 
   --bt-active: #220ad6;
   --checkbox-color: #4caf50;
+  --box-shadow: 0 0 0;
+  --err-red: #d93025;
+  --std-black: #000000;
+  --std-white: #ffffff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -36,11 +36,8 @@ body.light {
   --bg-color1: #DBF0E4;
   --bg-color1-rgb: 219, 240, 228;
   --bg-color2: #B6E2CA;
-  --bg-color2-rgb: 182, 226, 202;
   --bg-color3: #92D3AF;
-  --bg-color3-rgb: 146, 211, 175;
   --bg-color4: #00665F;
-  --bg-color4-rgb: 0, 102, 95;
   --bg-color5: 0 0 0;
   --text-color: #213547;
   --btn-text: #EDF8F2;
@@ -96,7 +93,6 @@ h1 {
   background: var(--bg-color2);
   border-right: 1px solid rgb(var(--bg-color5) / 0.15);
   backdrop-filter: blur(6px);
-
   transition: width 0.25s ease, background 0.25s ease;
 }
 
@@ -122,12 +118,9 @@ h1 {
   border-color: rgb(var(--bg-color5) / 0.35);
 }
 
-.input-password {
-  border: 1px solid #ccc;
-}
 
 .password-error {
-  border: 1px solid #ff4d4d;
+  border: 1px solid var(--err-red);
   background: rgba(255, 0, 0, 0.1);
 }
 
@@ -137,7 +130,7 @@ h1 {
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   border: 1px solid rgb(var(--bg-color5) / 0.25);
   padding: 8px 12px;
 }
@@ -145,7 +138,7 @@ h1 {
 .logout-button:hover {
   background: var(--bg-color2);
   border-color: rgb(var(--bg-color5) / 0.35);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
   transform: translateY(-1px);
 }
 
@@ -159,9 +152,6 @@ h1 {
 
 .user-preferences-button {
   cursor: pointer;
-  /*position: fixed;
-  top: 5px;
-  right: 20px;*/
   background: var(--bg-color4);
   color: var(--btn-text);
   border: 1px solid rgb(var(--bg-color5) / 0.25); 
@@ -204,8 +194,7 @@ h1 {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(4px);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-
+  box-shadow: 0 1px 6px rgba(var(--box-shadow), 0.05);
   transition: border-color 0.3s ease-in-out, background 0.3s ease-in-out;
 }
 
@@ -230,22 +219,19 @@ h1 {
   padding: 10px 16px;
   border-radius: 8px;
   border: 1px solid rgb(var(--bg-color5) / 0.25);
-  /*background: #3a3a3a;*/
   background: var(--bg-color4);
-  color: #fff;
+  color: var(--btn-text);
   font-size: 16px;
   cursor: pointer;
-
   backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .todo-controls-button:hover {
-  /*background: #555; */
   background: var(--bg-color2);
   border-color: rgb(var(--bg-color5) / 0.35);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
   transform: translateY(-1px);
 }
 
@@ -275,7 +261,6 @@ h1 {
 
 .quick-actions-container {
   display: flex;
-  /*gap: 8px; */
   justify-self: start;
   align-items: center;
   min-width: 310px;
@@ -293,10 +278,10 @@ h1 {
   border-radius: 20px;
   border: 1px solid rgb(var(--bg-color5) / 0.25);
   background: var(--bg-color4);
-  color: #fff;
+  color: var(--btn-text);
   cursor: pointer;
   backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
   min-height: 32px;
   min-width: 32px;
@@ -326,7 +311,7 @@ body.light .quick-actions-button:hover {
   /*background: #220ad6;*/
   background: var(--bt-active);
   border-color: rgb(var(--bg-color5) / 0.35);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
   transform: translateY(-1px);
 }
 
@@ -340,7 +325,7 @@ body.light .quick-actions-button.active.search-button {
 }
 
 .quick-actions-button.active.search-button:hover {
-  color: #fff;
+  color: var(--std-white);
   transform: translateY(-1px);
 }
 
@@ -446,16 +431,13 @@ body.light .quick-actions-button.active.search-button {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-
   margin: 12px 0;
   padding: 10px 16px;
-
   border: 1px solid rgb(var(--bg-color5) / 0.2);
   border-radius: 8px;
   background: rgb(var(--bg-color5) / 0.05);
   backdrop-filter: blur(4px);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-
+  box-shadow: 0 1px 6px rgba(var(--box-shadow), 0.05);
   transition: border-color 0.2s ease-in-out, background 0.2s ease-in-out;
 }
 
@@ -506,7 +488,7 @@ body.light .quick-actions-button.active.search-button {
 
 .todo-alert {
   margin-left: 10px;
-  color: rgb(190, 0, 0);
+  color: var(--err-red);
 }
 
 .todo-edit-input {
@@ -567,19 +549,18 @@ body.light .quick-actions-button.active.search-button {
   border-radius: 15px;
   border: 1px solid rgb(var(--bg-color5) / 0.25);
   background: var(--bg-color4);
-  color: #fff;
+  color: var(--btn-text);
   font-size: 14px;
   cursor: pointer;
-
   backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .due-date-button:hover {
   background: var(--bg-color2);
   border-color: rgb(var(--bg-color5) / 0.35);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
   transform: translateY(-1px);
 }
 
@@ -635,16 +616,15 @@ body.light .due-date-button:hover {
   color: var(--btn-text);
   font-size: 14px;
   cursor: pointer;
-
   backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .date-picker-button:hover {
   background: var(--bg-color2);
   border-color: rgb(var(--bg-color5) / 0.35);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
   transform: translateY(-1px);
 }
 
@@ -660,7 +640,7 @@ body.light .due-date-button:hover {
   border-radius: 12px;
   background: rgba(var(--bg-color1-rgb), 0.9);
   border: 1px solid rgb(var(--bg-color5) / 0.25);
-  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+  box-shadow: 0 18px 60px rgba(var(--box-shadow),.35);
   transition: top 600ms ease-out, left 600ms ease-out;
 }
 
@@ -722,7 +702,7 @@ body.light .due-date-button:hover {
   backdrop-filter: blur(12px);
   border: 1px solid rgb(var(--bg-color5) / 0.2);
   background: rgb(var(--bg-color5) / 0.05);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 6px rgba(var(--box-shadow), 0.05);
   gap: 10px;
 }
 
@@ -741,7 +721,7 @@ body.light .due-date-button:hover {
   color: var(--btn-text);
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
   border: 1px solid rgb(var(--bg-color5) / 0.25);
 }
 
@@ -750,7 +730,7 @@ body.light .due-date-button:hover {
   border-color: rgb(var(--bg-color5) / 0.35);
   transform: translateY(2px);
   background: var(--bg-color2);
-  box-shadow: 0 2px 12px rgb(var(--bg-color5) / 0.1);
+  box-shadow: 0 2px 12px rgb(var(--box-shadow) / 0.1);
 }
 
 .login-form-input::placeholder {
@@ -783,10 +763,10 @@ body.light .due-date-button:hover {
   font-size: 0.95rem;
   font-weight: 600;
   min-height: 25px;
-  background: #fba29a;
-  color: #aa0b00;
+  background: var(--err-red);
+  color: #2e0401;
   border: 1px solid #ff7768;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 8px rgba(var(--box-shadow),0.08);
   text-align: center;
   opacity: 0;
 }
@@ -805,7 +785,7 @@ body.light .due-date-button:hover {
   height: 0;
   border-top: 6px solid transparent;
   border-bottom: 6px solid transparent;
-  border-right: 6px solid #d93025;
+  border-right: 6px solid var(--err-red);
 }
 
 .login-form-input-bubble {
@@ -814,12 +794,12 @@ body.light .due-date-button:hover {
   left: 100%;
   transform: translate(8px, -50%);
   padding: 6px 10px;
-  background: #d93025;       /* rosso solido moderato */
-  color: #fff;               /* testo bianco leggibile */
+  background: var(--err-red);
+  color: var(--std-white);
   font-size: 0.85rem;
   border-radius: 6px;
-  border: 1px solid #a52714; /* bordo leggermente più scuro */
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border: 1px solid #a52714;
+  box-shadow: 0 4px 8px rgba(var(--box-shadow),0.15);
   white-space: nowrap;
 }
 
@@ -866,14 +846,14 @@ body.light .due-date-button:hover {
   width: 26px;
   left: 4px;
   bottom: 4px;
-  background-color: #1a1a1a;
+  background-color: var(--std-black);
   -webkit-transition: .4s;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #1a1a1a;
-  color: white;
+  background-color: var(--std-black);
+  color: var(--std-white);
 }
 
 
@@ -881,7 +861,7 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
-  background-color: white;
+  background-color: var(--std-white);
 }
 
 .slider.round {
@@ -928,7 +908,7 @@ color:#1a1a1a;
   background: rgb(var(--bg-color5) / 0.06);
   border: 1px solid rgb(var(--bg-color5) / 0.18);
   backdrop-filter: blur(12px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 12px 30px rgba(var(--box-shadow), 0.25);
   opacity: 0;
   transform: translateY(-4px);
   transition: opacity 0.5s ease, transform 0.5s ease;
