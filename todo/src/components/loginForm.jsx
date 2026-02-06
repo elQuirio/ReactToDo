@@ -118,14 +118,14 @@ export function LoginForm() {
             }
         }
 
-        addError('email', !email, 'Email is required.');
-        addError('email', !validator.isEmail(email), 'Please enter a valid email address.');
-        addError('password', !password, 'Password is required.');
+        addError('email', !email, "Don’t forget your email");
+        addError('email', !validator.isEmail(email), 'Hmm... check the email format');
+        addError('password', !password, "You’ll need a password here");
 
         if (eventName === 'registration') {
-            addError('confirmPassword', !confirmPassword, 'Please confirm password.');
-            addError('password', password.length<8, 'Password must be at least 8 characters.');
-            addError('confirmPassword', !(password===confirmPassword), "Passwords don't match.");
+            addError('confirmPassword', !confirmPassword, 'Please confirm your password');
+            addError('password', password.length<8, "A bit short... try at least 8 characters");
+            addError('confirmPassword', !(password===confirmPassword), "Almost! The two passwords don't match");
         } 
         
         return errors;
@@ -138,7 +138,7 @@ export function LoginForm() {
         else if (password===confirmPassword) {
             setFieldErrors({confirmPassword: ''});
         } else {
-            setFieldErrors({confirmPassword: "Passwords don't match."});
+            setFieldErrors({confirmPassword: "Almost! The two passwords don't match"});
         }
     };
 
