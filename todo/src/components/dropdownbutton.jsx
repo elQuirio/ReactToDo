@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
+import { CircleChevronUp, CircleChevronDown } from 'lucide-react';
 
 export function DropDownButton({handleOnClick}) {
-    const [ isToggled, setIsToggled ] = useState(false);
+    const [ isToggled, setIsToggled ] = useState(true);
     const dispatch = useDispatch();
     let dropDownPanel = '';
+    let caret;
 
     useEffect(() => {dispatch(fetchPreferences())}, [dispatch]);
 
@@ -34,18 +36,21 @@ export function DropDownButton({handleOnClick}) {
 
 
     if (isToggled) {
-        dropDownPanel = (<div className="dropdown-panel">
-                            <button className="todo-controls-button dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
-                            <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsDone}>Mark all as done</button>
-                            <button className="todo-controls-button dropdown-item" onClick={handleMarkAllAsActive}>Mark all as active</button>
+        dropDownPanel = (<div className="dropdown-panel dropdown-panel--up">
+                            <button className="dropdown-item" onClick={handleOnClick} >Clear all</button>
+                            <button className="dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
+                            <button className="dropdown-item" onClick={handleMarkAllAsDone}>Mark all done</button>
+                            <button className="dropdown-item" onClick={handleMarkAllAsActive}>Mark all active</button>
                         </div>)
+        caret = (< CircleChevronDown size={24} onClick={handleDropDownClick}/>)
+    } else {
+        caret = (< CircleChevronUp size={24} onClick={handleDropDownClick}/>)
     }
 
     
     return  <div className="dropdown-button" tabIndex={0} onBlur={handleOnBlur}>
-                <button className="todo-controls-button" onClick={handleOnClick}>
-                    <span>Clear todos</span>
-                    <span className="caret" onClick={handleDropDownClick}> ▼ </span>
+                <button className="todo-controls-caret" >
+                    { caret }
                 </button>
                 { dropDownPanel }
             </div>
