@@ -26,7 +26,7 @@ export function TodoHeader({ todoHeader, todoData }) {
 
     return <div className="todo-header">
                 <GripVertical size={24} className="drag-handle"/>
-                <input type="checkbox" checked={status === "active" ? false : true} onChange={onCheckboxChange} onClick={(e) => e.stopPropagation()}/> 
+                <input type="checkbox" checked={status === "active" ? false : true} onChange={onCheckboxChange} onClick={(e) => e.stopPropagation()} onDoubleClick={(e) => e.stopPropagation()}/> 
                 {todoContent}
                 <button className="expand-todo-btn" onClick={toggleDetails} title={isExpanded ? 'Collapse': 'Expand'} aria-label={isExpanded ? 'Collapse': 'Expand'}>{isExpanded ? <Minus size={26}/> : <Plus size={26}/> }</button>
            </div>
