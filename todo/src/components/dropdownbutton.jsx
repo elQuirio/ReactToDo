@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos } from '../thunks/todoThunks';
+import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
 import { CircleChevronUp, CircleChevronDown } from 'lucide-react';
 
-export function DropDownButton({handleOnClick}) {
-    const [ isToggled, setIsToggled ] = useState(true);
+export function DropDownButton() {
+    const [ isToggled, setIsToggled ] = useState(false);
     const dispatch = useDispatch();
     let dropDownPanel = '';
     let caret;
@@ -34,10 +34,14 @@ export function DropDownButton({handleOnClick}) {
         setIsToggled(false);
     }
 
+    function handleClearAllTodos() {
+        dispatch(clearTodos());
+    };
 
+    
     if (isToggled) {
         dropDownPanel = (<div className="dropdown-panel dropdown-panel--up">
-                            <button className="dropdown-item" onClick={handleOnClick} >Clear all</button>
+                            <button className="dropdown-item" onClick={handleClearAllTodos} >Clear all</button>
                             <button className="dropdown-item" onClick={handleClearCompleted} >Clear completed</button>
                             <button className="dropdown-item" onClick={handleMarkAllAsDone}>Mark all done</button>
                             <button className="dropdown-item" onClick={handleMarkAllAsActive}>Mark all active</button>
