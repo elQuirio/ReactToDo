@@ -57,14 +57,16 @@ function App() {
     body = (<div className="main-container">
               <aside></aside>
               <main className='todo-content'>
-                <div className='todo-content-inner'>
-                  <section className="active" >
-                    <TodoList />
-                  </section>
-                  <section className='controls'>
-                    <AddTodoInputbox />
-                  </section>
+                <div className='todo-scroll'>
+                  <div className='todo-content-inner'>
+                    <section className="active" >
+                      <TodoList />
+                    </section>
+                  </div>
                 </div>
+                  <div className='controls'>
+                    <AddTodoInputbox />
+                  </div>
               </main>
               <UserMenu/>
             </div>)
