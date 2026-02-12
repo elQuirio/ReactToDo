@@ -10,9 +10,9 @@ import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
 
 export default function AddTodoInputbox() {
-    const [text, setText] = useState('');
     const dispatch = useDispatch();
     const searchButtonActive = useSelector(selectSearchBtnToggled);
+    const [text, setText] = useState('');
 
     useEffect(() => { dispatch(fetchTodos()) }, [dispatch]);
     useEffect(() => { dispatch(fetchPreferences())}, [dispatch]);
@@ -62,7 +62,7 @@ export default function AddTodoInputbox() {
     return (<div className="control-bar">
                 <input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown} placeholder={handlePlaceholder()}/>
                 <div className="control-bar-buttons-wrapper">
-                    <button className="todo-controls-button" onClick={handleAddTodoClick}>Add todo</button>
+                    <button className={`todo-controls-button ${searchButtonActive ? 'disabled' : ''}`} disabled={searchButtonActive} title={searchButtonActive ? 'Disable search mode to use actions' : ''} onClick={handleAddTodoClick} >Add todo</button>
                     <DropDownButton handleOnClick={handleClearAllTodos} />
                 </div>
                 <StatusBar searchString={text}/>
