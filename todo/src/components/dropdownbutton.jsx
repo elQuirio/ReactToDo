@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
 import { CircleChevronUp, CircleChevronDown } from 'lucide-react';
+import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
 export function DropDownButton() {
     const [ isToggled, setIsToggled ] = useState(false);
     const dispatch = useDispatch();
+    const searchButtonActive = useSelector(selectSearchBtnToggled);
     let dropDownPanel = '';
     let caret;
 
@@ -52,8 +54,8 @@ export function DropDownButton() {
     }
 
     
-    return  <div className="dropdown-button" tabIndex={0} onBlur={handleOnBlur}>
-                <button className="todo-controls-caret" >
+    return  <div className={`dropdown-button ${searchButtonActive ? 'disabled' : ''}`} disabled={searchButtonActive} tabIndex={0} onBlur={handleOnBlur}>
+                <button className={`todo-controls-caret ${searchButtonActive ? 'disabled' : ''}`} title={searchButtonActive ? 'Disable search mode to use actions' : ''} disabled={searchButtonActive} >
                     { caret }
                 </button>
                 { dropDownPanel }

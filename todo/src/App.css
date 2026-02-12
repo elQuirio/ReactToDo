@@ -252,9 +252,20 @@ h1 {
   color: var(--btn-text);
   font-size: 16px;
   cursor: pointer;
+  opacity: 1;
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 6px rgba(var(--box-shadow), 0.15);
-  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, opacity 250ms ease;
+}
+
+.todo-controls-button.disabled {
+  opacity: 0.1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.todo-controls-button.hidden {
+  /*visibility: hidden;*/
 }
 
 .todo-controls-button:hover {
@@ -280,13 +291,31 @@ h1 {
   cursor: pointer;
 }
 
+.todo-controls-caret.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 
 /* ----- dropdownbutton ----- */
 
 .dropdown-button {
   position: relative;
-  display: inline-block;
+  display: flex;
+  align-items: center;
   z-index: 5;
+  opacity: 1;
+  transition: opacity 250ms ease;
+}
+
+.dropdown-button.disabled {
+  opacity: 0.1;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.dropdown-button.hidden {
+  /*visibility: hidden;*/
 }
 
 .dropdown-panel {
