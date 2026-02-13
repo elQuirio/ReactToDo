@@ -54,7 +54,7 @@ export function DropDownButton() {
     }
 
     
-    return  <div className={`dropdown-button ${searchButtonActive ? 'disabled' : ''}`} disabled={searchButtonActive} tabIndex={0} onBlur={handleOnBlur}>
+    return  <div className={`dropdown-button ${searchButtonActive ? 'disabled' : ''}`} tabIndex={0} onBlur={handleOnBlur}>
                 <button className={`todo-controls-caret ${searchButtonActive ? 'disabled' : ''}`} title={searchButtonActive ? 'Disable search mode to use actions' : ''} disabled={searchButtonActive} >
                     { caret }
                 </button>
