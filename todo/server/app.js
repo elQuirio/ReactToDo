@@ -157,38 +157,15 @@ app.patch("/api/todos/reorder", (req, res) => {
   }
 });
 
-
-//capire se possibile accorpare e semplificare
-app.patch("/api/todos/mark-all-as-completed", (req, res) => {
-  const userId = req.user.userId;
-  const todos = readTodos();
-  const userTodos = todos.filter((t)=> t.userId === userId);
-  const otherTodos = todos.filter((t)=> t.userId !== userId);
-  const updatedTodos = userTodos.map((t) => {
-    if (t.status !== 'completed') {
-      return { ...t, status: 'completed', updatedAt: Date.now() };
-    } else {
-      return t;
-    }
-  });
-
-  try {
-    const allTodos = [...updatedTodos, ...otherTodos];
-    allTodos.forEach((t) => writeTodo(t));
-    return res.status(200).json({data: updatedTodos});
-  } catch (err) {
-    return res.status(500).json({message: "Error saving todo"})
-  }
-});
-
-app.patch("/api/todos/mark-all-as-active", (req, res) => {
+app.patch("/api/todos/mark-all/:status", (req, res) => {
+  const { status } = req.params;
   const userId = req.user.userId;
   const allTodos = readTodos();
   const userTodos = allTodos.filter((t) => t.userId === userId);
   const otherTodos = allTodos.filter((t) => t.userId !== userId);
   const updatedTodos = userTodos.map(t => {
-    if (t.status !== "active") {
-      return {...t, status: 'active', updatedAt: Date.now()}
+    if (t.status !== status) {
+      return {...t, "status": status, updatedAt: Date.now()}
     } else {
       return t;
     }
@@ -230,16 +207,25 @@ app.delete("/api/todos", (req, res) => {
 
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
-  const userId = req.user.userId;
-  const preferences = patchPreferencesByUserId(userId, req.body);
-  return res.json({data: preferences});
+  try {
+    const userId = req.user.userId;
+    const preferences = patchPreferencesByUserId(userId, req.body);
+    return res.json({data: preferences});
+  } catch(err) {
+    return res.status(500).json({message: "Error saving preferences"});
+  }
 });
 
 app.get('/api/preferences', (req, res) => {
-  const userId = req.user.userId;
-  const preferences = getPreferencesByUserID(userId);
-  return res.json({data: preferences});
+  try {
+    const userId = req.user.userId;
+    const preferences = getPreferencesByUserID(userId);
+    return res.json({data: preferences});
+  } catch (err) {
+    return res.status(500).json({message: 'Error fetching preferences'});
+  }
 });
+
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");

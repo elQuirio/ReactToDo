@@ -2,7 +2,7 @@ import '../App.css';
 import AddTodoInputbox from '../components/addTodoInputbox';
 import TodoList from '../components/todoList';
 import { useEffect, useState } from "react";
-import { selectIsLogged, selectAuthLoading } from '../selectors/authSelector';
+import { selectIsLogged } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
 import { useSelector, useDispatch } from "react-redux";
 import { LoginForm }  from '../components/loginForm';
@@ -14,7 +14,6 @@ function App() {
   const [showLoader, setShowLoader] = useState(true);
   const isLogged = useSelector(selectIsLogged);
   const isLightMode = useSelector(selectIsLightMode);
-  //const isAuthLoading = useSelector(selectAuthLoading);
 
   const dispatch = useDispatch();
 
@@ -52,9 +51,9 @@ function App() {
 
 
   if (showLoader) {
-    body = (<div className='loader-container'><div className='bootstrap-spinner'></div></div>)
+    return body = (<div className='loader-container'><div className='bootstrap-spinner'></div></div>)
   } else if (isLogged) {
-    body = (<div className="main-container">
+    return body = (<div className="main-container">
               <aside></aside>
               <main className='todo-content'>
                 <div className='todo-scroll'>
@@ -71,13 +70,13 @@ function App() {
               <UserMenu/>
             </div>)
   } else {
-    body = (<div className="main-container">
-              <LoginForm />
-            </div>)
+    return body = (<div className="main-container">
+                    <LoginForm />
+                  </div>)
 
   }
 
-  return body
+  return body;
 }
 
 export default App

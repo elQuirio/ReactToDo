@@ -105,7 +105,7 @@ export const markAllAsCompletedTodos = createAsyncThunk(
     'todos/markAllAsCompleted',
     async ( _ , { dispatch, rejectWithValue }) => {
         try {
-            const res = await fetch('http://localhost:3000/api/todos/mark-all-as-completed', {
+            const res = await fetch('http://localhost:3000/api/todos/mark-all/completed', {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 credentials: 'include',
@@ -124,7 +124,7 @@ export const markAllAsActiveTodos = createAsyncThunk(
     'todos/markAllAsActive',
     async (_ , { dispatch, rejectWithValue} ) => {
         try {
-            const res = await fetch('http://localhost:3000/api/todos/mark-all-as-active', {
+            const res = await fetch('http://localhost:3000/api/todos/mark-all/active', {
                 method: 'PATCH',
                 headers: { "Content-Type": "application/json" },
                 credentials: 'include',
