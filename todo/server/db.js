@@ -97,8 +97,6 @@ export function sortTodos(sortDirection, sortBy, userId) {
     const allTodos = readTodos();
     const userTodos = allTodos.filter((t)=> t.userId === userId);
     const otherTodos = allTodos.filter((t)=> t.userId !== userId);
-    const activeTodos = userTodos.filter((t) => t.status === "active");
-    const completedTodos = userTodos.filter((t) => t.status === "completed");
 
     const SORTBY_MAP = {
         "manual": "position",
@@ -109,7 +107,7 @@ export function sortTodos(sortDirection, sortBy, userId) {
     const sortMethod = SORTBY_MAP[sortBy];
     if (!sortMethod) throw new Error("SortBy method not found!");
     try {
-        activeTodos.sort((a, b) => {
+        userTodos.sort((a, b) => {
             const valA = a[sortMethod];
             const valB = b[sortMethod];
             if (typeof valA === "string") {
@@ -118,9 +116,9 @@ export function sortTodos(sortDirection, sortBy, userId) {
                 return sortDirection === 'asc' ? valA - valB : valB - valA;
             }
         });
-        const todosAll = [...activeTodos, ...completedTodos, ...otherTodos];
+        const todosAll = [...userTodos, ...otherTodos];
         writeAllTodos(todosAll);
-        return [...activeTodos, ...completedTodos];
+        return [...userTodos];
     } catch (e) {
         throw new Error(e);
     }
