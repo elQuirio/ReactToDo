@@ -151,11 +151,12 @@ h1 {
 }
 
 .user-preferences-button {
+  display: flex;
   cursor: pointer;
   background: var(--bg-color4);
   color: var(--btn-text);
   border: 1px solid rgb(var(--bg-color5) / 0.25); 
-  padding: 7px 8px;
+  padding: 8px;
   border-radius: 20px;
 }
 
