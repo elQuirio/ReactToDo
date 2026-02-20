@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
-import { CircleChevronUp, CircleChevronDown } from 'lucide-react';
+import { CircleChevronUp, CircleChevronDown, ListChevronsUpDown, ListChevronsDownUp } from 'lucide-react';
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
 export function DropDownButton() {
@@ -21,14 +21,17 @@ export function DropDownButton() {
 
     function handleClearCompleted() {
         dispatch(clearCompletedTodos());
+        setIsToggled(false);
     }
 
     function handleMarkAllAsActive() {
         dispatch(markAllAsActiveTodos());
+        setIsToggled(false);
     }
 
     function handleMarkAllAsDone() {
         dispatch(markAllAsCompletedTodos());
+        setIsToggled(false);
     }
 
     function handleOnBlur(e) {
@@ -38,6 +41,7 @@ export function DropDownButton() {
 
     function handleClearAllTodos() {
         dispatch(clearTodos());
+        setIsToggled(false);
     };
 
     
@@ -48,14 +52,14 @@ export function DropDownButton() {
                             <button className="dropdown-item" onClick={handleMarkAllAsDone}>Mark all done</button>
                             <button className="dropdown-item" onClick={handleMarkAllAsActive}>Mark all active</button>
                         </div>)
-        caret = (< CircleChevronDown size={24} onClick={handleDropDownClick}/>)
+        caret = (< ListChevronsDownUp size={28} onClick={handleDropDownClick}/>)
     } else {
-        caret = (< CircleChevronUp size={24} onClick={handleDropDownClick}/>)
+        caret = (< ListChevronsUpDown size={28} onClick={handleDropDownClick}/>)
     }
 
     
     return  <div className={`dropdown-button ${searchButtonActive ? 'disabled' : ''}`} tabIndex={0} onBlur={handleOnBlur}>
-                <button className={`todo-controls-caret ${searchButtonActive ? 'disabled' : ''}`} title={searchButtonActive ? 'Disable search mode to use actions' : ''} disabled={searchButtonActive} >
+                <button className={`todo-controls-button ${searchButtonActive ? 'disabled' : ''}`} title={searchButtonActive ? 'Disable search mode to use actions' : ''} disabled={searchButtonActive} >
                     { caret }
                 </button>
                 { dropDownPanel }

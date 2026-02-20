@@ -71,12 +71,10 @@ export function StatusBar({ searchString }) {
                 <span className="dot"> | </span>
                 <span className='status-chip'>Overdue: {overdueTodos.length}</span>
             </span>
-            <span>
-                <div className='viewMode-selector-container'>
+                <span className='viewMode-selector-container'>
                     <div className={`selector-thumb ${viewMode}`}/>
                         <button type='button' className={`viewMode-button ${viewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
                         <button type='button' className={`viewMode-button ${viewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
-                    </div>
-            </span>
+                    </span>
         </div>
 }
