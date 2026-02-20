@@ -9,7 +9,7 @@ import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUser
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: 'http://localhost:5173',methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+app.use(cors({origin: 'http://localhost:5173', methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));

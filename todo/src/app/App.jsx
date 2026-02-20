@@ -51,10 +51,11 @@ function App() {
 
 
   if (showLoader) {
-    return body = (<div className='loader-container'><div className='bootstrap-spinner'></div></div>)
+    return body = (<div className='loader-container'>
+                      <div className='bootstrap-spinner'></div>
+                    </div>)
   } else if (isLogged) {
     return body = (<div className="main-container">
-              <aside></aside>
               <main className='todo-content'>
                 <div className='todo-scroll'>
                   <div className='todo-content-inner'>
