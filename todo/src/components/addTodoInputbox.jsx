@@ -76,7 +76,7 @@ export default function AddTodoInputbox() {
                         <button className={`todo-controls-button ${searchButtonActive ? 'disabled' : ''}`} disabled={searchButtonActive} title={searchButtonActive ? 'Disable search mode to use actions' : ''} onClick={handleAddTodoClick} >
                             < CircleArrowUp size={28}/>
                         </button>
-                        <DropDownButton handleOnClick={handleClearAllTodos} />
+                        <DropDownButton />
                     </div>
                 </div>
                 <StatusBar searchString={text}/>

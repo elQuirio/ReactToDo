@@ -620,6 +620,7 @@ body.light .quick-actions-button.active.search-button {
   display: flex;
   flex-direction: row;
   width: 100%;
+  padding: 0 20px;
 }
 
 .todo-alert {
