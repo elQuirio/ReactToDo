@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import { clearCookies } from './utils/helpers.js';
 
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, getUserByUserId } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId } from './db.js';
 
 const app = express();
 app.use(express.json());
@@ -34,7 +34,9 @@ app.post('/api/auth/register', async (req, res) => {
 
   const hashedPwd = await bcrypt.hash(password, 10);
   const userId = crypto.randomUUID();
-  const savedUser = saveNewUser({email, password: hashedPwd, userId: userId});
+  //const savedUser = saveNewUser({email, password: hashedPwd, userId: userId});
+
+  const savedUser = registerNewUser({email, password: hashedPwd, userId: userId});
 
   if (savedUser) {
     return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
