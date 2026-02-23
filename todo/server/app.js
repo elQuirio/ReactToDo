@@ -188,7 +188,9 @@ app.post("/api/todos", (req, res) => {
   todo.position = getNewPosition(userId);
   try {
     writeTodo(todo, userId);
-    return res.status(201).json({data: todo});
+    const prefs = getPreferencesByUserID(userId);
+    const todos = sortTodos(prefs.sortDirection, prefs.sortBy, userId);
+    return res.status(201).json({data: todos});
   } catch (err) {
     return res.status(500).json({message: "Error saving todo"})
   }
