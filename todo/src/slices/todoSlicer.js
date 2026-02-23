@@ -11,7 +11,7 @@ const todoSlice = createSlice({
     initialState: initialState,
     reducers: {
         addTodo: (state, action) => {
-            state.todos.push(action.payload);
+            state.todos = (action.payload);
             },
         clearAllTodos:  (state) => {
             state.todos = [];
