@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import { clearCookies } from './utils/helpers.js';
 
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId, writeGetSortedTodos } from './db.js';
 
 const app = express();
 app.use(express.json());
@@ -138,8 +138,8 @@ app.patch("/api/todos", (req, res) => {
     const userId = req.user.userId;
     const todo = {userId, ...req.body};
     try {
-      writeTodo(todo); //capire se posso passare userId come parametro senza dover ricostruire il todo
-      return res.status(200).json({data: todo});
+      const todos = writeGetSortedTodos(todo, userId);
+      return res.status(200).json({data: todos});
     } 
     catch (err) {
       return res.status(500).json({message: "Error saving todo"})
@@ -158,6 +158,7 @@ app.patch("/api/todos/reorder", (req, res) => {
     return res.status(500).json({message: "Error sorting todos"});
   }
 });
+
 
 app.patch("/api/todos/mark-all/:status", (req, res) => {
   const { status } = req.params;
@@ -187,9 +188,7 @@ app.post("/api/todos", (req, res) => {
   const todo = { userId, ...req.body};
   todo.position = getNewPosition(userId);
   try {
-    writeTodo(todo, userId);
-    const prefs = getPreferencesByUserID(userId);
-    const todos = sortTodos(prefs.sortDirection, prefs.sortBy, userId);
+    const todos = writeGetSortedTodos(todo, userId);
     return res.status(201).json({data: todos});
   } catch (err) {
     return res.status(500).json({message: "Error saving todo"})
