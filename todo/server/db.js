@@ -19,8 +19,8 @@ export const readTodos = () => {
     }
 };
 
-export const writeTodo = (todo, userId) => {
-    const dbTodos = readTodos(userId);
+export const writeTodo = (todo) => {
+    const dbTodos = readTodos();
     const index = dbTodos.findIndex((t) => t.id == todo.id);
     if (index !== -1) {
         //update if exists
@@ -34,6 +34,14 @@ export const writeTodo = (todo, userId) => {
         return todo;
     }
 };
+
+export const writeGetSortedTodos = (todo, userId) => {
+    if (!userId || !todo) throw new Error("User id is required"); // standardizzare validation errors
+    writeTodo(todo);
+    const { sortDirection, sortBy } = getPreferencesByUserID(userId);
+    return sortTodos(sortDirection, sortBy, userId);
+};
+
 
 export const writeAllTodos = (todos) => {
     fs.writeFileSync(db, JSON.stringify(todos, null, 2));
