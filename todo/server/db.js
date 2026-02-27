@@ -114,6 +114,9 @@ export function sortTodos(sortDirection, sortBy, userId) {
     }
     const sortMethod = SORTBY_MAP[sortBy];
     if (!sortMethod) throw new Error("SortBy method not found!");
+
+    if (sortDirection != 'asc' && sortDirection != 'desc') throw new Error("Sort direction must be 'asc' or 'desc'");
+
     try {
         userTodos.sort((a, b) => {
             const valA = a[sortMethod];
@@ -238,4 +241,33 @@ export function getUserByUserId(userId){
     } catch (e) {
         return null;
     }
+};
+
+
+
+/////////////////// SERVICES ////////////////////////
+
+export function getTodosByUserId(userId) {
+    if (!userId) throw new Error('getTodosByUserId -> User id is mandatory');
+    const allTodos = readTodos();
+    return allTodos.filter((t)=> t.userId === userId);
+};
+
+export function markAllTodosStatusByUserId(userId, status) {
+    if (!userId) throw new Error('Missing user Id');
+
+    if ((status !== 'active') && (status!=='completed')) throw new Error('Status not valid');
+
+    const allTodos = readTodos();
+    const userTodos = allTodos.filter((t) => t.userId === userId);
+    const otherTodos = allTodos.filter((t) => t.userId !== userId);
+    const updatedTodos = userTodos.map(t => {
+        if (t.status !== status) {
+            return {...t, "status": status, updatedAt: Date.now()}
+        } else {
+            return t;
+        }
+    });
+    writeAllTodos([...updatedTodos,...otherTodos]);
+    return updatedTodos;
 };

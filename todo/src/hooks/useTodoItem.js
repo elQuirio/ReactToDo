@@ -20,14 +20,14 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
                 } else {
                     dueDate = toBeCompletedAt + oneDay;
                 }
-                dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }))
+                dispatch(saveTodo({todoId: id, todo: {id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: dueDate, position: position }}));
             }
         }, [dispatch, id, text, status, createdAt, toBeCompletedAt, position]);
 
 
     const todoDetailsResetDueDate = useCallback(() => {
         if (status !== 'completed') {
-            dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null, position: position }))
+            dispatch(saveTodo({todoId: id, todo: {id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: null, position: position }}));
         }
     }, [dispatch, id, text, status, createdAt, position]);
 
@@ -45,7 +45,7 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
     }, []);
 
     const datePickerHandleConfirm = useCallback(() => {
-        dispatch(saveTodo({id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: pickedDate, position: position }));
+        dispatch(saveTodo({todoId: id, todo: {id: id, text: text, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: pickedDate, position: position }}));
         setIsDatePickerOpen(false);
     }, [dispatch, id, text, status, createdAt, pickedDate, position]);
 
@@ -63,14 +63,14 @@ export function useTodoItem({ id, status, text, createdAt, updatedAt, toBeComple
     }, [dispatch, status]);
 
     const todoHeaderCheckboxChange = useCallback(() => {
-        dispatch(saveTodo({id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
+        dispatch(saveTodo({todoId: id, todo: {id: id, text: text, status: status === 'active' ? 'completed' : 'active', createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }}));
         dispatch(collapseId({id: id}));
     }, [dispatch, id, text, status, createdAt, toBeCompletedAt, position]);
 
 
     const todoHeaderOnBlur = useCallback(() => {
         if (tempText !== '') {
-            dispatch(saveTodo({id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }));
+            dispatch(saveTodo({todoId: id, todo: {id: id, text: tempText, status: status, createdAt: createdAt, updatedAt: Date.now(), toBeCompletedAt: toBeCompletedAt, position: position }}));
         }
         setIsEditing(false);
     }, [dispatch, id, tempText, status, createdAt, toBeCompletedAt, position, setIsEditing]);
