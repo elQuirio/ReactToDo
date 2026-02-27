@@ -20,9 +20,9 @@ export const fetchTodos = createAsyncThunk(
 
 export const saveTodo = createAsyncThunk(
     "todos/saveTodo",
-    async ( todo , { dispatch, rejectWithValue }) => {
+    async ( {todoId, todo} , { dispatch, rejectWithValue }) => {
         try {
-            const res = await fetch('http://localhost:3000/api/todos', {
+            const res = await fetch(`http://localhost:3000/api/todos/${todoId}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(todo),
@@ -142,10 +142,10 @@ export const markAllAsActiveTodos = createAsyncThunk(
 
 
 export const sortByTodos = createAsyncThunk(
-    'todos/sortByDirection', 
+    'todos/sortByDirection',
     async ( {sortDirection, sortBy},  { dispatch, rejectWithValue } ) => {
         try {
-            const res = await fetch(`http://localhost:3000/api/todos`, { 
+            const res = await fetch(`http://localhost:3000/api/todos/resort`, { 
                 method: 'PATCH', 
                 headers: { 'Content-Type': 'application/json' }, 
                 credentials: 'include',
