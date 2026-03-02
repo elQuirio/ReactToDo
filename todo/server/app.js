@@ -25,44 +25,50 @@ app.post('/api/auth/register', async (req, res) => {
   if (password !== confirmPassword) {
     return clearCookies(res).status(400).json({data: {isLogged:false}, message: "Password does not matches confirmPassword!"});
   }
+
+  try {
+    const userExists = getUserByEmail(email);
   
-  const userExists = getUserByEmail(email);
-  
-  if (userExists) {
-    return clearCookies(res).status(409).json({data: {isLogged:false}, message: "Email already registered!"});
+    if (userExists) {
+      return clearCookies(res).status(409).json({data: {isLogged:false}, message: "Email already registered!"});
+    }
+
+    const hashedPwd = await bcrypt.hash(password, 10);
+    const userId = crypto.randomUUID();
+
+    const savedUser = registerNewUser({email, password: hashedPwd, userId: userId});
+
+    if (savedUser) {
+      return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
+    } else {
+      return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
+    }
   }
-
-  const hashedPwd = await bcrypt.hash(password, 10);
-  const userId = crypto.randomUUID();
-  //const savedUser = saveNewUser({email, password: hashedPwd, userId: userId});
-
-  const savedUser = registerNewUser({email, password: hashedPwd, userId: userId});
-
-  if (savedUser) {
-    return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
-  } else {
+  catch (err) {
+    console.log(err);
     return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
   }
 });
 
 
 app.post('/api/auth/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return clearCookies(res).status(400).json({message: "User or password missing!"});
+  }
+
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return clearCookies(res).status(400).json({message: "User or password missing!"});
-    }
-
     const existingUser = getUserByEmail(email);
 
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "Password is wrong"});
+      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "User or password is wrong"});
     } else {
-      return clearCookies(res).status(404).json({data:{isLogged: false}, message: "User does not exists!"});
+      return clearCookies(res).status(404).json({data:{isLogged: false}, message: "User or password is wrong"});
     }
-  } catch(e) {
+  } catch(err) {
+    console.log(err);
     return clearCookies(res).status(500).json({data:{isLogged:false}, message: "Internal server error!"});
   }
 });
@@ -226,8 +232,8 @@ app.patch("/api/todos/:id", (req, res) => {
 
 // aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
+  const userId = req.user.userId;
   try {
-    const userId = req.user.userId;
     const preferences = patchPreferencesByUserId(userId, req.body);
     return res.json({data: preferences});
   } catch(err) {
@@ -236,8 +242,8 @@ app.patch('/api/preferences', (req, res) => {
 });
 
 app.get('/api/preferences', (req, res) => {
+  const userId = req.user.userId;
   try {
-    const userId = req.user.userId;
     const preferences = getPreferencesByUserID(userId);
     return res.json({data: preferences});
   } catch (err) {
