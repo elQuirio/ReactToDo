@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import { clearCookies } from './utils/helpers.js';
 
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId } from './db.js';
+import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
 
 const app = express();
 app.use(express.json());
@@ -119,6 +119,7 @@ app.get("/api/todos", (req, res) => {
 
 // PATCH
 app.patch("/api/todos/resort", (req, res) => {
+  console.log('resorting');
   const sortDirection = req.body.sortDirection;
   const sortBy = req.body.sortBy;
   const userId = req.user.userId;
@@ -136,29 +137,10 @@ app.patch("/api/todos/resort", (req, res) => {
     }
 });
 
-
-// PATCH
-app.patch("/api/todos/:id", (req, res) => {
-  const userId = req.user.userId;
-  const todoId = req.params.id;
-  const todo = {userId, ...req.body, id: todoId};
-  
-  if (!todoId) return res.status(400).json({message: 'Missing todo Id'});
-  try {
-    const todos = writeGetSortedTodos(todo, userId);
-    return res.status(200).json({data: todos});
-  }
-  catch (err) {
-    console.log(err);
-    return res.status(500).json({message: "Error saving todo"});
-  }
-});
-
 // PATCH
 app.patch("/api/todos/reorder", (req, res) => {
   const userId = req.user.userId;
   const { fromId, toId } = req.body;
-  
   if (!fromId || !toId) {
     return res.status(400).json({message: 'Missing from/to id'});
   }
@@ -167,10 +149,10 @@ app.patch("/api/todos/reorder", (req, res) => {
     const sortedTodos = manualResortTodos(fromId, toId, userId);
     return res.status(200).json({data: sortedTodos});
   } catch (err) {
-    console.log(err);
     return res.status(500).json({message: "Error reordering todos"});
   }
 });
+
 
 //PATCH
 app.patch("/api/todos/mark-all/:status", (req, res) => {
@@ -181,10 +163,10 @@ app.patch("/api/todos/mark-all/:status", (req, res) => {
     return res.status(400).json({message: "Missing status"});
   }
   try {
-    const updatedTodos = markAllTodosStatusByUserId(userId);
+    const updatedTodos = markAllTodosStatusByUserId(userId, status);
     return res.status(200).json({data: updatedTodos});
 
-  } catch {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({message: "Error saving todo"});
   }
@@ -210,6 +192,9 @@ app.post("/api/todos", (req, res) => {
 app.delete("/api/todos", (req, res) => {
   const userId = req.user.userId;
   const status = req.query.status;
+  if (!status) {
+    return res.status(400).json({message: "Missing status"})
+  }
   try {
     const todos = clearTodos(userId, status);
     return res.status(200).json({data: todos});
@@ -219,6 +204,22 @@ app.delete("/api/todos", (req, res) => {
   }
 });
 
+// PATCH
+app.patch("/api/todos/:id", (req, res) => {
+  const userId = req.user.userId;
+  const todoId = req.params.id;
+  const todo = {userId, ...req.body, id: todoId};
+  
+  if (!todoId) return res.status(400).json({message: 'Missing todo Id'});
+  try {
+    const todos = writeGetSortedTodos(todo, userId);
+    return res.status(200).json({data: todos});
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(500).json({message: "Error saving todo"});
+  }
+});
 
 
 ///////////////////////////////////////// PREFERENCES ///////////////////////////////////////////

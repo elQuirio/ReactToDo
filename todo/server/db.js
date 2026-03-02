@@ -20,6 +20,7 @@ export const readTodos = () => {
 };
 
 export const writeTodo = (todo) => {
+    console.log('writing...');
     const dbTodos = readTodos();
     const index = dbTodos.findIndex((t) => t.id == todo.id);
     if (index !== -1) {
