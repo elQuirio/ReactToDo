@@ -52,7 +52,7 @@ export const insertTodo = createAsyncThunk(
                 });
             const data = await res.json();
             if (!res.ok) {
-                return rejectWithValue(data.message || "Server error adding todo!")
+                return rejectWithValue(data.message || "Server error adding todo!");
             }
             dispatch(addTodo(data.data));
         } catch (e) {
