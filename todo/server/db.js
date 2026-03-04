@@ -38,7 +38,9 @@ export const writeTodo = (todo) => {
 };
 
 export const writeGetSortedTodos = (todo, userId) => {
-    if (!userId || !todo) throw new Error("User id is required"); // standardizzare validation errors
+    const {id} = todo;
+    if (!id) throw new Error('Invalid todo');
+    if (!userId) throw new Error("User id is required");
     writeTodo(todo);
     const { sortDirection, sortBy } = getPreferencesByUserID(userId);
     return sortTodos(sortDirection, sortBy, userId);

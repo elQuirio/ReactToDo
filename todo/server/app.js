@@ -125,7 +125,6 @@ app.get("/api/todos", (req, res) => {
 
 // PATCH
 app.patch("/api/todos/resort", (req, res) => {
-  console.log('resorting');
   const sortDirection = req.body.sortDirection;
   const sortBy = req.body.sortBy;
   const userId = req.user.userId;
@@ -139,7 +138,7 @@ app.patch("/api/todos/resort", (req, res) => {
 
   } catch (err) {
       console.log(err);
-      return res.status(500).json({message: err ?? "Error sorting todos"})
+      return res.status(500).json({message: err ?? "Error sorting todos"});
     }
 });
 
@@ -235,7 +234,8 @@ app.patch('/api/preferences', (req, res) => {
   const userId = req.user.userId;
   try {
     const preferences = patchPreferencesByUserId(userId, req.body);
-    return res.json({data: preferences});
+    const todos = sortTodos(preferences.sortDirection, preferences.sortBy, userId);
+    return res.json({data: {preferences: preferences, todos: todos}});
   } catch(err) {
     return res.status(500).json({message: "Error saving preferences"});
   }

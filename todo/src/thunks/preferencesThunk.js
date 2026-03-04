@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPreferences } from '../slices/preferencesSlicer';
+import { resetTodos } from '../slices/todoSlicer';
 
 export const fetchPreferences = createAsyncThunk(
     'preferences/getUserPreferences', 
@@ -36,7 +37,10 @@ export const updatePreferences = createAsyncThunk(
             if (!resp.ok) {
                 return rejectWithValue(data.message || "Server error saving preferences!")
             }
-            dispatch(resetPreferences(data.data));
+            console.log(data.data.preferences);
+            dispatch(resetPreferences(data.data.preferences));
+            dispatch(resetTodos(data.data.todos));
+
         } catch (e) {
             return rejectWithValue(e.message || "Error updating preferences!");
         }

@@ -31,7 +31,7 @@ export function SortMethodButton () {
         setPendingKey(key);
         setIsExpanded(false);
         dispatch(updatePreferences({sortBy: key}));
-        dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
+        //dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
     }
 
     useEffect(() => {

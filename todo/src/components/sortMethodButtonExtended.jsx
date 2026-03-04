@@ -16,7 +16,7 @@ export function SortMethodButtonExtended () {
 
     function handleOnClick(key) {
         dispatch(updatePreferences({sortBy: key}));
-        dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
+        //dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
     }
     
     return <div className={`sort-method-wrapper`}>

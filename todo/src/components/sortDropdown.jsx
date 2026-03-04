@@ -17,7 +17,7 @@ export default function SortDropdown() {
     
     function handleOnClick(e) {
         dispatch(updatePreferences({sortBy: e.target.value}));
-        dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: e.target.value}));
+        //dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: e.target.value}));
     }
 
     return <div className={"sort-dropdown user-panel-item"}>

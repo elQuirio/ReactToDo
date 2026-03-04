@@ -28,10 +28,10 @@ export function StatusBar({ searchString }) {
 
     function handleSortTodos() {
         if (currentDirection=="asc") {
-            dispatch(sortByTodos({sortDirection: 'desc', sortBy: currentSortBy}));
+            //dispatch(sortByTodos({sortDirection: 'desc', sortBy: currentSortBy}));
             dispatch(updatePreferences({sortDirection: "desc"}));
         } else if (currentDirection== "desc") {
-            dispatch(sortByTodos({sortDirection: 'asc', sortBy:currentSortBy}));
+            //dispatch(sortByTodos({sortDirection: 'asc', sortBy:currentSortBy}));
             dispatch(updatePreferences({sortDirection: "asc"}));
         } 
     }
