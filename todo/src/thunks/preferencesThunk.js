@@ -37,7 +37,6 @@ export const updatePreferences = createAsyncThunk(
             if (!resp.ok) {
                 return rejectWithValue(data.message || "Server error saving preferences!")
             }
-            console.log(data.data.preferences);
             dispatch(resetPreferences(data.data.preferences));
             dispatch(resetTodos(data.data.todos));
 

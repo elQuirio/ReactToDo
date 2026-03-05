@@ -1,22 +1,15 @@
 import fs, { readFileSync } from 'fs';
 import path from "path";
 
-//simulating db with json file
+
 export const db = path.resolve("../src/assets/todos.json");
 export const preferences = path.resolve("../src/assets/preferences.json");
 export const users = path.resolve("../src/assets/users.json")
 
 export const readTodos = () => {
-    try {
-        const data = fs.readFileSync(db, "utf-8");
-        if (!data) {
-            return [];
-        }
-        const userData = JSON.parse(data);
-        return userData ? userData : [];
-    } catch (err) {
-        return [];
-    }
+    const data = fs.readFileSync(db, "utf-8");
+    const userData = JSON.parse(data);
+    return userData ? userData : [];
 };
 
 export const writeTodo = (todo) => {
@@ -141,7 +134,7 @@ export function readPreferences() {
     return JSON.parse(pref);
 };
 
-// capire dove spostare questo
+
 export function getDefaultPreferences(userId) {
     if (!userId) throw new Error('User id is missing');
     return {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true, viewMode: 'all' }

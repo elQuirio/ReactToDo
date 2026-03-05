@@ -1,14 +1,12 @@
 import { GripVertical, CalendarPlus, CalendarCog, ArrowDownAz, ChevronsRight } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSortBy, selectSortDirection } from '../selectors/preferencesSelector';
+import { selectSortBy } from '../selectors/preferencesSelector';
 import { updatePreferences } from "../thunks/preferencesThunk";
-import { sortByTodos } from "../thunks/todoThunks";
 
 export function SortMethodButton () {
     const dispatch = useDispatch();
     const currentSortBy = useSelector(selectSortBy);
-    const currentSortDirection = useSelector(selectSortDirection);
     const METHODS = [ {key: 'manual', icon: GripVertical, title: 'Sorted manually'},
                       {key: 'createdAt', icon: CalendarPlus, title: 'Sorted by creation date'},
                       {key: 'updatedAt', icon: CalendarCog, title: 'Sorted by update date'},
@@ -31,7 +29,6 @@ export function SortMethodButton () {
         setPendingKey(key);
         setIsExpanded(false);
         dispatch(updatePreferences({sortBy: key}));
-        //dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: key}));
     }
 
     useEffect(() => {
