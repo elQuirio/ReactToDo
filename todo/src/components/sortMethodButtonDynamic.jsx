@@ -3,7 +3,6 @@ import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSortBy, selectSortDirection } from '../selectors/preferencesSelector';
 import { updatePreferences } from "../thunks/preferencesThunk";
-import { sortByTodos } from "../thunks/todoThunks";
 
 export function SortMethodButtonDynamic () {
     const dispatch = useDispatch();
@@ -55,7 +54,6 @@ export function SortMethodButtonDynamic () {
             requestAnimationFrame(() => {
                 setVisualKey(pendingKey);
                 dispatch(updatePreferences({sortBy: pendingKey}));
-                //dispatch(sortByTodos({sortDirection: currentSortDirection, sortBy: pendingKey}));
                 setPendingKey(null);
                 requestAnimationFrame(() => setActiveFade(false));
             })

@@ -65,7 +65,7 @@ export const logoutUser = createAsyncThunk('auth/logout',
                 credentials: 'include',
             });
             const data = await resp.json()
-            if (!resp.ok) { //modificare anche negli altri dopo aver adattato i messaggi nelle rotte
+            if (!resp.ok) {
                 return rejectWithValue(data.message || 'Logout failed!');
             }
             return data;

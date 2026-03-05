@@ -67,7 +67,7 @@ export default function AddTodoInputbox() {
             return 'Write something...';
         }
     }
-    //<input className="addTodo" type="text" value={text} onChange={handleOnChangeInputbox} onKeyDown={handleKeyDown} placeholder={handlePlaceholder()}/>
+    
 
     return (<div className="control-bar">
                 <div className="add-todo-wrapper">

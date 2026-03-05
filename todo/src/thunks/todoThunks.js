@@ -1,4 +1,4 @@
-import { createAsyncThunk, isRejectedWithValue } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addTodo, resetTodos, updateTodo } from '../slices/todoSlicer';
 
 export const fetchTodos = createAsyncThunk(
@@ -60,7 +60,7 @@ export const insertTodo = createAsyncThunk(
         }
 });
 
-// capire se si puo accorpare completed e all e gestione errori
+
 export const clearTodos = createAsyncThunk(
     "todos/clearTodos",
     async ( _ , { dispatch, rejectWithValue }) => {
@@ -100,7 +100,7 @@ export const clearCompletedTodos = createAsyncThunk(
     }
 });
 
-// capire se possibile accorpare
+
 export const markAllAsCompletedTodos = createAsyncThunk(
     'todos/markAllAsCompleted',
     async ( _ , { dispatch, rejectWithValue }) => {

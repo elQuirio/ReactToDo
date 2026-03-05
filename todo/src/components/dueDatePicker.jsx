@@ -64,7 +64,7 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
             });
         };
 
-        window.addEventListener("keydown", onKeyDownCapture, true); // capture
+        window.addEventListener("keydown", onKeyDownCapture, true);
         return () => window.removeEventListener("keydown", onKeyDownCapture, true);
     }, [isDatePickerOpen]);
 

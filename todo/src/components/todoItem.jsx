@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { dragAndDropReorderTodos } from "../thunks/todoThunks";
 import { updatePreferences } from "../thunks/preferencesThunk";
@@ -20,7 +19,6 @@ export function TodoItem({todoData}) {
         todoItem: { doubleClick }
     } = useTodoItem({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position });
 
-    //const todoData = useMemo(() => ({id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position}), [id, status, text, createdAt, updatedAt, toBeCompletedAt, isExpanded, position]);
 
     function handleOnDragStart(e, id) {
         if (status !== 'completed') {
@@ -48,7 +46,7 @@ export function TodoItem({todoData}) {
             e.preventDefault();
             const fromId = e.dataTransfer.getData('text/plain');
             const toId = id;
-            if (!fromId || fromId === toId) return; // ignora drop su se stesso
+            if (!fromId || fromId === toId) return;
             
             dispatch(dragAndDropReorderTodos({fromId, toId}));
             dispatch(updatePreferences({sortBy: "manual"}));

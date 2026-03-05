@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 let initialState = {
-    //id: true/false
     expandedTodo: {},
     searchBtnActive: false,
     searchString: ""

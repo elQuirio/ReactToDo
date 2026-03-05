@@ -1,8 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
-import { sortByTodos } from '../thunks/todoThunks';
 import { updatePreferences } from '../thunks/preferencesThunk';
-import { selectSortDirection, selectSortBy, selectViewMode } from '../selectors/preferencesSelector';
+import { selectSortDirection, selectViewMode } from '../selectors/preferencesSelector';
 import { selectSearchBtnToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { SortMethodSwitch } from '../components/sortMethodSwitch';
@@ -13,7 +12,6 @@ export function StatusBar({ searchString }) {
     const completedTodos = useSelector(selectCompletedTodos);
     const overdueTodos = useSelector(selectOverdueTodos);
     const currentDirection = useSelector(selectSortDirection);
-    const currentSortBy = useSelector(selectSortBy);
     const viewMode = useSelector(selectViewMode);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
 
@@ -28,10 +26,8 @@ export function StatusBar({ searchString }) {
 
     function handleSortTodos() {
         if (currentDirection=="asc") {
-            //dispatch(sortByTodos({sortDirection: 'desc', sortBy: currentSortBy}));
             dispatch(updatePreferences({sortDirection: "desc"}));
         } else if (currentDirection== "desc") {
-            //dispatch(sortByTodos({sortDirection: 'asc', sortBy:currentSortBy}));
             dispatch(updatePreferences({sortDirection: "asc"}));
         } 
     }
@@ -45,7 +41,6 @@ export function StatusBar({ searchString }) {
     }
 
     function handleToggleSearch() {
-        //condizione che resetta il search string
         dispatch(updateSearchString({text: searchString}));
         dispatch(searchBtnToggle());
     }

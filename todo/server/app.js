@@ -118,7 +118,7 @@ app.use('/api/preferences', requireAuth);
 
 // GET
 app.get("/api/todos", (req, res) => {
-  const userId = req.user.userId; // posso fare una funzione getter
+  const userId = req.user.userId;
   const userTodos = getTodosByUserId(userId);
   return res.status(200).send({data: userTodos});
 });
@@ -229,7 +229,6 @@ app.patch("/api/todos/:id", (req, res) => {
 
 ///////////////////////////////////////// PREFERENCES ///////////////////////////////////////////
 
-// aggiungere try/catch
 app.patch('/api/preferences', (req, res) => {
   const userId = req.user.userId;
   try {

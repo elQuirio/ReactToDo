@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
-import { CircleChevronUp, CircleChevronDown, ListChevronsUpDown, ListChevronsDownUp } from 'lucide-react';
+import { ListChevronsUpDown, ListChevronsDownUp } from 'lucide-react';
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 
 export function DropDownButton() {
