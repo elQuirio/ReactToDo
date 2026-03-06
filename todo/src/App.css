@@ -455,11 +455,26 @@ body.light .quick-actions-button:hover {
   background: var(--bt-active);
 }
 
+.quick-actions-button.active.chat-button {
+  /*background: #220ad6;*/
+  background: var(--bt-active);
+}
+
+
 body.light .quick-actions-button.active.search-button {
   background: #cc0300;
 }
 
+body.light .quick-actions-button.active.chat-button {
+  background: #cc0300;
+}
+
 .quick-actions-button.active.search-button:hover {
+  color: var(--std-white);
+  transform: translateY(-1px);
+}
+
+.quick-actions-button.active.chat-button:hover {
   color: var(--std-white);
   transform: translateY(-1px);
 }

@@ -1,11 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
+import { collapseAll, searchBtnToggle, chatButtonToggle, updateSearchString } from "../slices/uiTodoSlicer";
 import { updatePreferences } from '../thunks/preferencesThunk';
 import { selectSortDirection, selectViewMode } from '../selectors/preferencesSelector';
-import { selectSearchBtnToggled } from '../selectors/uiSelectors';
+import { selectSearchBtnToggled, selectChatButtonToggled } from '../selectors/uiSelectors';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { SortMethodSwitch } from '../components/sortMethodSwitch';
-import { Search, Minimize2, ArrowUpNarrowWide, ArrowDownNarrowWide } from "lucide-react";
+import { Search, Minimize2, ArrowUpNarrowWide, ArrowDownNarrowWide, BotMessageSquare } from "lucide-react";
 
 export function StatusBar({ searchString }) {
     const activeTodos = useSelector(selectActiveTodos);
@@ -14,6 +14,7 @@ export function StatusBar({ searchString }) {
     const currentDirection = useSelector(selectSortDirection);
     const viewMode = useSelector(selectViewMode);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
+    const chatButtonActive = useSelector(selectChatButtonToggled);
 
     let sortComponent = '';
 
@@ -45,16 +46,20 @@ export function StatusBar({ searchString }) {
         dispatch(searchBtnToggle());
     }
 
+    function handleToggleChat() {
+        dispatch(chatButtonToggle());
+    }
+
     if (currentDirection === "desc") {
         sortComponent = <ArrowDownNarrowWide className='sort-icon' size={18}/>
     } else {
         sortComponent = <ArrowUpNarrowWide className='sort-icon' size={18}/>
     }
 
-
     return <div className="status-bar-mini">
             <span className='quick-actions-container'>
                 <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch} title='Search mode' aria-label='Search mode'><Search className='search-icon' size={18}/></button>
+                <button className={`chat-button quick-actions-button ${chatButtonActive?"active":""}`} onClick={handleToggleChat} title='Chat assistant' aria-label='Chat assistant'><BotMessageSquare className='chat-icon' size={18}/></button>
                 <button className='sort-button quick-actions-button' onClick={handleSortTodos} title='Sort direction' aria-label='Sort direction'>{sortComponent}</button>
                 <button className='collapse-button quick-actions-button' onClick={handleCollapseAll} title='Collapse all todos' aria-label='Collapse all todos' ><Minimize2 className='collapse-icon' size={18}/></button>
                 <SortMethodSwitch />
