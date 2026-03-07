@@ -1,0 +1,22 @@
+[
+  {
+    "email": "abc@hit.it",
+    "password": "$2b$10$jzZlsbVDrN4CEzZSOJkfWehZNNbRM7w7kcsAyFcEYBO3YC4CuCTCS",
+    "userId": "8fd7e954-a463-4b76-8a8d-73904c41680c"
+  },
+  {
+    "email": "abc@hot.it",
+    "password": "$2b$10$infBX9kl/66zrZXxntiq.eLt9rQhMoabk72EZsSt72T4MZWX9oOVC",
+    "userId": "a358cbc8-e69e-4585-8a7d-7f48251f8907"
+  },
+  {
+    "email": "aaa@hot.it",
+    "password": "$2b$10$QGhYh2B.BrPwqNIRCEATTuRTG.j6ZDRTHiMIxYUws7IE5HmCN3OqO",
+    "userId": "575e7627-768a-4753-abdc-802653afcc49"
+  },
+  {
+    "email": "aaa@aa.it",
+    "password": "$2b$10$.zlwKz8c6mfpkyiQ/w9tcue9TtPp95LpaKWVym6y0aK8Lak9mGatG",
+    "userId": "eab89cd3-84ec-4c57-bd5e-d032e0cd2585"
+  }
+]
