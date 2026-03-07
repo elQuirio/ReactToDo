@@ -1,7 +1,6 @@
 import '../App.css';
 import AddTodoInputbox from '../components/addTodoInputbox';
 import TodoList from '../components/todoList';
-import ChatMessageList from '../components/chatMessageList';
 import { useEffect, useState } from "react";
 import { selectIsLogged } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
@@ -9,14 +8,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { LoginForm }  from '../components/loginForm';
 import { checkLogin } from '../thunks/authThunks';
 import UserMenu from '../components/userMenu';
-import { selectChatButtonToggled } from '../selectors/uiSelectors';
 
 function App() {
   let body = '';
   const [showLoader, setShowLoader] = useState(true);
   const isLogged = useSelector(selectIsLogged);
   const isLightMode = useSelector(selectIsLightMode);
-  const chatButtonActive = useSelector(selectChatButtonToggled);
 
   const dispatch = useDispatch();
 
@@ -58,13 +55,12 @@ function App() {
                       <div className='bootstrap-spinner'></div>
                     </div>)
   } else if (isLogged) {
-    let content = chatButtonActive ? <ChatMessageList /> : <TodoList />
     return body = (<div className="main-container">
               <main className='todo-content'>
                 <div className='todo-scroll'>
                   <div className='todo-content-inner'>
                     <section className="active" >
-                      {content}
+                      <TodoList />
                     </section>
                   </div>
                 </div>
@@ -80,6 +76,8 @@ function App() {
                   </div>)
 
   }
-};
+
+  return body;
+}
 
 export default App

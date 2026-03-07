@@ -3,14 +3,12 @@ import todoReducer from '../slices/todoSlicer';
 import uiReducer from '../slices/uiTodoSlicer';
 import preferencesReducer from '../slices/preferencesSlicer';
 import authReducer from '../slices/authSlice';
-import chatReducer from '../slices/chatSlicer';
 
 export const store = configureStore({
     reducer: {
         todos: todoReducer,
         uiTodo: uiReducer,
         preferences: preferencesReducer,
-        auth: authReducer,
-        chat: chatReducer
+        auth: authReducer
     }
 });

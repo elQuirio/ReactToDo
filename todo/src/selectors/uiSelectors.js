@@ -8,10 +8,6 @@ export function selectSearchBtnToggled(state) {
     return state.uiTodo.searchBtnActive;
 }
 
-export function selectChatButtonToggled(state) {
-    return state.uiTodo.chatButtonActive;
-}
-
 export function selectSearchString(state) {
     return state.uiTodo.searchString;
 }
