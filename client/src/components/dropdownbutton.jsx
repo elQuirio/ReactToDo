@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearCompletedTodos, markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
+import { markAllAsActiveTodos, markAllAsCompletedTodos, clearTodos } from '../thunks/todoThunks';
 import { fetchPreferences } from '../thunks/preferencesThunk';
 import { ListChevronsUpDown, ListChevronsDownUp } from 'lucide-react';
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
@@ -20,7 +20,7 @@ export function DropDownButton() {
     }
 
     function handleClearCompleted() {
-        dispatch(clearCompletedTodos());
+        dispatch(clearTodos('completed'));
         setIsToggled(false);
     }
 
@@ -40,7 +40,7 @@ export function DropDownButton() {
     }
 
     function handleClearAllTodos() {
-        dispatch(clearTodos());
+        dispatch(clearTodos('all'));
         setIsToggled(false);
     };
 

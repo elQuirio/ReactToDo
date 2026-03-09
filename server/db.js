@@ -2,9 +2,9 @@ import fs, { readFileSync } from 'fs';
 import path from "path";
 
 
-export const db = path.resolve("../src/assets/todos.json");
-export const preferences = path.resolve("../src/assets/preferences.json");
-export const users = path.resolve("../src/assets/users.json")
+export const db = path.resolve("./src/assets/todos.json");
+export const preferences = path.resolve("./src/assets/preferences.json");
+export const users = path.resolve("./src/assets/users.json")
 
 export const readTodos = () => {
     const data = fs.readFileSync(db, "utf-8");

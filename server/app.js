@@ -196,7 +196,7 @@ app.post("/api/todos", (req, res) => {
 // DELETE
 app.delete("/api/todos", (req, res) => {
   const userId = req.user.userId;
-  const status = req.query.status;
+  const { status } = req.query;
   if (!status) {
     return res.status(400).json({message: "Missing status"})
   }

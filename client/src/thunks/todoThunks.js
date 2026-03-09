@@ -63,15 +63,16 @@ export const insertTodo = createAsyncThunk(
 
 export const clearTodos = createAsyncThunk(
     "todos/clearTodos",
-    async ( _ , { dispatch, rejectWithValue }) => {
+    async ( status , { dispatch, rejectWithValue }) => {
         try {
-            const res = await fetch('http://localhost:3000/api/todos',
+            const res = await fetch(`http://localhost:3000/api/todos?status=${status}`,
                 {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" },
-                    credentials: 'include',
+                    credentials: 'include'
                 });
             const data = await res.json();
+            console.log(data);
             if (!res.ok) {
                 return rejectWithValue(data.message || "Server error clearing todos!");
             }
@@ -79,25 +80,6 @@ export const clearTodos = createAsyncThunk(
         } catch (e) {
             return rejectWithValue(e.message || "Error clearing todos!");
         }
-});
-
-export const clearCompletedTodos = createAsyncThunk(
-    "todos/clearCompletedTodos",
-    async ( _ , { dispatch, rejectWithValue }) => {
-        try {
-        const res = await fetch('http://localhost:3000/api/todos?status=completed', {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-            credentials: 'include',
-        });
-        const data = await res.json();
-        if(!res.ok) {
-            return rejectWithValue(data.message || "Server error clearing completed todos!");
-        }
-        dispatch(resetTodos(data.data));
-    } catch (e) {
-        return rejectWithValue(e.message || "Error clearing completed todos!");
-    }
 });
 
 

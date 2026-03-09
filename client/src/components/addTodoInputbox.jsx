@@ -37,7 +37,7 @@ export default function AddTodoInputbox() {
     };
 
     function handleClearAllTodos() {
-        dispatch(clearTodos());
+        dispatch(clearTodos('all'));
         setText('');
     };
 
