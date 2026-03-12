@@ -204,7 +204,7 @@ export function getUserByEmail(email) {
 };
 
 export function saveNewUser(userInfo) {
-    if (!userInfo.email || !userInfo.userId) throw new Error('Missing user email/id');
+    if (!userInfo || !userInfo.email || !userInfo.userId) throw new Error('Missing user email/id');
 
     const usersDb = readUsers();
     usersDb.push(userInfo);
