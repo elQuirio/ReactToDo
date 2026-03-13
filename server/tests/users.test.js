@@ -1,5 +1,6 @@
-import { users, getUserByEmail, readUsers, saveNewUser, getUserByUserId } from '../db.js';
+import { users, preferences, getDefaultPreferences, getUserByEmail, readUsers, saveNewUser, getUserByUserId, registerNewUser, patchPreferencesByUserId } from '../db.js';
 import fs, { readFileSync } from 'fs';
+import crypto from "crypto";
 
 
 describe('getUserByEmail', () => {
@@ -7,11 +8,30 @@ describe('getUserByEmail', () => {
         expect(() => getUserByEmail()).toThrow('Missing email');
     });
 
-    test('to return null if user not found', () => {
-        const user = getUserByEmail('fake@email.com');
+    test('returns null if user not found', () => {
+        const user = getUserByEmail(`${crypto.randomUUID()}@email.com`);
         expect(user).toBeNull();
+    });
+
+    test('returns the correct user when it exists', () => {
+        const originalUsers = fs.readFileSync(users, "utf-8");
+        try {
+            const newUser = {
+                userId: crypto.randomUUID(),
+                email: `${crypto.randomUUID()}@email.com`,
+                password: 'fakepassword'
+            }
+            saveNewUser(newUser);
+            const testUser = getUserByEmail(newUser.email);
+            expect(testUser).toEqual(newUser);
+        } 
+        finally{
+            fs.writeFileSync(users, originalUsers);
+        }
     })
 });
+
+
 
 describe('readUsers', () => {
     test('returns an array', () => {
@@ -19,6 +39,7 @@ describe('readUsers', () => {
         expect(users).toBeInstanceOf(Array);
     })
 });
+
 
 describe('saveNewUser', () => {
     test('throws an error when no user data is provided', () => {
@@ -33,12 +54,12 @@ describe('saveNewUser', () => {
         const originalUsers = fs.readFileSync(users, "utf-8");
         try {
             const newUser = {
-                userId:'fakeUserId',
-                email: 'fake@email.com',
+                userId: crypto.randomUUID(),
+                email: `${crypto.randomUUID()}@email.com`,
                 password: 'fakepassword'
             }
-            const savedUser = saveNewUser(newUser);
-            expect(savedUser).toEqual(newUser);
+            const testUser = saveNewUser(newUser);
+            expect(testUser).toEqual(newUser);
         } 
         finally{
             fs.writeFileSync(users, originalUsers);
@@ -46,3 +67,88 @@ describe('saveNewUser', () => {
     });
 
 });
+
+
+describe ('getUserByUserId', () => {
+    test('throws an error when userId is missing', () => {
+        expect(() => getUserByUserId()).toThrow('User id is missing');
+    });
+
+    test('returns the correct user when it exists', () => {
+        const originalUsers = fs.readFileSync(users, "utf-8");
+        try {
+            const testUser = {
+                userId: crypto.randomUUID(),
+                email: `${crypto.randomUUID()}@email.com`,
+                password: 'fakepassword'
+            }
+            saveNewUser(testUser);
+            const newUser = getUserByUserId(testUser.userId);
+            expect(newUser).toEqual(testUser);
+        }
+        finally {
+            fs.writeFileSync(users, originalUsers);
+        }
+    })
+
+    test("return null when user does't exist", () => {
+        expect(getUserByUserId(crypto.randomUUID())).toBeNull();
+    })
+});
+
+
+describe('registerNewUser', () => {
+    test('throws an error when UserId is missing', () => {
+        const testUser = {
+                email: `${crypto.randomUUID()}@email.com`,
+                password: 'fakepassword'
+            }
+            expect(() => registerNewUser(testUser)).toThrow('User id is missing');
+    });
+
+    test('throws an error when saveNewUser fails', () => {
+        const testUser = {
+                userId: crypto.randomUUID(),
+                password: 'fakepassword'
+            }
+            expect(() => registerNewUser(testUser)).toThrow('Missing user email/id');  
+    });
+
+    test('returns the correct user when it is registered correctly', () => {
+        const originalUsers = fs.readFileSync(users, "utf-8");
+        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        try {
+            const testUser = {
+                userId: crypto.randomUUID(),
+                email: `${crypto.randomUUID()}@email.com`,
+                password: 'fakepassword'
+            }
+            const newUser = registerNewUser(testUser);
+            expect(newUser).toEqual(testUser);
+        }
+        finally {
+            fs.writeFileSync(users, originalUsers);
+            fs.writeFileSync(preferences, originalPreferences);
+        }
+    })
+});
+
+
+describe('patchPreferencesByUserId', () => {
+    test('throws an error when userId is missing', () => {
+        expect(() =>  patchPreferencesByUserId()).toThrow('User id is missing')
+    });
+
+    test('save and returns correct preference object', () => {
+        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        try {
+            const userId = crypto.randomUUID();
+            const defaultPreferences = getDefaultPreferences(userId);
+            const testPreferences = patchPreferencesByUserId(userId, defaultPreferences);
+            expect(testPreferences).toEqual(defaultPreferences);
+        }
+        finally {
+            fs.writeFileSync(preferences, originalPreferences);
+        }
+    });
+})
