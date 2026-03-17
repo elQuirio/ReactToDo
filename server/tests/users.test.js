@@ -1,4 +1,4 @@
-import { users, preferences, getDefaultPreferences, getUserByEmail, readUsers, saveNewUser, getUserByUserId, registerNewUser, patchPreferencesByUserId } from '../db.js';
+import { users, preferences, getDefaultPreferences, getUserByEmail, readUsers, saveNewUser, getUserByUserId, registerNewUser, patchPreferencesByUserId, getPreferencesByUserID } from '../db.js';
 import fs, { readFileSync } from 'fs';
 import crypto from "crypto";
 
@@ -152,3 +152,31 @@ describe('patchPreferencesByUserId', () => {
         }
     });
 })
+
+
+describe('getPreferencesByUserID', () => {
+    test('throws an error when User Id is missing', () => {
+        expect(() => getPreferencesByUserID()).toThrow('User id is missing');
+    });
+
+    test('returns default preferences when no user is found', () => {
+        const userId = crypto.randomUUID();
+        const defaultPreferences =  getDefaultPreferences(userId);
+        const testPreferences = getPreferencesByUserID(userId);
+        expect(testPreferences).toEqual(defaultPreferences);
+    });
+
+    test('returns correct preferences when user is found', () => {
+        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        try {
+            const userId = crypto.randomUUID();
+            const partialPrefs = {sortBy: 'testSorting', sortDirection: 'testDirection', viewMode: 'testViewMode'};
+            patchPreferencesByUserId(userId, partialPrefs);
+            const testPreferences = getPreferencesByUserID(userId);
+            expect(testPreferences).toEqual({...getDefaultPreferences(userId), ...partialPrefs});
+        }
+        finally {
+            fs.writeFileSync(preferences, originalPreferences);
+        }
+    })
+});
