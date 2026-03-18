@@ -1,4 +1,4 @@
-import { users, preferences, getDefaultPreferences, getUserByEmail, readUsers, saveNewUser, getUserByUserId, registerNewUser, patchPreferencesByUserId, getPreferencesByUserID } from '../db.js';
+import { usersPath, preferencesPath, getDefaultPreferences, getUserByEmail, readUsers, saveNewUser, getUserByUserId, registerNewUser, patchPreferencesByUserId, getPreferencesByUserID } from '../db.js';
 import fs, { readFileSync } from 'fs';
 import crypto from "crypto";
 
@@ -14,7 +14,7 @@ describe('getUserByEmail', () => {
     });
 
     test('returns the correct user when it exists', () => {
-        const originalUsers = fs.readFileSync(users, "utf-8");
+        const originalUsers = fs.readFileSync(usersPath, "utf-8");
         try {
             const newUser = {
                 userId: crypto.randomUUID(),
@@ -26,7 +26,7 @@ describe('getUserByEmail', () => {
             expect(testUser).toEqual(newUser);
         } 
         finally{
-            fs.writeFileSync(users, originalUsers);
+            fs.writeFileSync(usersPath, originalUsers);
         }
     })
 });
@@ -51,7 +51,7 @@ describe('saveNewUser', () => {
     });
 
     test('user is saved correctly', () => {
-        const originalUsers = fs.readFileSync(users, "utf-8");
+        const originalUsers = fs.readFileSync(usersPath, "utf-8");
         try {
             const newUser = {
                 userId: crypto.randomUUID(),
@@ -62,7 +62,7 @@ describe('saveNewUser', () => {
             expect(testUser).toEqual(newUser);
         } 
         finally{
-            fs.writeFileSync(users, originalUsers);
+            fs.writeFileSync(usersPath, originalUsers);
         }
     });
 
@@ -75,7 +75,7 @@ describe ('getUserByUserId', () => {
     });
 
     test('returns the correct user when it exists', () => {
-        const originalUsers = fs.readFileSync(users, "utf-8");
+        const originalUsers = fs.readFileSync(usersPath, "utf-8");
         try {
             const testUser = {
                 userId: crypto.randomUUID(),
@@ -87,7 +87,7 @@ describe ('getUserByUserId', () => {
             expect(newUser).toEqual(testUser);
         }
         finally {
-            fs.writeFileSync(users, originalUsers);
+            fs.writeFileSync(usersPath, originalUsers);
         }
     })
 
@@ -115,8 +115,8 @@ describe('registerNewUser', () => {
     });
 
     test('returns the correct user when it is registered correctly', () => {
-        const originalUsers = fs.readFileSync(users, "utf-8");
-        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        const originalUsers = fs.readFileSync(usersPath, "utf-8");
+        const originalPreferences = fs.readFileSync(preferencesPath, "utf-8");
         try {
             const testUser = {
                 userId: crypto.randomUUID(),
@@ -127,56 +127,8 @@ describe('registerNewUser', () => {
             expect(newUser).toEqual(testUser);
         }
         finally {
-            fs.writeFileSync(users, originalUsers);
-            fs.writeFileSync(preferences, originalPreferences);
-        }
-    })
-});
-
-
-describe('patchPreferencesByUserId', () => {
-    test('throws an error when userId is missing', () => {
-        expect(() =>  patchPreferencesByUserId()).toThrow('User id is missing')
-    });
-
-    test('save and returns correct preference object', () => {
-        const originalPreferences = fs.readFileSync(preferences, "utf-8");
-        try {
-            const userId = crypto.randomUUID();
-            const defaultPreferences = getDefaultPreferences(userId);
-            const testPreferences = patchPreferencesByUserId(userId, defaultPreferences);
-            expect(testPreferences).toEqual(defaultPreferences);
-        }
-        finally {
-            fs.writeFileSync(preferences, originalPreferences);
-        }
-    });
-})
-
-
-describe('getPreferencesByUserID', () => {
-    test('throws an error when User Id is missing', () => {
-        expect(() => getPreferencesByUserID()).toThrow('User id is missing');
-    });
-
-    test('returns default preferences when no user is found', () => {
-        const userId = crypto.randomUUID();
-        const defaultPreferences =  getDefaultPreferences(userId);
-        const testPreferences = getPreferencesByUserID(userId);
-        expect(testPreferences).toEqual(defaultPreferences);
-    });
-
-    test('returns correct preferences when user is found', () => {
-        const originalPreferences = fs.readFileSync(preferences, "utf-8");
-        try {
-            const userId = crypto.randomUUID();
-            const partialPrefs = {sortBy: 'testSorting', sortDirection: 'testDirection', viewMode: 'testViewMode'};
-            patchPreferencesByUserId(userId, partialPrefs);
-            const testPreferences = getPreferencesByUserID(userId);
-            expect(testPreferences).toEqual({...getDefaultPreferences(userId), ...partialPrefs});
-        }
-        finally {
-            fs.writeFileSync(preferences, originalPreferences);
+            fs.writeFileSync(usersPath, originalUsers);
+            fs.writeFileSync(preferencesPath, originalPreferences);
         }
     })
 });

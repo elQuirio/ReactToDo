@@ -1,4 +1,4 @@
-import { preferences, getDefaultPreferences, patchPreferencesByUserId, getPreferencesByUserID } from '../db.js';
+import { preferencesPath, getDefaultPreferences, patchPreferencesByUserId, getPreferencesByUserID } from '../db.js';
 import fs, { readFileSync } from 'fs';
 import crypto from "crypto";
 
@@ -9,7 +9,7 @@ describe('patchPreferencesByUserId', () => {
     });
 
     test('save and returns correct preference object', () => {
-        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        const originalPreferences = fs.readFileSync(preferencesPath, "utf-8");
         try {
             const userId = crypto.randomUUID();
             const defaultPreferences = getDefaultPreferences(userId);
@@ -17,10 +17,10 @@ describe('patchPreferencesByUserId', () => {
             expect(testPreferences).toEqual(defaultPreferences);
         }
         finally {
-            fs.writeFileSync(preferences, originalPreferences);
+            fs.writeFileSync(preferencesPath, originalPreferences);
         }
     });
-})
+});
 
 
 describe('getPreferencesByUserID', () => {
@@ -36,7 +36,7 @@ describe('getPreferencesByUserID', () => {
     });
 
     test('returns correct preferences when user is found', () => {
-        const originalPreferences = fs.readFileSync(preferences, "utf-8");
+        const originalPreferences = fs.readFileSync(preferencesPath, "utf-8");
         try {
             const userId = crypto.randomUUID();
             const partialPrefs = {sortBy: 'testSorting', sortDirection: 'testDirection', viewMode: 'testViewMode'};
@@ -45,7 +45,7 @@ describe('getPreferencesByUserID', () => {
             expect(testPreferences).toEqual({...getDefaultPreferences(userId), ...partialPrefs});
         }
         finally {
-            fs.writeFileSync(preferences, originalPreferences);
+            fs.writeFileSync(preferencesPath, originalPreferences);
         }
     })
 });

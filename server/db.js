@@ -2,12 +2,12 @@ import fs, { readFileSync } from 'fs';
 import path from "path";
 
 
-export const db = path.resolve("./src/assets/todos.json");
-export const preferences = path.resolve("./src/assets/preferences.json");
-export const users = path.resolve("./src/assets/users.json")
+export const todosPath = path.resolve("./src/assets/todos.json");
+export const preferencesPath = path.resolve("./src/assets/preferences.json");
+export const usersPath = path.resolve("./src/assets/users.json");
 
 export const readTodos = () => {
-    const data = fs.readFileSync(db, "utf-8");
+    const data = fs.readFileSync(todosPath, "utf-8");
     const userData = JSON.parse(data);
     return userData ? userData : [];
 };
@@ -20,12 +20,12 @@ export const writeTodo = (todo) => {
     if (index !== -1) {
         //update if exists
         dbTodos[index] = todo;
-        fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
+        fs.writeFileSync(todosPath, JSON.stringify(dbTodos, null, 2));
         return todo;
     } else {
         //else append
         dbTodos.push(todo);
-        fs.writeFileSync(db, JSON.stringify(dbTodos, null, 2));
+        fs.writeFileSync(todosPath, JSON.stringify(dbTodos, null, 2));
         return todo;
     }
 };
@@ -41,7 +41,7 @@ export const writeGetSortedTodos = (todo, userId) => {
 
 
 export const writeAllTodos = (todos) => {
-    fs.writeFileSync(db, JSON.stringify(todos, null, 2));
+    fs.writeFileSync(todosPath, JSON.stringify(todos, null, 2));
     return todos;
 };
 
@@ -53,12 +53,12 @@ export const clearTodos = (userId, status="all") => {
         const dbTodos = readTodos();
         const userTodos = dbTodos.filter((t) => t.status !== "completed" && t.userId === userId);
         const otherTodos = dbTodos.filter((t) => t.userId !== userId);
-        fs.writeFileSync(db, JSON.stringify([...userTodos, ...otherTodos], null, 2));
+        fs.writeFileSync(todosPath, JSON.stringify([...userTodos, ...otherTodos], null, 2));
         return userTodos;
     } else if (status === "all") {
         const dbTodos = readTodos();
         const newDbTodos = dbTodos.filter((t) => t.userId !== userId);
-        fs.writeFileSync(db, JSON.stringify(newDbTodos, null, 2));
+        fs.writeFileSync(todosPath, JSON.stringify(newDbTodos, null, 2));
         return [];
     }
 };
@@ -130,7 +130,7 @@ export function sortTodos(sortDirection, sortBy, userId) {
 };
 
 export function readPreferences() {
-    const pref = fs.readFileSync(preferences, "utf-8");
+    const pref = fs.readFileSync(preferencesPath, "utf-8");
     return JSON.parse(pref);
 };
 
@@ -165,12 +165,12 @@ export function patchPreferencesByUserId(userId, prefObj) {
     if (prefIndex !== -1) {
         const newPref = {...getDefaultPreferences(userId), ...allPref[prefIndex], ...prefObj, userId };
         allPref[prefIndex] = newPref;
-        fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
+        fs.writeFileSync(preferencesPath, JSON.stringify(allPref, null, 2));
         return newPref;
     } else {
         const defaultPreferences = {...getDefaultPreferences(userId), ...prefObj, userId};
         allPref.push(defaultPreferences);
-        fs.writeFileSync(preferences, JSON.stringify(allPref, null, 2));
+        fs.writeFileSync(preferencesPath, JSON.stringify(allPref, null, 2));
         return defaultPreferences;
     }
 };
@@ -192,7 +192,7 @@ export function registerNewUser(userInfo) {
 /////////////////////////////////// AUTH / REGISTRATION //////////////////////////
 
 export function readUsers() {
-    const data = fs.readFileSync(users, "utf-8");
+    const data = fs.readFileSync(usersPath, "utf-8");
     return data.trim() ? JSON.parse(data) : [];
 };
 
@@ -208,7 +208,7 @@ export function saveNewUser(userInfo) {
 
     const usersDb = readUsers();
     usersDb.push(userInfo);
-    fs.writeFileSync(users, JSON.stringify(usersDb, null, 2));
+    fs.writeFileSync(usersPath, JSON.stringify(usersDb, null, 2));
     return userInfo;
 };
 
