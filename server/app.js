@@ -1,15 +1,21 @@
 import express from 'express';
 import cors from 'cors';
 import bcrypt from "bcrypt";
+import crypto from 'crypto';
 import cookieParser from "cookie-parser";
 import { clearCookies } from './utils/helpers.js';
 
-import { readTodos, writeTodo, clearTodos, getNewPosition, sortTodos, getMaxUserId, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, saveNewUser, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
+import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
+
+const allowedOrigins = [ 'http://localhost:5173', 'https://my-app.vercel.app' ]
+const PORT = process.env.PORT || 3000;
+const isProd = process.env.NODE_ENV === 'production';
+const sameSite = isProd ? 'none' : 'Lax';
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: 'http://localhost:5173', methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+app.use(cors({origin: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
@@ -39,7 +45,7 @@ app.post('/api/auth/register', async (req, res) => {
     const savedUser = registerNewUser({email, password: hashedPwd, userId: userId});
 
     if (savedUser) {
-      return res.cookie("userId", userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
+      return res.cookie("userId", userId, { httpOnly: true, sameSite: sameSite, secure: isProd, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
     } else {
       return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
     }
@@ -63,7 +69,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: "Lax", secure: false, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "User or password is wrong"});
+      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: sameSite, secure: isProd, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "User or password is wrong"});
     } else {
       return clearCookies(res).status(404).json({data:{isLogged: false}, message: "User or password is wrong"});
     }
@@ -251,7 +257,8 @@ app.get('/api/preferences', (req, res) => {
 });
 
 
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000");
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
