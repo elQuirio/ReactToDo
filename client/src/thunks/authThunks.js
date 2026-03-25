@@ -1,9 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { API_BASE_URL } from "../config/api";
 
 export const registerUser = createAsyncThunk('auth/registerUser', 
     async ( credentials, { rejectWithValue }) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/auth/register', {   
+            const resp = await fetch(`${API_BASE_URL}/api/auth/register`, {   
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: 'include',
@@ -22,7 +23,7 @@ export const registerUser = createAsyncThunk('auth/registerUser',
 export const loginUser = createAsyncThunk('auth/loginUser',
     async (credentials , { rejectWithValue }) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/auth/login', {
+            const resp = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: 'POST',
                 headers: { "Content-Type": "application/json" },
                 credentials: 'include',
@@ -42,7 +43,7 @@ export const loginUser = createAsyncThunk('auth/loginUser',
 export const checkLogin = createAsyncThunk('auth/checkAuth', 
     async ( _, { rejectWithValue } ) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/auth/checkAuth', {
+            const resp = await fetch(`${API_BASE_URL}/api/auth/checkAuth`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -60,7 +61,7 @@ export const checkLogin = createAsyncThunk('auth/checkAuth',
 export const logoutUser = createAsyncThunk('auth/logout', 
     async ( _ , { rejectWithValue }) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/auth/logout', {
+            const resp = await fetch(`${API_BASE_URL}/api/auth/logout`, {
                 method: 'POST',
                 credentials: 'include',
             });

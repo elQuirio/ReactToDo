@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPreferences } from '../slices/preferencesSlicer';
 import { resetTodos } from '../slices/todoSlicer';
+import { API_BASE_URL } from "../config/api";
 
 export const fetchPreferences = createAsyncThunk(
     'preferences/getUserPreferences', 
     async ( _ , { dispatch, rejectWithValue } ) => {
         try{
-            const resp = await fetch('http://localhost:3000/api/preferences', {
+            const resp = await fetch(`${API_BASE_URL}/api/preferences`, {
                 method: "GET",
                 credentials: "include"
             });
@@ -25,7 +26,7 @@ export const updatePreferences = createAsyncThunk(
     'preferences/updatePreferences', 
     async ( pref, { dispatch, rejectWithValue }) => {
         try {
-            const resp = await fetch('http://localhost:3000/api/preferences', {
+            const resp = await fetch(`${API_BASE_URL}/api/preferences`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
