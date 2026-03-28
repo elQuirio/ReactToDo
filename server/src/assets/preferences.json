@@ -1,23 +1,2 @@
 [
-  {
-    "userId": "eab89cd3-84ec-4c57-bd5e-d032e0cd2585",
-    "sortBy": "alpha",
-    "sortDirection": "asc",
-    "isLightMode": true,
-    "viewMode": "all"
-  },
-  {
-    "userId": "575e7627-768a-4753-abdc-802653afcc49",
-    "sortBy": "manual",
-    "sortDirection": "asc",
-    "isLightMode": true,
-    "viewMode": "all"
-  },
-  {
-    "userId": "8fd7e954-a463-4b76-8a8d-73904c41680c",
-    "sortBy": "createdAt",
-    "sortDirection": "asc",
-    "isLightMode": true,
-    "viewMode": "all"
-  }
 ]

@@ -3,7 +3,7 @@ import cors from 'cors';
 import bcrypt from "bcrypt";
 import crypto from 'crypto';
 import cookieParser from "cookie-parser";
-import { clearCookies } from './utils/helpers.js';
+//import { clearCookies } from './utils/helpers.js';
 
 import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
 
@@ -26,17 +26,17 @@ app.post('/api/auth/register', async (req, res) => {
   const {email, password, confirmPassword} = req.body;
   
   if (!email || !password || !confirmPassword) {
-    return clearCookies(res).status(400).json({data: {isLogged:false}, message: "Missing user, password or confirmPassword!"});
+    return res.status(400).json({data: {isLogged:false}, message: "Missing user, password or confirmPassword!"});
   }
   if (password !== confirmPassword) {
-    return clearCookies(res).status(400).json({data: {isLogged:false}, message: "Password does not matches confirmPassword!"});
+    return res.status(400).json({data: {isLogged:false}, message: "Password does not matches confirmPassword!"});
   }
 
   try {
     const userExists = getUserByEmail(email);
   
     if (userExists) {
-      return clearCookies(res).status(409).json({data: {isLogged:false}, message: "Email already registered!"});
+      return res.status(409).json({data: {isLogged:false}, message: "Email already registered!"});
     }
 
     const hashedPwd = await bcrypt.hash(password, 10);
@@ -45,14 +45,14 @@ app.post('/api/auth/register', async (req, res) => {
     const savedUser = registerNewUser({email, password: hashedPwd, userId: userId});
 
     if (savedUser) {
-      return res.cookie("userId", userId, { httpOnly: true, sameSite: sameSite, secure: isProd, maxAge: 365*24*60*60*1000 }).status(201).json({data: savedUser});
+      return res.status(201).json({data: {isLogged: true, token: savedUser.userId, email: savedUser.email, userId: savedUser.userId }});
     } else {
-      return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
+      return res.status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
     }
   }
   catch (err) {
     console.log(err);
-    return clearCookies(res).status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
+    return res.status(500).json({data: {isLogged:false}, message: "Internal error saving user!"});
   }
 });
 
@@ -61,58 +61,69 @@ app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return clearCookies(res).status(400).json({message: "User or password missing!"});
+    return res.status(400).json({message: "User or password missing!"});
   }
 
   try {
     const existingUser = getUserByEmail(email);
 
-    if (existingUser) {
-      const isMatch = await bcrypt.compare(password, existingUser.password);
-      return isMatch ? res.cookie("userId", existingUser.userId, { httpOnly: true, sameSite: sameSite, secure: isProd, maxAge: 365*24*60*60*1000 }).status(200).json({data: {isLogged: true, email: email}}) : clearCookies(res).status(401).json({data:{isLogged: false}, message: "User or password is wrong"});
+    if (existingUser && await bcrypt.compare(password, existingUser.password)) {
+      return res.status(200).json({data: {isLogged: true, token: existingUser.userId, userId: existingUser.userId, email: email}});
     } else {
-      return clearCookies(res).status(404).json({data:{isLogged: false}, message: "User or password is wrong"});
+      return res.status(401).json({data:{isLogged: false}, message: "User or password is wrong"});
     }
   } catch(err) {
     console.log(err);
-    return clearCookies(res).status(500).json({data:{isLogged:false}, message: "Internal server error!"});
+    return res.status(500).json({data:{isLogged:false}, message: "Internal server error!"});
   }
 });
 
 
 app.get('/api/auth/checkAuth', (req, res) => {
-  const userId = req.cookies.userId;
+  const authHeader = (req.headers.authorization);
   
-  if (!userId) {
-    return clearCookies(res).status(200).json({data: {isLogged: false}, message: "Missing user id!"});
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(200).json({data: {isLogged: false}, message: "Invalid or missing token!"});
   }
 
-  const userData = getUserByUserId(userId);
+  const token = (authHeader).split(' ')[1];
+
+  const userData = getUserByUserId(token);
 
   if(!userData) {
-    return clearCookies(res).status(200).json({data: { isLogged: false}, message: "User not found!"});
+    return res.status(200).json({data: { isLogged: false}, message: "User not found!"});
   }
 
-  return res.status(200).json({data: {isLogged: true, userId: userId, email: userData.email}});
+  return res.status(200).json({data: {isLogged: true, userId: userData.userId, email: userData.email}});
 });
 
 
 app.post('/api/auth/logout', (req,res) => {
-  return clearCookies(res).status(200).json({data:{isLogged:false}, message: 'User logged out'});
+  return res.status(200).json({data:{isLogged:false}, message: 'User logged out'});
 });
 
 
 /////////////////////////////////////// MIDDLEWARE ////////////////////////////////////////
 
 function requireAuth(req, res, next) {
-  const userId = req.cookies.userId;
-  if (!userId) {
-    return clearCookies(res).status(401).json({message: "User not authenticated!"});
+  
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({message: "User not authenticated!"});
   }
-  const user = getUserByUserId(userId);
+
+  const token = authHeader.split(' ')[1]
+  if (!token) {
+    return res.status(401).json({message: "User not authenticated!"});
+  }
+
+  const user = getUserByUserId(token);
+
   if (!user) {
-    return clearCookies(res).status(401).json({message: "User not authenticated!"});
+    return res.status(401).json({message: "User not authenticated!"});
   }
+
   req.user = user;
   next();
 };
