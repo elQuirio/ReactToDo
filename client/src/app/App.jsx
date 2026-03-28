@@ -6,7 +6,7 @@ import { selectIsLogged } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
 import { useSelector, useDispatch } from "react-redux";
 import { LoginForm }  from '../components/loginForm';
-import { checkLogin } from '../thunks/authThunks';
+import { checkAuth } from '../thunks/authThunks';
 import UserMenu from '../components/userMenu';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {dispatch(checkLogin())}, [dispatch]);
+  useEffect(() => {dispatch(checkAuth())}, [dispatch]);
   
   useEffect(() => {
     if (isLightMode === false) {
