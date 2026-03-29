@@ -54,7 +54,6 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
 
             if (!data.data?.isLogged) {
                 localStorage.removeItem('token');
-                return rejectWithValue(data.message|| 'Not authenticated!');
             }
             return data;
         } catch (e) {

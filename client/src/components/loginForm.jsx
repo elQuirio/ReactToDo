@@ -126,7 +126,7 @@ export function LoginForm() {
             addError('confirmPassword', !confirmPassword, 'Please confirm your password');
             addError('password', password.length<8, "A bit short... try at least 8 characters");
             addError('confirmPassword', !(password===confirmPassword), "Almost! The two passwords don't match");
-        } 
+        }
         
         return errors;
     };
