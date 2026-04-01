@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { API_BASE_URL } from "../config/api";
+import { headerGenerator } from '../utils/helpers';
 
 export const registerUser = createAsyncThunk('auth/registerUser', 
     async ( credentials, { rejectWithValue }) => {
@@ -45,15 +46,17 @@ export const loginUser = createAsyncThunk('auth/loginUser',
 export const checkAuth = createAsyncThunk('auth/checkAuth', 
     async ( _, { rejectWithValue } ) => {
         try {
-            const token = localStorage.getItem('token');
+            const header = headerGenerator(false);
+            console.log(header);
             const resp = await fetch(`${API_BASE_URL}/api/auth/checkAuth`, {
                 method: 'GET',
-                headers: token ? {Authorization: `Bearer ${token}`} : {},
+                headers: header,
             });
             const data = await resp.json();
 
             if (!data.data?.isLogged) {
                 localStorage.removeItem('token');
+                return data;
             }
             return data;
         } catch (e) {
@@ -66,10 +69,10 @@ export const logoutUser = createAsyncThunk('auth/logout',
     async ( _ , { rejectWithValue }) => {
         try {
             //placeholder backend call
-            const token = localStorage.getItem('token');
+            const header = headerGenerator(false);
             const resp = await fetch(`${API_BASE_URL}/api/auth/logout`, {
                 method: 'POST',
-                headers: token ? {Authorization: `Bearer ${token}`} : {}
+                headers: header
             });
             const data = await resp.json()
             if (!resp.ok) {

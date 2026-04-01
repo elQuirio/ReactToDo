@@ -3,7 +3,6 @@ import cors from 'cors';
 import bcrypt from "bcrypt";
 import crypto from 'crypto';
 import cookieParser from "cookie-parser";
-//import { clearCookies } from './utils/helpers.js';
 
 import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
 
@@ -108,7 +107,7 @@ app.post('/api/auth/logout', (req,res) => {
 function requireAuth(req, res, next) {
   
   const authHeader = req.headers.authorization;
-  
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({message: "User not authenticated!"});
   }

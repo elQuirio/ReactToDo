@@ -1,16 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { resetPreferences } from '../slices/preferencesSlicer';
 import { resetTodos } from '../slices/todoSlicer';
+import { headerGenerator } from '../utils/helpers';
 import { API_BASE_URL } from "../config/api";
 
 export const fetchPreferences = createAsyncThunk(
     'preferences/getUserPreferences', 
     async ( _ , { dispatch, rejectWithValue } ) => {
         try{
-            const token = localStorage.getItem('token');
+            const header = headerGenerator(false);
             const resp = await fetch(`${API_BASE_URL}/api/preferences`, {
                 method: "GET",
-                headers: token ? {Authorization: `Bearer ${token}`} : {},
+                headers: header
             });
             const data = await resp.json();
 
@@ -34,13 +35,10 @@ export const updatePreferences = createAsyncThunk(
     'preferences/updatePreferences', 
     async ( pref, { dispatch, rejectWithValue }) => {
         try {
-            const token = localStorage.getItem('token');
+            const header = headerGenerator(true);
             const resp = await fetch(`${API_BASE_URL}/api/preferences`, {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                     ... (token && { Authorization: `Bearer ${token}` })
-                 },
+                headers: header,
                 body: JSON.stringify(pref)
             });
 
