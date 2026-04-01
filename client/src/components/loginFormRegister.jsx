@@ -14,9 +14,9 @@ export function LoginFormRegister({fieldErrors, handleEmailOnChange, handlePassw
                     <LoginFormInput fieldError={fieldErrors.confirmPassword} inputType={'password'} placeholder={'Confirm password...'} onChange={handleConfirmPasswordChange} extraClass={fieldErrors.password ? 'password-error login-form-input' : 'login-form-input'} />
                 </div>
 
-                <button type='submit' className="login-form-button">
+                <button type='submit' className="login-form-button main-button">
                     {isAuthLoading ? <><div>Registering...</div><div className='button-spinner'></div></> : <div>Confirm</div>}
                 </button>
-                <button type="button" onClick={() => setRegistrationMode(false)} className="login-form-button">Login</button>
+                <button type="button" onClick={() => setRegistrationMode(false)} className="login-form-button secondary-button">Login</button>
             </div>
 };

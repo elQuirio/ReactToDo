@@ -12,9 +12,9 @@ export function LoginFormLogin({fieldErrors, handleEmailOnChange, handlePassword
                     <LoginFormInput fieldError={fieldErrors.password} inputType={'password'} placeholder={'Password...'} onChange={handlePasswordOnChange} />
                 </div>
 
-                <button type="submit" className="login-form-button" disabled={isAuthLoading}>
+                <button type="submit" className="login-form-button main-button" disabled={isAuthLoading}>
                     {isAuthLoading ? <><div>Logging in...</div><div className="button-spinner"></div></> : <div>Login</div>}
                 </button>
-                <button type='button' onClick={() => {setRegistrationMode(true)}} className="login-form-button">Register</button>
+                <button type='button' onClick={() => {setRegistrationMode(true)}} className="login-form-button secondary-button">Register</button>
             </div>)
 };
