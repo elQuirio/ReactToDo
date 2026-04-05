@@ -143,7 +143,7 @@ h1 {
   transition: border-color 0.3s ease-in-out, background 0.3s ease-in-out;
 }
 
-.addTodo {
+.auto-grow-text-area {
   flex: 1;
   min-width: 0px;
   min-height: 48px;
@@ -156,7 +156,7 @@ h1 {
   resize: none;
 }
 
-.addTodo:focus::placeholder {
+.auto-grow-text-area:focus::placeholder {
   opacity: 0;
 }
 
@@ -709,15 +709,18 @@ body.light .quick-actions-button:hover {
   transform: translateY(-1px);
 }
 
-.quick-actions-button.active.search-button {
+.quick-actions-button.active.search-button,
+.quick-actions-button.active.chat-button {
   background: var(--bt-active);
 }
 
-body.light .quick-actions-button.active.search-button {
+body.light .quick-actions-button.active.search-button,
+body.light .quick-actions-button.active.chat-button {
   background: #cc0300;
 }
 
-.quick-actions-button.active.search-button:hover {
+.quick-actions-button.active.search-button:hover,
+.quick-actions-button.active.chat-button:hover {
   color: var(--std-white);
   transform: translateY(-1px);
 }
@@ -1171,7 +1174,7 @@ color:#1a1a1a;
   .status-chip-container {
     display: none;
   }
-  .addTodo {
+  .auto-grow-text-area {
     font-size: 18px;
   }
 }
@@ -1180,7 +1183,7 @@ color:#1a1a1a;
 .quick-actions-button {
   margin: 0 3px;
 }
-.addTodo {
+.auto-grow-text-area {
   line-height: 20px;
 }
 }
