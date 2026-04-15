@@ -5,6 +5,7 @@ import path from "path";
 export const todosPath = path.resolve("./src/assets/todos.json");
 export const preferencesPath = path.resolve("./src/assets/preferences.json");
 export const usersPath = path.resolve("./src/assets/users.json");
+export const messagesPath = path.resolve("./src/assets/messages.json");
 
 export const readTodos = () => {
     const data = fs.readFileSync(todosPath, "utf-8");
@@ -217,6 +218,61 @@ export function getUserByUserId(userId){
 
     const userData = readUsers();
     return userData.find((u) => u.userId === userId) || null;
+};
+
+
+/////////////////// MESSAGES ////////////////////////
+
+export function readMessages() {
+    const data = fs.readFileSync(messagesPath, "utf-8");
+    return data.trim() ? JSON.parse(data) : [];
+};
+
+export function getMessagesByUserId(userId) {
+    if (!userId) throw new Error('User id is missing!');
+
+    const allMessages = readMessages();
+    return allMessages.filter(m => m.userId === userId);
+};
+
+export function checkConversationId(userId, conversationId) {
+    if (!userId) throw new Error('User id is missing!');
+    if (!conversationId) throw new Error('Conversation id is missing!');
+
+    const allMessages = readMessages();
+    return !allMessages.some(c => (c.conversationId === conversationId && c.userId !== userId));
+};
+
+export function getNextMessagePosition(userId, conversationId) {
+    if (!userId) throw new Error('User id is missing!');
+    if (!conversationId) throw new Error('Conversation id is missing!');
+    if (checkConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
+
+    const messages = getMessagesByUserId(userId).filter((c) => c.conversationId === conversationId);
+    const maxPos = messages.reduce((acc, m) => Math.max(acc, m.position ?? 0), 0);
+
+    return maxPos +1;
+};
+
+export function appendQuestionAnswer(userId, conversationId, userText, assistantText) {
+    if (!userId) throw new Error('User id is missing!');
+    if (!conversationId) throw new Error('Conversation id is missing!');
+    if (!userText) throw new Error('User message is missing!');
+    if (!assistantText) throw new Error('Assistant message is missing!');
+    if (checkConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
+
+    const userMessagePosition = getNextMessagePosition(userId, conversationId);
+    const assistantMessagePosition = userMessagePosition +1;
+
+    const userMessage = {userId: userId, role: 'user', messageId: crypto.randomUUID(), conversationId: conversationId, position: userMessagePosition, messageText: userText };
+    const assistantMessage = {userId: userId, role: 'assistant', messageId: crypto.randomUUID(), conversationId: conversationId, position: assistantMessagePosition, messageText: assistantText };
+
+    const allMessages = readMessages();
+
+    allMessages.push(userMessage, assistantMessage);
+    fs.writeFileSync(messagesPath, JSON.stringify(allMessages, null, 2));
+
+    return [ userMessage, assistantMessage ];
 };
 
 

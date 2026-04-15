@@ -1,10 +1,13 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bcrypt from "bcrypt";
 import crypto from 'crypto';
 import cookieParser from "cookie-parser";
+dotenv.config({ path: './dev.env'});
 
-import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId } from './db.js';
+import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId, getMessagesByUserId, appendQuestionAnswer } from './db.js';
+import { askLLM } from './services/llmService.js';
 
 const allowedOrigins = [ 'http://localhost:5173', 'https://my-app.vercel.app' ]
 const PORT = process.env.PORT || 3000;
@@ -18,6 +21,37 @@ app.use(cors({origin: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', '
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
+
+
+/////////////////////////////////////// MIDDLEWARE ////////////////////////////////////////
+
+function requireAuth(req, res, next) {
+  
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({message: "User not authenticated!"});
+  }
+
+  const token = authHeader.split(' ')[1]
+  if (!token) {
+    return res.status(401).json({message: "User not authenticated!"});
+  }
+
+  const user = getUserByUserId(token);
+
+  if (!user) {
+    return res.status(401).json({message: "User not authenticated!"});
+  }
+
+  req.user = user;
+  next();
+};
+
+app.use('/api/todos', requireAuth);
+app.use('/api/preferences', requireAuth);
+app.use('/api/chat', requireAuth);
+
 
 ///////////////////////////////////////// LOGIN / REGISTRATION ///////////////////////////////////////////
 
@@ -101,34 +135,6 @@ app.post('/api/auth/logout', (req,res) => {
   return res.status(200).json({data:{isLogged:false}, message: 'User logged out'});
 });
 
-
-/////////////////////////////////////// MIDDLEWARE ////////////////////////////////////////
-
-function requireAuth(req, res, next) {
-  
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({message: "User not authenticated!"});
-  }
-
-  const token = authHeader.split(' ')[1]
-  if (!token) {
-    return res.status(401).json({message: "User not authenticated!"});
-  }
-
-  const user = getUserByUserId(token);
-
-  if (!user) {
-    return res.status(401).json({message: "User not authenticated!"});
-  }
-
-  req.user = user;
-  next();
-};
-
-app.use('/api/todos', requireAuth);
-app.use('/api/preferences', requireAuth);
 
 ///////////////////////////////////////// TODOS ///////////////////////////////////////////
 
@@ -266,6 +272,46 @@ app.get('/api/preferences', (req, res) => {
   }
 });
 
+
+///////////////////////////////////////// MESSAGES ///////////////////////////////////////////
+
+app.get('/api/chat/messages', (req, res) => {
+  const userId = req.user.userId;
+  try {
+    const messages = getMessagesByUserId(userId);
+    return res.status(200).json({data: messages});
+  } catch (err) {
+    return res.status(500).json({message: 'Error fetching messages'});
+  }
+});
+
+app.post('/api/chat/messages', async (req, res) => {
+  const userId = req.user.userId;
+  const messagePayload = req.body.message;
+  try {
+    if (!messagePayload) {
+      return res.status(400).json({ message:'Message payload is required'});
+    }
+    const { conversationId, userText } = messagePayload;
+    if (!userText || !conversationId) {
+      return res.status(400).json({message: 'Incomplete request'});
+    }
+    // ask llm
+    const assistantText = await askLLM(userText);
+    if (!assistantText) {
+      return res.status(502).json({message: 'No message returned from LLM'});
+    }
+    // append response to db
+    const messageExchange = appendQuestionAnswer(userId, conversationId, userText, assistantText);
+
+    // return new message
+    return res.status(201).json({message: 'Message created successfully', data: {messages: messageExchange}});
+
+  } catch(err) {
+    console.log(err);
+    return res.status(500).json({message: 'Error generating response'});
+  }
+});
 
 
 app.listen(PORT, () => {

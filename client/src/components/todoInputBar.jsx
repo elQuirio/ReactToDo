@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuid } from 'uuid';
 import  { DropDownButton } from './dropdownbutton';
-import { StatusBar } from './statusBar';
+import { TodoStatusBar } from './todoStatusBar';
 import { AutoGrowTextArea } from './autoGrowTextArea';
 import { updateSearchString } from "../slices/uiTodoSlicer";
 import { fetchTodos, insertTodo } from '../thunks/todoThunks';
@@ -10,7 +10,7 @@ import { fetchPreferences } from "../thunks/preferencesThunk";
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 import { CircleArrowUp } from "lucide-react";
 
-export default function AddTodoInputbox() {
+export function TodoInputBar() {
     const dispatch = useDispatch();
     const searchButtonActive = useSelector(selectSearchBtnToggled);
     const [text, setText] = useState('');
@@ -60,6 +60,6 @@ export default function AddTodoInputbox() {
                         <DropDownButton />
                     </div>
                 </div>
-                <StatusBar searchString={text}/>
+                <TodoStatusBar searchString={text}/>
             </div>)
 }
