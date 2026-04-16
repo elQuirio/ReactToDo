@@ -15,7 +15,7 @@ import { addTempMessages } from "../slices/messageSlice";
 
 export function ChatInputBar() {
     const dispatch = useDispatch();
-    const searchButtonActive = useSelector(selectSearchBtnToggled);
+    //const searchButtonActive = useSelector(selectSearchBtnToggled);
     const [text, setText] = useState('');
 
     useEffect(() => { dispatch(fetchMessages()) }, [dispatch]);
@@ -24,25 +24,26 @@ export function ChatInputBar() {
     function handleSendMessageClick () {
         const userText = text.trim();
         if (userText) {
-            const now = Date.now();
             const tmpUserMsgId = uuid();
             const tmpAssistantMsgId = uuid();
-
             const tempUserMessage = {
                 role: "user",
                 messageId: tmpUserMsgId,
                 conversationId: "1",
-                messageText: "Ciao! Sono qui, pronto ad aiutarti. Come posso assisterti oggi?"
+                messageText: userText,
+                isTemp: true
             };
             const tempAssistantMessage = {
                 role: "assistant",
                 messageId: tmpAssistantMsgId,
                 conversationId: "1",
-                messageText: "ok"
+                messageText: "...",
+                isTemp: true,
+                isLoading: true
             };
             //dispatch(insertTodo({id: uuid(), text: text, status: 'active', createdAt: now, updatedAt: now, toBeCompletedAt: null }))
             dispatch(addTempMessages([tempUserMessage, tempAssistantMessage]));
-            //dispatch(askChat({ userText: userText, conversationId: '1' }));
+            dispatch(askChat({ userText: userText, conversationId: '1', tmpUserMsgId, tmpAssistantMsgId }));
             setText('');
         }
     };

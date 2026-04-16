@@ -5,13 +5,13 @@ import { addMessage, resetMessages } from '../slices/messageSlice';
 
 export const askChat = createAsyncThunk(
     "chat/askChat", 
-    async ( message , { dispatch, rejectWithValue }) => {
+    async ( { userText, conversationId, tmpUserMsgId, tmpAssistantMsgId } , { dispatch, rejectWithValue }) => {
         try {
             const header = headerGenerator(true);
             const res = await fetch(`${API_BASE_URL}/api/chat/messages`, {
                 method: 'POST',
                 headers: header,
-                body: JSON.stringify({ message: message })
+                body: JSON.stringify({ message: { conversationId, userText } })
             });
             
             const data = await res.json();
@@ -26,14 +26,11 @@ export const askChat = createAsyncThunk(
             //dispatch(resetMessages(data.data));
             const [ userMessage, assistantMessage ] = data.data.messages;
 
-            //dispatch(addMessage(userMessage));
-            //dispatch(addMessage(assistantMessage));
-
-            return {}
-
+            return { tmpUserMsgId, tmpAssistantMsgId, messages: data.data.messages };
 
         } catch (e) {
-            return rejectWithValue(e.message || "Error asking chat!");
+            const errorMessage = e.message || "Error asking chat!";
+            return rejectWithValue({errorMessage, tmpAssistantMsgId});
         }
     }
 );
@@ -61,6 +58,6 @@ export const fetchMessages = createAsyncThunk(
             dispatch(resetMessages(data.data));
 
         } catch (err) {
-
+            return rejectWithValue(err.message || "Error fetching messages!");
         }
 });
