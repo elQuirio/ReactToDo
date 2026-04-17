@@ -19,8 +19,8 @@ logs/
 
 .vscode/
 
-.env
-.env.*.local
+*.env
+*.env.*.local
 
 .eslintcache
 .prettiercache
