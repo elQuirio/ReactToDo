@@ -47,7 +47,6 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
     async ( _, { rejectWithValue } ) => {
         try {
             const header = headerGenerator(false);
-            console.log(header);
             const resp = await fetch(`${API_BASE_URL}/api/auth/checkAuth`, {
                 method: 'GET',
                 headers: header,

@@ -235,7 +235,17 @@ export function getMessagesByUserId(userId) {
     return allMessages.filter(m => m.userId === userId);
 };
 
-export function checkConversationId(userId, conversationId) {
+export function getMessagesByConversationId(userId, conversationId) {
+    if (!userId) throw new Error('User id is missing!');
+    if (!conversationId) throw new Error('Conversation id is missing!');
+    if (!isValidConversationId(userId, conversationId)) throw new Error('Conversation id is wrong!');
+
+    const allMessages = readMessages();
+    return allMessages.filter(m => m.userId === userId && m.conversationId === conversationId);
+};
+
+
+export function isValidConversationId(userId, conversationId) {
     if (!userId) throw new Error('User id is missing!');
     if (!conversationId) throw new Error('Conversation id is missing!');
 
@@ -246,7 +256,7 @@ export function checkConversationId(userId, conversationId) {
 export function getNextMessagePosition(userId, conversationId) {
     if (!userId) throw new Error('User id is missing!');
     if (!conversationId) throw new Error('Conversation id is missing!');
-    if (checkConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
+    if (isValidConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
 
     const messages = getMessagesByUserId(userId).filter((c) => c.conversationId === conversationId);
     const maxPos = messages.reduce((acc, m) => Math.max(acc, m.position ?? 0), 0);
@@ -259,7 +269,7 @@ export function appendQuestionAnswer(userId, conversationId, userText, assistant
     if (!conversationId) throw new Error('Conversation id is missing!');
     if (!userText) throw new Error('User message is missing!');
     if (!assistantText) throw new Error('Assistant message is missing!');
-    if (checkConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
+    if (isValidConversationId(userId, conversationId) === false) throw new Error('Conversation id does not belong to user!');
 
     const userMessagePosition = getNextMessagePosition(userId, conversationId);
     const assistantMessagePosition = userMessagePosition +1;

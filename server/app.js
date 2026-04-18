@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: './dev.env'});
 
 import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId, getMessagesByUserId, appendQuestionAnswer } from './db.js';
+import { buildInstructionPrompt, buildLLMInput } from './services/promptBuilder.js';
 import { askLLM } from './services/llmService.js';
 
 const allowedOrigins = [ 'http://localhost:5173', 'https://my-app.vercel.app' ]
@@ -296,8 +297,12 @@ app.post('/api/chat/messages', async (req, res) => {
     if (!userText || !conversationId) {
       return res.status(400).json({message: 'Incomplete request'});
     }
+    // context builder
+    const instructions = buildInstructionPrompt();
+    const llmInput = buildLLMInput(userId, conversationId, userText);
+
     // ask llm
-    const assistantText = await askLLM(userText);
+    const assistantText = await askLLM(instructions, llmInput);
     if (!assistantText) {
       return res.status(502).json({message: 'No message returned from LLM'});
     }
