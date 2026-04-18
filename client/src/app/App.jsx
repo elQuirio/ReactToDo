@@ -1,13 +1,14 @@
 import '../App.css';
-import AddTodoInputbox from '../components/addTodoInputbox';
-import TodoList from '../components/todoList';
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { ViewWrapper } from '../components/viewWrapper';
+import UserMenu from '../components/userMenu';
+import { LoginForm }  from '../components/loginForm';
+import { InputBarWrapper } from '../components/inputBarWrapper';
 import { selectIsLogged } from '../selectors/authSelector';
 import { selectIsLightMode } from '../selectors/preferencesSelector';
-import { useSelector, useDispatch } from "react-redux";
-import { LoginForm }  from '../components/loginForm';
 import { checkAuth } from '../thunks/authThunks';
-import UserMenu from '../components/userMenu';
+
 
 function App() {
   let body = '';
@@ -60,12 +61,12 @@ function App() {
                 <div className='todo-scroll'>
                   <div className='todo-content-inner'>
                     <section className="active" >
-                      <TodoList />
+                      <ViewWrapper />
                     </section>
                   </div>
                 </div>
                   <div className='controls'>
-                    <AddTodoInputbox />
+                    <InputBarWrapper />
                   </div>
               </main>
               <UserMenu/>

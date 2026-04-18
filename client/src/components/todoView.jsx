@@ -6,7 +6,7 @@ import { TodoItem } from "./todoItem";
 import { selectSearchBtnToggled } from "../selectors/uiSelectors";
 import { useRef, useEffect } from "react";
 
-export default function TodoList() {
+export function TodoView() {
     const activeTodoSelector = useSelector( selectActiveTodos );
     const expandedTodos = useSelector( selectUiTodos );
     const searchButtonActive = useSelector(selectSearchBtnToggled);
