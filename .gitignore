@@ -19,7 +19,7 @@ logs/
 
 .vscode/
 
-.env
+*.env
 .env.*.local
 
 .eslintcache
