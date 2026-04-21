@@ -7,6 +7,7 @@ export const preferencesPath = path.resolve("./src/assets/preferences.json");
 export const usersPath = path.resolve("./src/assets/users.json");
 export const messagesPath = path.resolve("./src/assets/messages.json");
 
+/////////////////// TODOS ////////////////////////
 export const readTodos = () => {
     const data = fs.readFileSync(todosPath, "utf-8");
     const userData = JSON.parse(data);
@@ -130,6 +131,9 @@ export function sortTodos(sortDirection, sortBy, userId) {
     return [...userTodos];
 };
 
+
+/////////////////// PREFERENCES ////////////////////////
+
 export function readPreferences() {
     const pref = fs.readFileSync(preferencesPath, "utf-8");
     return JSON.parse(pref);
@@ -176,6 +180,9 @@ export function patchPreferencesByUserId(userId, prefObj) {
     }
 };
 
+
+/////////////////////////////////// AUTH / REGISTRATION //////////////////////////
+
 export function registerNewUser(userInfo) {
     const { userId } = userInfo;
     if (!userId) throw new Error('User id is missing');
@@ -189,8 +196,6 @@ export function registerNewUser(userInfo) {
     return saved;
 };
 
-
-/////////////////////////////////// AUTH / REGISTRATION //////////////////////////
 
 export function readUsers() {
     const data = fs.readFileSync(usersPath, "utf-8");
