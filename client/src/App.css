@@ -1110,6 +1110,50 @@ color:#1a1a1a;
 }
 
 
+/************************ Chat View ************************/
+
+.chat-view {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-item {
+  max-width: 65%;
+  padding: 10px 16px;
+  border: 1px solid rgb(var(--bg-color5) / 0.2);
+  border-radius: 8px;
+  background: rgb(var(--bg-color5) / 0.05);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 6px rgb(var(--box-shadow) / 0.05);
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.chat-item-user {
+  background-color: var(--bg-color4);
+  color: var(--btn-text)
+}
+
+.chat-item-row {
+  display: flex;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.chat-item-row-user {
+  width: 100%;
+  justify-content: flex-end;
+  text-align: left;
+}
+
+.chat-item-row-assistant {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+
+
 /************************ Spinner ************************/
 .loader-container {
   height: 100vh;
