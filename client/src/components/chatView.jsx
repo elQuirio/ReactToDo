@@ -23,7 +23,7 @@ export function ChatView() {
     }, [messageList.length]);
 
     return (
-        <div>
+        <div className="chat-view">
             {messageList.map(m => 
             <MessageItem key={m.messageId} messageData={{...m}} /> )}
         </div>

@@ -9,9 +9,11 @@ import { TodoHeader } from "./todoHeader";
 export function MessageItem({messageData}) {
 
     //const { userId, role, messageId, conversationId, position, messageText } = messageData;
-    const { messageText } = messageData;
+    const { messageText, role } = messageData;
 
-    return  <div className={`todo-item`} onDoubleClick={() => {}} >
-                {messageText}
+    return  <div className={`chat-item-row ${role === 'user' ? 'chat-item-row-user' : 'chat-item-row-assistant'}`}>
+                <div className={`chat-item ${role === 'user' ? 'chat-item-user' : 'chat-item-assistant'}`} onDoubleClick={() => {}} >
+                    {messageText}
+                </div>
             </div>
 };
