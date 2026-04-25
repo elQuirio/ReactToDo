@@ -1129,6 +1129,14 @@ color:#1a1a1a;
   white-space: pre-wrap;
 }
 
+.chat-item-measure {
+  position: absolute;
+  top: 0;
+  left: -9999px;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .chat-item-user {
   background-color: var(--bg-color4);
   color: var(--btn-text)
