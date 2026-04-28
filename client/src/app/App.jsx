@@ -57,15 +57,15 @@ function App() {
                     </div>)
   } else if (isLogged) {
     return body = (<div className="main-container">
-              <main className='todo-content'>
-                <div className='todo-scroll'>
-                  <div className='todo-content-inner'>
+              <main className='main-content'>
+                <div className='main-view-scroll'>
+                  <div className='main-view-scroll-content'>
                     <section className="active" >
                       <ViewWrapper />
                     </section>
                   </div>
                 </div>
-                  <div className='controls'>
+                  <div className='main-view-controls'>
                     <InputBarWrapper />
                   </div>
               </main>

@@ -7,8 +7,9 @@ import cookieParser from "cookie-parser";
 dotenv.config({ path: './dev.env'});
 
 import { clearTodos, getNewPosition, sortTodos, getPreferencesByUserID, patchPreferencesByUserId, manualResortTodos, getUserByEmail, registerNewUser, getUserByUserId, writeGetSortedTodos, getTodosByUserId, markAllTodosStatusByUserId, getMessagesByUserId, appendQuestionAnswer } from './db.js';
-import { buildInstructionPrompt, buildLLMInput } from './services/promptBuilder.js';
-import { askLLM } from './services/llmService.js';
+//import { buildInstructionPrompt, buildLLMInput } from './services/promptBuilder.js';
+//import { askLLM } from './services/llmClient.js';
+import { generateChatReply } from './services/chatService.js';
 
 const allowedOrigins = [ 'http://localhost:5173', 'https://my-app.vercel.app' ]
 const PORT = process.env.PORT || 3000;
@@ -294,22 +295,12 @@ app.post('/api/chat/messages', async (req, res) => {
       return res.status(400).json({ message:'Message payload is required'});
     }
     const { conversationId, userText } = messagePayload;
-    if (!userText || !conversationId) {
+    if (typeof userText !== 'string' || !userText.trim() || !conversationId) {
       return res.status(400).json({message: 'Incomplete request'});
     }
-    // context builder
-    const instructions = buildInstructionPrompt();
-    const llmInput = buildLLMInput(userId, conversationId, userText);
 
-    // ask llm
-    const assistantText = await askLLM(instructions, llmInput);
-    if (!assistantText) {
-      return res.status(502).json({message: 'No message returned from LLM'});
-    }
-    // append response to db
-    const messageExchange = appendQuestionAnswer(userId, conversationId, userText, assistantText);
+    const messageExchange = await generateChatReply(userId, conversationId, userText);
 
-    // return new message
     return res.status(201).json({message: 'Message created successfully', data: {messages: messageExchange}});
 
   } catch(err) {

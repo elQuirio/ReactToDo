@@ -1,22 +1,16 @@
-import { getNextMessagePosition, getMessagesByConversationId, getTodosByUserId } from "../db.js";
 
-export function buildLLMInput(userId, conversationId, userMessage) {
-    if (!userId) throw new Error('User id is required!');
-    if (!conversationId) throw new Error('Conversation id is required!');
+export function buildLLMInput(todoContext, oldMessages, userMessage) {
+    if (!todoContext) throw new Error('Todo context is missing!');
+    if (!oldMessages) throw new Error('Old messages are required!');
     if (userMessage.trim() === '') throw new Error('User message is required');
 
-    const todoContext = buildTodoContext(userId);
-    const oldMessages = getMessagesByConversationId(userId, conversationId);
     const newMessageInput = { role: 'user', content: [{type: 'input_text', text: userMessage}],};
     
     if (oldMessages.length === 0) {
         return [todoContext, newMessageInput];
     }
 
-    const msgPosToFetch = getNextMessagePosition(userId, conversationId) - 11;
-    const rawMessages = oldMessages.filter((m) => m.position >= msgPosToFetch).sort((a,b) => a.position - b.position);
-
-    const messageHistInput = rawMessages.map((m) => {
+    const messageHistInput = oldMessages.map((m) => {
             return { 
                 role: m.role, 
                 content: [{ type: m.role === 'assistant' ? 'output_text' : 'input_text' , text: m.messageText, }]
@@ -26,8 +20,9 @@ export function buildLLMInput(userId, conversationId, userMessage) {
     return [todoContext, ...messageHistInput, newMessageInput];
 }
 
-export function buildTodoContext(userId) {
-    const userTodos = getTodosByUserId(userId);
+export function buildTodoContext(userTodos) {
+    if (!userTodos) throw new Error('User todos are missing!');
+
     const todoResp = {
         role: 'user', 
         content: [{ 
