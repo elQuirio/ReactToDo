@@ -807,6 +807,41 @@ body.light .quick-actions-button.active.chat-button {
   transform: translateX(100%);
 }
 
+/************************ typingDots ************************/
+
+.typing-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.typing-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #777;
+  animation: dotsJump 0.8s infinite ease-in-out;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.typing-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes dotsJump {
+  0%, 80%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px) scale(1.25);
+    opacity: 1;
+  }
+}
 
 /************************ todoDetails ************************/
 
@@ -1146,6 +1181,7 @@ color:#1a1a1a;
   display: flex;
   width: 100%;
   margin: 8px 0;
+  min-height: 45px;
 }
 
 .chat-item-row-user {

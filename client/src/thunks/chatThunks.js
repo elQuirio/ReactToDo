@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API_BASE_URL } from '../config/api';
 import { headerGenerator } from '../utils/helpers';
-import { addMessage, resetMessages } from '../slices/messageSlice';
+import { resetMessages } from '../slices/messageSlice';
 
 export const askChat = createAsyncThunk(
     "chat/askChat", 
-    async ( { userText, conversationId, tmpUserMsgId, tmpAssistantMsgId } , { dispatch, rejectWithValue }) => {
+    async ( { userText, conversationId, tmpUserMsgId } , { dispatch, rejectWithValue }) => {
         try {
             const header = headerGenerator(true);
             const res = await fetch(`${API_BASE_URL}/api/chat/messages`, {
@@ -23,14 +23,12 @@ export const askChat = createAsyncThunk(
             if (!res.ok) {
                 return rejectWithValue(data.message || "Error asking chat!");
             }
-            //dispatch(resetMessages(data.data));
-            const [ userMessage, assistantMessage ] = data.data.messages;
 
-            return { tmpUserMsgId, tmpAssistantMsgId, messages: data.data.messages };
+            return { tmpUserMsgId, messages: data.data.messages };
 
         } catch (e) {
             const errorMessage = e.message || "Error asking chat!";
-            return rejectWithValue({errorMessage, tmpAssistantMsgId});
+            return rejectWithValue({errorMessage});
         }
     }
 );

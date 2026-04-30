@@ -29,15 +29,15 @@ const messageSlice = createSlice({
         builder.addCase(askChat.fulfilled, (state, action) => {
             state.asking = false;
             state.error = null;
-            const { tmpUserMsgId, tmpAssistantMsgId, messages } = action.payload;
-            state.messages = state.messages.filter(m => (m.messageId !== tmpUserMsgId) && (m.messageId !== tmpAssistantMsgId));
+            const { tmpUserMsgId, messages } = action.payload;
+            state.messages = state.messages.filter(m => (m.messageId !== tmpUserMsgId));
             state.messages.push( ...messages )
         }),
         builder.addCase(askChat.rejected, (state, action) => {
             state.asking = false;
-            state.error = 'Error'
-            const { tmpAssistantMsgId } = action.payload;
-            state.messages = state.messages.filter(m => m.messageId !== tmpAssistantMsgId);
+            state.error = 'Error';
+            //const { tmpAssistantMsgId } = action.payload;
+            //state.messages = state.messages.filter(m => m.messageId !== tmpAssistantMsgId);
         })
     }
 });
