@@ -1,12 +1,13 @@
 import { useSelector } from "react-redux";
-import { selectMessages } from "../selectors/messageSelectors";
-
+import { selectMessages, selectIsAsking } from "../selectors/messageSelectors";
+import { TypingDots } from './typingDots';
 import { MessageItem } from "./messageItem";
 
 import { useRef, useEffect } from "react";
 
 export function ChatView() {
     const messageList = useSelector(selectMessages);
+    const isAsking = useSelector(selectIsAsking);
 
     const prevCountRef = useRef(messageList.length);
 
@@ -26,6 +27,7 @@ export function ChatView() {
         <div className="chat-view">
             {messageList.map(m => 
             <MessageItem key={m.messageId} messageData={{...m}} /> )}
+            {isAsking && <TypingDots/>}
         </div>
     )
 };
