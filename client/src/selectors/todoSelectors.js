@@ -35,7 +35,7 @@ export const selectSearchedVisibleTodo = createSelector([selectSearchedTodo, sel
     if (viewMode === 'active') {
         const t = todos.filter((t) => t.status === 'active');
         return t;
-    } else {;
+    } else {
         return todos;
     }
 });

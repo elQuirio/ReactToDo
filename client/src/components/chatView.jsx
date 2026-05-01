@@ -15,7 +15,7 @@ export function ChatView() {
         const prev = prevCountRef.current;
         const next = messageList.length;
 
-        if (next > prev) {
+        if (next >= prev) {
             window.scrollTo({top: document.documentElement.scrollHeight, behavior: "auto"});
         }
 

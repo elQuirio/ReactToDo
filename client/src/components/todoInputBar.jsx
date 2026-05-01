@@ -38,7 +38,7 @@ export function TodoInputBar() {
     };
 
     function handleKeyDown(e) {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
             handleAddTodoClick();
             e.preventDefault();
         } else if (e.key === "Escape") {

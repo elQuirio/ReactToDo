@@ -31,7 +31,7 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
         const onGlobalPointerDown = (e) => {
             const pop = popoverRef.current;
             if (!pop) return;
-            if (popoverRef.current.contains(e.target)) return;
+            if (pop.contains(e.target)) return;
             handleCancel();
         };
 
@@ -68,9 +68,8 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
         return () => window.removeEventListener("keydown", onKeyDownCapture, true);
     }, [isDatePickerOpen]);
 
-    let pickerContent = '';
 
-    pickerContent = createPortal(<div className="date-picker-overlay"  onDoubleClick={(e) => e.stopPropagation()}>
+    return createPortal(<div className="date-picker-overlay"  onDoubleClick={(e) => e.stopPropagation()}>
                         <div className="date-picker-popover" style={floatingStyles} onClick={(e) => e.stopPropagation()}  ref={(node) => {
                             refs.setFloating(node);
                             popoverRef.current = node;
@@ -87,7 +86,5 @@ export function DueDatePicker({anchorElement, datePicker, todoItemCommands }) {
                                 <button type="button" className="date-picker-button" onClick={handleCancel}>Cancel</button>
                             </div>
                         </div>
-                    </div>, document.body)
-
-    return  pickerContent;
+                    </div>, document.body);
 };
