@@ -36,8 +36,6 @@ const messageSlice = createSlice({
         builder.addCase(askChat.rejected, (state, action) => {
             state.asking = false;
             state.error = 'Error';
-            //const { tmpAssistantMsgId } = action.payload;
-            //state.messages = state.messages.filter(m => m.messageId !== tmpAssistantMsgId);
         })
     }
 });

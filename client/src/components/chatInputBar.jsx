@@ -32,12 +32,11 @@ export function ChatInputBar() {
     };
 
     function handleOnChangeInputbox(e) {
-        //const value = e.target.value;
         setText(e.target.value);
     };
 
     function handleKeyDown(e) {
-        if (e.key === "Enter") {
+        if (e.key === "Enter" && !e.shiftKey) {
             handleSendMessageClick();
             e.preventDefault();
         } else if (e.key === "Escape") {

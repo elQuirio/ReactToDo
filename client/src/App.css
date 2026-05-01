@@ -613,7 +613,7 @@ body.light .login-form-button.main-button:hover {
   border-radius: 6px;
 }
 
-/************************ sortMethodButton / sortMethodButtonDynamic / sortMethodButtonExtended ************************/
+/************************ / sortMethodButtonDynamic / sortMethodButtonExtended ************************/
 .sort-method-wrapper {
   display:flex;
   align-items:stretch;
