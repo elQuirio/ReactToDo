@@ -1,8 +1,9 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { collapseAll, searchBtnToggle, chatBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
+import { collapseAll, searchBtnToggle, updateSearchString } from "../slices/uiTodoSlicer";
 import { updatePreferences } from '../thunks/preferencesThunk';
-import { selectSortDirection, selectViewMode } from '../selectors/preferencesSelector';
-import { selectSearchBtnToggled, selectChatBtnToggled } from '../selectors/uiSelectors';
+import { selectSortDirection, selectTodoViewMode } from '../selectors/preferencesSelector';
+import { selectSearchBtnToggled } from '../selectors/uiSelectors';
+import { selectMainView } from '../selectors/preferencesSelector';
 import { selectActiveTodos, selectCompletedTodos, selectOverdueTodos } from '../selectors/todoSelectors';
 import { SortMethodSwitch } from '../components/sortMethodSwitch';
 import { Search, Minimize2, ArrowUpNarrowWide, ArrowDownNarrowWide, BotMessageSquare } from "lucide-react";
@@ -12,9 +13,9 @@ export function TodoStatusBar({ searchString }) {
     const completedTodos = useSelector(selectCompletedTodos);
     const overdueTodos = useSelector(selectOverdueTodos);
     const currentDirection = useSelector(selectSortDirection);
-    const viewMode = useSelector(selectViewMode);
+    const todoViewMode = useSelector(selectTodoViewMode);
     const searchButtonActive = useSelector(selectSearchBtnToggled);
-    const chatButtonActive = useSelector(selectChatBtnToggled);
+    const mainViewMode = useSelector(selectMainView);
 
     let sortComponent = '';
 
@@ -34,11 +35,11 @@ export function TodoStatusBar({ searchString }) {
     }
 
     function handleShowAll() {
-        dispatch(updatePreferences({viewMode: 'all'}));
+        dispatch(updatePreferences({todoViewMode: 'all'}));
     }
 
     function handleShowActive() {
-        dispatch(updatePreferences({viewMode: 'active'}));
+        dispatch(updatePreferences({todoViewMode: 'active'}));
     }
 
     function handleToggleSearch() {
@@ -47,7 +48,7 @@ export function TodoStatusBar({ searchString }) {
     }
 
     function handleToggleChat() {
-        dispatch(chatBtnToggle());
+        dispatch(updatePreferences({mainView: 'chat'}));
     }
 
     if (currentDirection === "desc") {
@@ -60,7 +61,7 @@ export function TodoStatusBar({ searchString }) {
     return <div className="status-bar-mini">
             <span className='quick-actions-container'>
                 <button className={`search-button quick-actions-button ${searchButtonActive?"active":""}`} onClick={handleToggleSearch} title='Search mode' aria-label='Search mode'><Search className='search-icon' size={18}/></button>
-                <button className={`chat-button quick-actions-button ${chatButtonActive?"active":""}`} onClick={handleToggleChat} title='Chat mode' aria-label='Chat mode'><BotMessageSquare className='chat-icon' size={18}/></button>
+                <button className={`chat-button quick-actions-button ${mainViewMode==='chat'?"active":""}`} onClick={handleToggleChat} title='Chat mode' aria-label='Chat mode'><BotMessageSquare className='chat-icon' size={18}/></button>
                 <button className='sort-button quick-actions-button' onClick={handleSortTodos} title='Sort direction' aria-label='Sort direction'>{sortComponent}</button>
                 <button className='collapse-button quick-actions-button' onClick={handleCollapseAll} title='Collapse all todos' aria-label='Collapse all todos' ><Minimize2 className='collapse-icon' size={18}/></button>
                 <SortMethodSwitch />
@@ -72,10 +73,10 @@ export function TodoStatusBar({ searchString }) {
                 <span className="dot"> | </span>
                 <span className='status-chip'>Overdue: {overdueTodos.length}</span>
             </span>
-                <span className='viewMode-selector-container'>
-                    <div className={`selector-thumb ${viewMode}`}/>
-                        <button type='button' className={`viewMode-button ${viewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
-                        <button type='button' className={`viewMode-button ${viewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
+                <span className='todoViewMode-selector-container'>
+                    <div className={`selector-thumb ${todoViewMode}`}/>
+                        <button type='button' className={`todoViewMode-button ${todoViewMode === 'active' ? 'active' : ''}`} onClick={handleShowActive}>Active</button>
+                        <button type='button' className={`todoViewMode-button ${todoViewMode === 'all' ? 'active' : ''}`} onClick={handleShowAll}>All</button>
                     </span>
         </div>
 }
