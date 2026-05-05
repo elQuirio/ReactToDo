@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
-import { selectChatBtnToggled} from "../selectors/uiSelectors";
+import { selectMainView } from "../selectors/preferencesSelector";
 import { ChatInputBar } from '../components/chatInputBar';
 import { TodoInputBar } from '../components/todoInputBar';
 
 export function InputBarWrapper() {
-    const chatButtonActive = useSelector(selectChatBtnToggled);
+    const mainViewMode = useSelector(selectMainView);
 
-    const wrapper = chatButtonActive ? <ChatInputBar />  : <TodoInputBar /> ;
+    const wrapper = mainViewMode === 'chat' ? <ChatInputBar />  : <TodoInputBar /> ;
 
     return wrapper;
 }

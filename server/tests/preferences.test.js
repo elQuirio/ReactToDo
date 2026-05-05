@@ -39,7 +39,7 @@ describe('getPreferencesByUserID', () => {
         const originalPreferences = fs.readFileSync(preferencesPath, "utf-8");
         try {
             const userId = crypto.randomUUID();
-            const partialPrefs = {sortBy: 'testSorting', sortDirection: 'testDirection', viewMode: 'testViewMode'};
+            const partialPrefs = {sortBy: 'testSorting', sortDirection: 'testDirection', todoViewMode: 'testViewMode'};
             patchPreferencesByUserId(userId, partialPrefs);
             const testPreferences = getPreferencesByUserID(userId);
             expect(testPreferences).toEqual({...getDefaultPreferences(userId), ...partialPrefs});

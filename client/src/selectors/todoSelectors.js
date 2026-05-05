@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { selectSearchString } from "./uiSelectors";
-import { selectViewMode } from "./preferencesSelector";
+import { selectTodoViewMode } from "./preferencesSelector";
 
 export function selectTodos(state) {
     return state.todos.todos;
@@ -31,8 +31,8 @@ export const selectSearchedTodo = createSelector([selectTodos, selectSearchStrin
     }   
 });
 
-export const selectSearchedVisibleTodo = createSelector([selectSearchedTodo, selectViewMode], (todos, viewMode) => {
-    if (viewMode === 'active') {
+export const selectSearchedVisibleTodo = createSelector([selectSearchedTodo, selectTodoViewMode], (todos, todoViewMode) => {
+    if (todoViewMode === 'active') {
         const t = todos.filter((t) => t.status === 'active');
         return t;
     } else {

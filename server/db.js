@@ -142,7 +142,7 @@ export function readPreferences() {
 
 export function getDefaultPreferences(userId) {
     if (!userId) throw new Error('User id is missing');
-    return {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true, viewMode: 'all' };
+    return {userId: userId, sortBy: 'manual', sortDirection: 'asc', isLightMode: true, todoViewMode: 'all', mainView: 'todo' };
 };
 
 export function getPreferencesByUserID(userId) {

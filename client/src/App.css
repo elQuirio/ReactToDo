@@ -744,7 +744,7 @@ body.light .quick-actions-button.active.chat-button {
 }
 
 
-.viewMode-selector-container {
+.todoViewMode-selector-container {
   position: relative;
   display: grid;
   width: 160px;
@@ -764,7 +764,7 @@ body.light .quick-actions-button.active.chat-button {
   gap: 6px;
 }
 
-.viewMode-button {
+.todoViewMode-button {
   border: 0;
   z-index: 2;
   border-radius: 999px;
@@ -776,7 +776,7 @@ body.light .quick-actions-button.active.chat-button {
   transition: transform 140ms ease, background 200ms ease, box-shadow 200ms ease, color 0.6s ease;
 }
 
-.viewMode-button.active {
+.todoViewMode-button.active {
   color: var(--btn-text);
   background: transparent;
   border: none;
@@ -1244,7 +1244,7 @@ color:#1a1a1a;
  .status-bar-mini {
   grid-template-columns: 1fr auto;
  }
-.viewMode-selector-container {
+.todoViewMode-selector-container {
     margin: 0 auto;
     justify-self: center;
     grid-column: 1/-1;
